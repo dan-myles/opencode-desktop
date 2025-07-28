@@ -2,10 +2,6 @@ import path from "node:path"
 import { app, BrowserWindow, Menu } from "electron"
 import windowStateKeeper from "electron-window-state"
 
-import { registerMenuIpc } from "@/ipc/menu-ipc"
-import appMenu from "@/menu/app-menu"
-import { registerWindowStateChangedEvents } from "@/state"
-
 let appWindow: BrowserWindow
 
 /**
@@ -61,17 +57,10 @@ export function createAppWindow(): BrowserWindow {
     )
   }
 
-  // Build the application menu
-  const menu = Menu.buildFromTemplate(appMenu)
-  Menu.setApplicationMenu(menu)
-
   // Show window when is ready to
   appWindow.on("ready-to-show", () => {
     appWindow.show()
   })
-
-  // Register Inter Process Communication for main process
-  registerMainIPC()
 
   savedWindowState.manage(appWindow)
 
@@ -82,16 +71,4 @@ export function createAppWindow(): BrowserWindow {
   })
 
   return appWindow
-}
-
-/**
- * Register Inter Process Communication
- */
-function registerMainIPC() {
-  /**
-   * Here you can assign IPC related codes for the application window
-   * to Communicate asynchronously from the main process to renderer processes.
-   */
-  registerWindowStateChangedEvents(appWindow)
-  registerMenuIpc(appWindow)
 }
