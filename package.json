@@ -7,7 +7,9 @@
   "type": "module",
   "pnpm": {
     "onlyBuiltDependencies": [
-      "electron"
+      "@tailwindcss/oxide",
+      "electron",
+      "esbuild"
     ]
   },
   "scripts": {
