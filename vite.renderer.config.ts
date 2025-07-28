@@ -1,5 +1,6 @@
 import type { ConfigEnv } from "vite"
 import tailwindcss from "@tailwindcss/vite"
+import { tanstackRouter } from "@tanstack/router-plugin/vite"
 import { defineConfig } from "vite"
 import svgrPlugin from "vite-plugin-svgr"
 import viteTsconfigPaths from "vite-tsconfig-paths"
@@ -25,6 +26,10 @@ export default defineConfig((env) => {
     },
     clearScreen: false,
     plugins: [
+      tanstackRouter({
+        target: "react",
+        autoCodeSplitting: true,
+      }),
       pluginExposeRenderer(name),
       svgrPlugin(),
       viteTsconfigPaths(),

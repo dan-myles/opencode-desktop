@@ -1,7 +1,4 @@
 import { app, BrowserWindow } from "electron"
-import installExtension, {
-  REACT_DEVELOPER_TOOLS,
-} from "electron-devtools-installer"
 import squirrelStartup from "electron-squirrel-startup"
 
 import { createAppWindow } from "./window"
@@ -12,12 +9,6 @@ process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = "true"
 if (squirrelStartup) {
   app.quit()
 }
-
-app.whenReady().then(() => {
-  installExtension(REACT_DEVELOPER_TOOLS)
-    .then((extension) => console.info(`Added Extension:  ${extension.name}`))
-    .catch((err) => console.info("An error occurred: ", err))
-})
 
 /**
  * This method will be called when Electron has finished

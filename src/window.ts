@@ -1,5 +1,5 @@
 import path from "node:path"
-import { app, BrowserWindow, Menu } from "electron"
+import { app, BrowserWindow } from "electron"
 import windowStateKeeper from "electron-window-state"
 
 let appWindow: BrowserWindow
@@ -66,7 +66,7 @@ export function createAppWindow(): BrowserWindow {
 
   // Close all windows when main window is closed
   appWindow.on("close", () => {
-    appWindow = null
+    appWindow = null!
     app.quit()
   })
 
