@@ -3,7 +3,7 @@ import { useState } from "react"
 import type { WindowState } from "@/state"
 import { useRendererListener } from "@/app/hooks/use-renderer-listener"
 import { MenuChannels } from "@/channels/menu-channels"
-import Menu from "./menu"
+import { Menu } from "./menu"
 import WindowControls from "./window-controls"
 
 const handleDoubleClick = () => {

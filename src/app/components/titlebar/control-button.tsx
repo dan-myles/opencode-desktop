@@ -1,7 +1,8 @@
 import type React from "react"
-import classNames from "classnames"
 
-type ControlButtonProps = {
+import { cn } from "@/app/lib/utils"
+
+interface ControlButtonProps {
   name: string
   onClick:
     | React.MouseEventHandler<HTMLButtonElement>
@@ -10,7 +11,7 @@ type ControlButtonProps = {
 }
 
 export function ControlButton({ name, onClick, path }: ControlButtonProps) {
-  const className = classNames("control", name)
+  const className = cn("control", name)
   const title = name[0].toUpperCase() + name.substring(1)
 
   return (
