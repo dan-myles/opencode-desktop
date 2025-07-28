@@ -166,95 +166,12 @@
   html,
   body,
   #root {
-    @apply bg-background text-foreground h-full;
-  }
-}
-
-@layer components {
-  /* Window Titlebar Styles */
-  .window-titlebar {
-    @apply bg-background sticky top-0 z-50 flex h-8 items-stretch select-none;
-    -webkit-app-region: drag;
-  }
-
-  .window-titlebar > section {
-    @apply flex items-center;
-  }
-
-  .window-titlebar-icon {
-    @apply px-2;
-  }
-
-  .window-titlebar-icon img {
-    @apply h-5 w-5;
-  }
-
-  /* Menu Styles */
-  .menu-item {
-    @apply relative;
-  }
-
-  .menu-item.active .menu-title {
-    @apply bg-secondary;
-  }
-
-  .menu-title {
-    @apply hover:bg-secondary px-2.5 py-2 text-xs;
-    -webkit-app-region: no-drag;
-  }
-
-  .menu-popup {
-    @apply bg-popover fixed z-10000 hidden min-w-20;
-  }
-
-  .menu-popup.active {
-    @apply block;
-  }
-
-  .menu-popup-item {
-    @apply hover:bg-accent hover:text-accent-foreground flex w-full justify-between px-4 py-2 text-xs hover:cursor-pointer;
-  }
-
-  .menu-popup-item:hover .popup-item-name {
-    @apply text-accent-foreground;
-  }
-
-  .menu-popup-item:hover .popup-item-shortcut {
-    @apply text-muted-foreground;
-  }
-
-  .popup-item-name {
-    @apply text-popover-foreground pr-8;
-  }
-
-  .popup-item-shortcut {
-    @apply text-muted-foreground;
-  }
-
-  .popup-item-separator {
-    @apply bg-border my-1 h-[1px];
-  }
-
-  /* Window Controls */
-  .window-titlebar-controls {
-    @apply absolute top-0 right-0 bottom-0 flex items-stretch;
-  }
-
-  .control {
-    @apply hover:bg-secondary flex h-full items-center px-4;
-    -webkit-app-region: no-drag;
-  }
-
-  .control.close:hover {
-    @apply bg-destructive;
-  }
-}
-
-@layer base {
-  * {
-    @apply border-border outline-ring/50;
-  }
-  body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .titlebar {
+    -webkit-app-region: drag;
   }
 }
