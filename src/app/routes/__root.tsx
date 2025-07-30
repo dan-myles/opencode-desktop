@@ -6,7 +6,7 @@ import { useState, useEffect } from "react"
 import { ThemeProvider } from "@/app/components/providers/theme.provider"
 import { AppSidebar } from "@/app/components/sidebar"
 import { Titlebar } from "@/app/components/titlebar"
-import { SidebarInset, SidebarProvider } from "@/app/components/ui/sidebar"
+import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/app/components/ui/sidebar"
 import { getQueryClient } from "../lib/query-client"
 
 export const Route = createRootRoute({
@@ -46,7 +46,6 @@ function RootDocument() {
   return (
     <>
       <div className="flex h-screen flex-col">
-        <Titlebar />
         <div className="flex flex-1 overflow-hidden">
           <SidebarProvider
             open={sidebarOpen}
@@ -54,12 +53,16 @@ function RootDocument() {
             style={
               {
                 "--sidebar-width": "16rem",
-                "--sidebar-width-icon": "5rem",
+                "--sidebar-width-icon": "0rem",
               } as React.CSSProperties
             }
           >
+            <Titlebar />
             <AppSidebar />
-            <SidebarInset className="flex-1 overflow-auto">
+            <SidebarInset className="flex-1 overflow-auto relative">
+              {!sidebarOpen && (
+                <SidebarTrigger className="absolute bottom-4 left-4 z-10 animate-in fade-in duration-700" />
+              )}
               <div className="flex flex-1 flex-col gap-4 p-4">
                 <Outlet />
               </div>
