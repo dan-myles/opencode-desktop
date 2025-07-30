@@ -8,6 +8,7 @@ import {
   SidebarHeader,
   SidebarMenu,
   SidebarMenuItem,
+  SidebarTrigger,
 } from "../ui/sidebar"
 import { MenuButton } from "./menu-button"
 
@@ -34,11 +35,15 @@ const bottomNavigation = [
 
 export function AppSidebar() {
   return (
-    <Sidebar variant="sidebar" collapsible="none" className="h-full">
+    <Sidebar variant="sidebar" collapsible="icon" className="h-full">
       <SidebarHeader>
         {/* Logo section with top padding for titlebar */}
-        <div className="flex items-center justify-center gap-2 px-2 py-3 pt-10">
-          <Terminal className="size-6" />
+        <div className="flex items-center justify-between gap-2 px-2 py-3 pt-10">
+          <div className="flex items-center gap-2">
+            <Terminal className="size-6" />
+            <span className="font-semibold group-data-[collapsible=icon]:hidden">Opencode</span>
+          </div>
+          <SidebarTrigger className="group-data-[collapsible=icon]:hidden" />
         </div>
       </SidebarHeader>
       

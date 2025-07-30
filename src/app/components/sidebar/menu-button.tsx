@@ -29,13 +29,14 @@ export function MenuButton({ title, url, icon: Icon }: MenuButtonProps) {
           <Link 
             to={url} 
             viewTransition
-            className="flex items-center justify-center w-full"
+            className="flex items-center gap-3"
           >
-            <Icon className="size-6" />
+            <Icon className="size-4" />
+            <span className="group-data-[collapsible=icon]:hidden">{title}</span>
           </Link>
         </SidebarMenuButton>
       </TooltipTrigger>
-      <TooltipContent side="right">
+      <TooltipContent side="right" className="group-data-[collapsible=icon]:block hidden">
         {title}
       </TooltipContent>
     </Tooltip>
