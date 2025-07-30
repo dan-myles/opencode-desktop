@@ -1,6 +1,9 @@
 import path from "node:path"
 import { app, BrowserWindow } from "electron"
 import windowStateKeeper from "electron-window-state"
+import { createIPCHandler } from "trpc-electron/main"
+
+import { appRouter } from "./server/root"
 
 let appWindow: BrowserWindow
 
@@ -30,10 +33,9 @@ export function createAppWindow(): BrowserWindow {
     frame: false,
     backgroundColor: "#1a1a1a",
     webPreferences: {
-      nodeIntegration: false,
+      sandbox: false,
+      nodeIntegration: true,
       contextIsolation: true,
-      nodeIntegrationInWorker: false,
-      nodeIntegrationInSubFrames: false,
       preload: path.join(import.meta.dirname, "preload.js"),
     },
   }
@@ -69,6 +71,9 @@ export function createAppWindow(): BrowserWindow {
     appWindow = null!
     app.quit()
   })
+
+  // Init TRPC link
+  createIPCHandler({ router: appRouter, windows: [appWindow] })
 
   return appWindow
 }

@@ -20,6 +20,10 @@ const config: ForgeConfig = {
     executableName: productName,
     // Set application icon
     icon: path.resolve(rootDir, "assets/icons/icon"),
+    // Bundle the opencode binary
+    extraResource: [
+      path.resolve(rootDir, "bin/opencode")
+    ],
   },
   rebuildConfig: {},
   makers: [

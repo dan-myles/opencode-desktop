@@ -1,4 +1,4 @@
-import { app, BrowserWindow } from "electron"
+import { app, BrowserWindow, ipcMain } from "electron"
 import squirrelStartup from "electron-squirrel-startup"
 
 import { createAppWindow } from "./window"
@@ -15,7 +15,9 @@ if (squirrelStartup) {
  * initialization and is ready to create browser windows.
  * Some APIs can only be used after this event occurs.
  */
-app.on("ready", createAppWindow)
+app.on("ready", () => {
+  createAppWindow()
+})
 
 /**
  * Emitted when the application is activated. Various actions can
