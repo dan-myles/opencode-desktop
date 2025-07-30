@@ -7,14 +7,14 @@ export const Route = createFileRoute("/")({
 })
 
 function Index() {
-  const { data } = api.opencode.binaryPath.useQuery({ name: "Dan" })
+  const { data } = api.opencode.getBinaryPath.useQuery()
 
   return (
     <div className="p-2">
       <h3>Welcome Home!</h3>
       <Link to="/test" viewTransition>
         TO TEST
-        {data}
+        {data?.path}
       </Link>
     </div>
   )

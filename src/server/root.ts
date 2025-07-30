@@ -1,4 +1,4 @@
-import { opencodeRouter } from "./routers/opencode"
+import { opencodeRouter } from "./routers/opencode/opencode.router"
 import { createTRPCRouter} from "./trpc"
 
 

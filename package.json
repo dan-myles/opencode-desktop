@@ -17,11 +17,12 @@
     "package": "electron-forge package",
     "make": "electron-forge make",
     "publish": "electron-forge publish",
+    "typecheck": "tsc --noEmit",
     "lint": "eslint",
     "lint:fix": "eslint --fix",
     "format": "prettier --check . --ignore-path ./.prettierignore",
     "format:fix": "prettier --write . --ignore-path ./.prettierignore",
-    "clean": "git clean -xdf node_modules .vite"
+    "clean": "git clean -xdf node_modules .vite .tanstack"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.0",

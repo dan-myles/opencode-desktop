@@ -174,7 +174,7 @@
   }
 }
 
-.titlebar {
+.draggable {
   -webkit-app-region: drag;
 }
 
