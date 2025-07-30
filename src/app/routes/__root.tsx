@@ -6,10 +6,9 @@ import { ThemeProvider } from "@/app/components/providers/theme.provider"
 import { AppSidebar } from "@/app/components/sidebar"
 import { Titlebar } from "@/app/components/titlebar"
 import { SidebarInset, SidebarProvider } from "@/app/components/ui/sidebar"
-import { RouterContext } from "@/app/router"
 import { getQueryClient } from "../lib/query-client"
 
-export const Route = createRootRoute<RouterContext>({
+export const Route = createRootRoute({
   component: RootComponent,
 })
 
