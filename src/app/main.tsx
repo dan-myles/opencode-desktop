@@ -1,12 +1,16 @@
 import { StrictMode } from "react"
-import { RouterProvider } from "@tanstack/react-router"
+import { createRouter, RouterProvider } from "@tanstack/react-router"
 import ReactDOM from "react-dom/client"
 
-import { createRouter } from "./router"
+import { routeTree } from "./routeTree.gen"
 
 import "@/app/styles/globals.css"
 
-const router = createRouter()
+const router = createRouter({
+  routeTree,
+  scrollRestoration: true,
+  defaultPreload: "intent",
+})
 
 const rootElement = document.getElementById("root") as HTMLDivElement
 const root = ReactDOM.createRoot(rootElement)

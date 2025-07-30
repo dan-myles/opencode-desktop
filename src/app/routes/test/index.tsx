@@ -3,7 +3,6 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { createFileRoute, Link } from "@tanstack/react-router"
 
 import { Badge } from "@/app/components/ui/badge"
-import { Button } from "@/app/components/ui/button"
 import {
   Card,
   CardContent,
@@ -22,24 +21,24 @@ export const Route = createFileRoute("/test/")({
 
 function RouteComponent() {
   const queryClient = useQueryClient()
-  const binary = useQuery(api.opencode.getBinaryPath.queryOptions())
-  const status = useQuery(api.opencode.getServerStatus.queryOptions())
+  const binary = useQuery(api.opencode.path.queryOptions())
+  const status = useQuery(api.opencode.status.queryOptions())
 
   const startServer = useMutation(
-    api.opencode.startServer.mutationOptions({
+    api.opencode.start.mutationOptions({
       onSuccess: () => {
         queryClient.invalidateQueries(
-          api.opencode.getServerStatus.queryFilter(),
+          api.opencode.status.queryFilter(),
         )
       },
     }),
   )
 
   const stopServer = useMutation(
-    api.opencode.stopServer.mutationOptions({
+    api.opencode.stop.mutationOptions({
       onSuccess: () => {
         queryClient.invalidateQueries(
-          api.opencode.getServerStatus.queryFilter(),
+          api.opencode.status.queryFilter(),
         )
       },
     }),
@@ -68,18 +67,18 @@ function RouteComponent() {
         <CardContent className="space-y-2">
           <div className="flex items-center gap-2">
             <Label>Path:</Label>
-            <CodeBox>{binaryInfo?.path}</CodeBox>
+            {/* <CodeBox>{binaryInfo?.path}</CodeBox> */}
           </div>
           <div className="flex items-center gap-2">
             <Label>Status:</Label>
-            <Badge variant={binaryInfo?.exists ? "default" : "destructive"}>
-              {binaryInfo?.exists ? "Found" : "Not Found"}
-            </Badge>
+            {/* <Badge variant={binaryInfo?.exists ? "default" : "destructive"}> */}
+            {/*   {binaryInfo?.exists ? "Found" : "Not Found"} */}
+            {/* </Badge> */}
           </div>
           <div className="flex items-center gap-2">
             <Label>Environment:</Label>
             <Badge variant="outline">
-              {binaryInfo?.isDev ? "Development" : "Production"}
+              {/* {binaryInfo?.isDev ? "Development" : "Production"} */}
             </Badge>
           </div>
         </CardContent>
@@ -96,24 +95,24 @@ function RouteComponent() {
         <CardContent className="space-y-2">
           <div className="flex items-center gap-2">
             <Label>Status:</Label>
-            <Badge variant={serverStatus?.isRunning ? "default" : "secondary"}>
-              {serverStatus?.isRunning ? "Running" : "Stopped"}
-            </Badge>
+            {/* <Badge variant={serverStatus?.isRunning ? "default" : "secondary"}> */}
+            {/*   {serverStatus?.isRunning ? "Running" : "Stopped"} */}
+            {/* </Badge> */}
           </div>
-          {serverStatus?.isRunning && (
-            <>
-              <div className="flex items-center gap-2">
-                <Label>PID:</Label>
-                <CodeBox>{serverStatus.pid}</CodeBox>
-              </div>
-              <div className="flex items-center gap-2">
-                <Label>URL:</Label>
-                <CodeBox>
-                  http://{host}:{port}
-                </CodeBox>
-              </div>
-            </>
-          )}
+          {/* {serverStatus?.isRunning && ( */}
+          {/*   <> */}
+          {/*     <div className="flex items-center gap-2"> */}
+          {/*       <Label>PID:</Label> */}
+          {/*       <CodeBox>{serverStatus.pid}</CodeBox> */}
+          {/*     </div> */}
+          {/*     <div className="flex items-center gap-2"> */}
+          {/*       <Label>URL:</Label> */}
+          {/*       <CodeBox> */}
+          {/*         http://{host}:{port} */}
+          {/*       </CodeBox> */}
+          {/*     </div> */}
+          {/*   </> */}
+          {/* )} */}
         </CardContent>
       </Card>
 
@@ -147,25 +146,25 @@ function RouteComponent() {
           </div>
 
           <div className="flex gap-2">
-            <Button
-              onClick={handleStartServer}
-              disabled={
-                serverStatus?.isRunning ||
-                startServer.isPending ||
-                !binaryInfo?.exists
-              }
-              className="flex-1"
-            >
-              {startServer.isPending ? "Starting..." : "Start Server"}
-            </Button>
-            <Button
-              onClick={handleStopServer}
-              disabled={!serverStatus?.isRunning || stopServer.isPending}
-              variant="destructive"
-              className="flex-1"
-            >
-              {stopServer.isPending ? "Stopping..." : "Stop Server"}
-            </Button>
+            {/* <Button */}
+            {/*   onClick={handleStartServer} */}
+            {/*   disabled={ */}
+            {/*     serverStatus?.isRunning || */}
+            {/*     startServer.isPending || */}
+            {/*     !binaryInfo?.exists */}
+            {/*   } */}
+            {/*   className="flex-1" */}
+            {/* > */}
+            {/*   {startServer.isPending ? "Starting..." : "Start Server"} */}
+            {/* </Button> */}
+            {/* <Button */}
+            {/*   onClick={handleStopServer} */}
+            {/*   disabled={!serverStatus?.isRunning || stopServer.isPending} */}
+            {/*   variant="destructive" */}
+            {/*   className="flex-1" */}
+            {/* > */}
+            {/*   {stopServer.isPending ? "Stopping..." : "Stop Server"} */}
+            {/* </Button> */}
           </div>
 
           {/* Display mutation results */}

@@ -1,5 +1,5 @@
 import { QueryClientProvider } from "@tanstack/react-query"
-import { createRootRouteWithContext, Outlet } from "@tanstack/react-router"
+import { createRootRoute, Outlet } from "@tanstack/react-router"
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools"
 
 import { ThemeProvider } from "@/app/components/providers/theme.provider"
@@ -9,7 +9,7 @@ import { SidebarInset, SidebarProvider } from "@/app/components/ui/sidebar"
 import { RouterContext } from "@/app/router"
 import { getQueryClient } from "../lib/query-client"
 
-export const Route = createRootRouteWithContext<RouterContext>()({
+export const Route = createRootRoute<RouterContext>({
   component: RootComponent,
 })
 

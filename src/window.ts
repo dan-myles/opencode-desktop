@@ -33,8 +33,9 @@ export function createAppWindow(): BrowserWindow {
     frame: false,
     backgroundColor: "#1a1a1a",
     webPreferences: {
-      sandbox: false,
-      nodeIntegration: true,
+      nodeIntegration: false,
+      nodeIntegrationInSubFrames: false,
+      nodeIntegrationInWorker: false,
       contextIsolation: true,
       preload: path.join(import.meta.dirname, "preload.js"),
     },
@@ -63,7 +64,6 @@ export function createAppWindow(): BrowserWindow {
   appWindow.on("ready-to-show", () => {
     appWindow.show()
   })
-
   savedWindowState.manage(appWindow)
 
   // Close all windows when main window is closed
