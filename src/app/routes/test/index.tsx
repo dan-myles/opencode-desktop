@@ -6,6 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../..
 import { Badge } from "../../components/ui/badge"
 import { Input } from "../../components/ui/input"
 import { Label } from "../../components/ui/label"
+import { CodeBox } from "../../components/ui/code-box"
 
 export const Route = createFileRoute("/test/")({
   component: RouteComponent,
@@ -58,9 +59,9 @@ function RouteComponent() {
         <CardContent className="space-y-2">
           <div className="flex items-center gap-2">
             <Label>Path:</Label>
-            <code className="bg-gray-100 px-2 py-1 rounded text-sm">
+            <CodeBox>
               {binaryInfo?.path || "Loading..."}
-            </code>
+            </CodeBox>
           </div>
           <div className="flex items-center gap-2">
             <Label>Status:</Label>
@@ -94,15 +95,15 @@ function RouteComponent() {
             <>
               <div className="flex items-center gap-2">
                 <Label>PID:</Label>
-                <code className="bg-gray-100 px-2 py-1 rounded text-sm">
+                <CodeBox>
                   {serverStatus.pid}
-                </code>
+                </CodeBox>
               </div>
               <div className="flex items-center gap-2">
                 <Label>URL:</Label>
-                <code className="bg-gray-100 px-2 py-1 rounded text-sm">
+                <CodeBox>
                   http://{host}:{port}
-                </code>
+                </CodeBox>
               </div>
             </>
           )}
@@ -162,7 +163,7 @@ function RouteComponent() {
               {startServerMutation.data.message}
               {startServerMutation.data.url && (
                 <div className="mt-1">
-                  Server URL: <code>{startServerMutation.data.url}</code>
+                  Server URL: <CodeBox>{startServerMutation.data.url}</CodeBox>
                 </div>
               )}
             </div>

@@ -70,6 +70,7 @@ bin/                      # Opencode CLI binary location
 - Do not make useless helper functions, inline functionality unless the function is reusable or composable
 - Prefer early returns over nested `if` statements
 - Use conventional commits such as feat(scope): <desc> or fix: <desc>
+- When using conventional commits try to always use a scope when possible
 - Write short and simple PR summaries, they should be to the point and easy to read
 - When pushing a large commit write a commit summary after the conventional commit message, after \n
 - DON'T show git diffs, sometimes they are too large!
