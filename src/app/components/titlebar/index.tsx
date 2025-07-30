@@ -1,8 +1,5 @@
 export function Titlebar() {
   return (
-    <div
-      className="titlebar bg-background sticky top-0 z-50 flex h-8 items-stretch
-        select-none"
-    ></div>
+    <div className="titlebar fixed top-0 left-0 right-0 h-8 bg-transparent select-none draggable z-50" />
   )
 }

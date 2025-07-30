@@ -58,6 +58,7 @@ bin/                      # Opencode CLI binary location
 - Minimize `else` statements
 - Use early returns over nested conditionals
 - Inline functionality unless truly reusable
+- When importing code, only use relative imports if we are in the same directory, else use @/
 - Functional components with hooks
 - Use TypeScript for all components
 - Follow existing component patterns in `src/app/components/`

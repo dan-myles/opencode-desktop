@@ -178,6 +178,15 @@
   -webkit-app-region: drag;
 }
 
+/* Ensure sidebar has minimum width for window controls */
+.group[data-collapsible="icon"] [data-slot="sidebar-container"] {
+  min-width: 5rem !important;
+}
+
+.group[data-collapsible="icon"] [data-slot="sidebar-gap"] {
+  min-width: 5rem !important;
+}
+
 html:active-view-transition-type(warp) {
   &::view-transition-old(post) {
     animation: 400ms ease-out both warp-out;
