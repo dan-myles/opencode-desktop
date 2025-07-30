@@ -10,6 +10,12 @@ import { CodeBox } from "../../components/ui/code-box"
 
 export const Route = createFileRoute("/test/")({
   component: RouteComponent,
+  loader: ({ context }) => {
+    // Test that we can access the query client from context
+    console.log("Query client available in loader:", !!context.queryClient)
+    console.log("tRPC client available in loader:", !!context.trpcClient)
+    return null
+  },
 })
 
 function RouteComponent() {
