@@ -1,54 +1,55 @@
-import { createFileRoute, Link } from "@tanstack/react-router"
 import { useState } from "react"
-import { api } from "../../lib/api"
-import { Button } from "../../components/ui/button"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "../../components/ui/card"
-import { Badge } from "../../components/ui/badge"
-import { Input } from "../../components/ui/input"
-import { Label } from "../../components/ui/label"
-import { CodeBox } from "../../components/ui/code-box"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import { createFileRoute, Link } from "@tanstack/react-router"
+
+import { Badge } from "@/app/components/ui/badge"
+import { Button } from "@/app/components/ui/button"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/app/components/ui/card"
+import { CodeBox } from "@/app/components/ui/code-box"
+import { Input } from "@/app/components/ui/input"
+import { Label } from "@/app/components/ui/label"
+import { api } from "@/app/lib/api"
 
 export const Route = createFileRoute("/test/")({
   component: RouteComponent,
-  loader: ({ context }) => {
-    // Test that we can access the query client from context
-    console.log("Query client available in loader:", !!context.queryClient)
-    console.log("tRPC client available in loader:", !!context.trpcClient)
-    return null
-  },
 })
 
 function RouteComponent() {
+  const queryClient = useQueryClient()
+  const binary = useQuery(api.opencode.getBinaryPath.queryOptions())
+  const status = useQuery(api.opencode.getServerStatus.queryOptions())
+
+  const startServer = useMutation(
+    api.opencode.startServer.mutationOptions({
+      onSuccess: () => {
+        queryClient.invalidateQueries(
+          api.opencode.getServerStatus.queryFilter(),
+        )
+      },
+    }),
+  )
+
+  const stopServer = useMutation(
+    api.opencode.stopServer.mutationOptions({
+      onSuccess: () => {
+        queryClient.invalidateQueries(
+          api.opencode.getServerStatus.queryFilter(),
+        )
+      },
+    }),
+  )
+
   const [port, setPort] = useState(3000)
   const [host, setHost] = useState("localhost")
 
-  // Queries
-  const { data: binaryInfo } = api.opencode.getBinaryPath.useQuery()
-  const { data: serverStatus, refetch: refetchStatus } = api.opencode.getServerStatus.useQuery()
-
-  // Mutations
-  const startServerMutation = api.opencode.startServer.useMutation({
-    onSuccess: () => {
-      refetchStatus()
-    }
-  })
-  
-  const stopServerMutation = api.opencode.stopServer.useMutation({
-    onSuccess: () => {
-      refetchStatus()
-    }
-  })
-
-  const handleStartServer = () => {
-    startServerMutation.mutate({ port, host })
-  }
-
-  const handleStopServer = () => {
-    stopServerMutation.mutate()
-  }
-
   return (
-    <div className="container mx-auto p-6 space-y-6">
+    <div className="container mx-auto space-y-6 p-6">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">Opencode Server Control</h1>
         <Link to="/" className="text-blue-600 hover:underline">
@@ -60,14 +61,14 @@ function RouteComponent() {
       <Card>
         <CardHeader>
           <CardTitle>Binary Information</CardTitle>
-          <CardDescription>Information about the opencode binary</CardDescription>
+          <CardDescription>
+            Information about the opencode binary
+          </CardDescription>
         </CardHeader>
         <CardContent className="space-y-2">
           <div className="flex items-center gap-2">
             <Label>Path:</Label>
-            <CodeBox>
-              {binaryInfo?.path || "Loading..."}
-            </CodeBox>
+            <CodeBox>{binaryInfo?.path}</CodeBox>
           </div>
           <div className="flex items-center gap-2">
             <Label>Status:</Label>
@@ -88,7 +89,9 @@ function RouteComponent() {
       <Card>
         <CardHeader>
           <CardTitle>Server Status</CardTitle>
-          <CardDescription>Current status of the opencode server</CardDescription>
+          <CardDescription>
+            Current status of the opencode server
+          </CardDescription>
         </CardHeader>
         <CardContent className="space-y-2">
           <div className="flex items-center gap-2">
@@ -101,9 +104,7 @@ function RouteComponent() {
             <>
               <div className="flex items-center gap-2">
                 <Label>PID:</Label>
-                <CodeBox>
-                  {serverStatus.pid}
-                </CodeBox>
+                <CodeBox>{serverStatus.pid}</CodeBox>
               </div>
               <div className="flex items-center gap-2">
                 <Label>URL:</Label>
@@ -148,36 +149,52 @@ function RouteComponent() {
           <div className="flex gap-2">
             <Button
               onClick={handleStartServer}
-              disabled={serverStatus?.isRunning || startServerMutation.isPending || !binaryInfo?.exists}
+              disabled={
+                serverStatus?.isRunning ||
+                startServer.isPending ||
+                !binaryInfo?.exists
+              }
               className="flex-1"
             >
-              {startServerMutation.isPending ? "Starting..." : "Start Server"}
+              {startServer.isPending ? "Starting..." : "Start Server"}
             </Button>
             <Button
               onClick={handleStopServer}
-              disabled={!serverStatus?.isRunning || stopServerMutation.isPending}
+              disabled={!serverStatus?.isRunning || stopServer.isPending}
               variant="destructive"
               className="flex-1"
             >
-              {stopServerMutation.isPending ? "Stopping..." : "Stop Server"}
+              {stopServer.isPending ? "Stopping..." : "Stop Server"}
             </Button>
           </div>
 
           {/* Display mutation results */}
-          {startServerMutation.data && (
-            <div className={`p-3 rounded ${startServerMutation.data.success ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-              {startServerMutation.data.message}
-              {startServerMutation.data.url && (
+          {startServer.data && (
+            <div
+              className={`rounded p-3 ${
+                startServer.data.success
+                  ? "bg-green-100 text-green-800"
+                  : "bg-red-100 text-red-800"
+              }`}
+            >
+              {startServer.data.message}
+              {startServer.data.url && (
                 <div className="mt-1">
-                  Server URL: <CodeBox>{startServerMutation.data.url}</CodeBox>
+                  Server URL: <CodeBox>{startServer.data.url}</CodeBox>
                 </div>
               )}
             </div>
           )}
 
-          {stopServerMutation.data && (
-            <div className={`p-3 rounded ${stopServerMutation.data.success ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
-              {stopServerMutation.data.message}
+          {stopServer.data && (
+            <div
+              className={`rounded p-3 ${
+                stopServer.data.success
+                  ? "bg-green-100 text-green-800"
+                  : "bg-red-100 text-red-800"
+              }`}
+            >
+              {stopServer.data.message}
             </div>
           )}
         </CardContent>

@@ -74,6 +74,7 @@ bin/                      # Opencode CLI binary location
 - Write short and simple PR summaries, they should be to the point and easy to read
 - When pushing a large commit write a commit summary after the conventional commit message, after \n
 - DON'T show git diffs, sometimes they are too large!
+- DO NOT make functions like `renderSomeItem` make them react components instead
 
 1. **Always run type checking** after code changes: `pnpm typecheck`, do this over starting the development server
 2. **Follow existing patterns** - check similar components/functions before creating new ones
