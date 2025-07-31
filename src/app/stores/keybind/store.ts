@@ -1,13 +1,13 @@
+import { useMemo } from "react"
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
 
 import type { Keybind, KeybindState, PersistedKeybind } from "./types"
-import { Platform } from "./types"
+import { getCurrentPlatform } from "@/app/lib/utils"
 
-// Global callback registry
 const callbackRegistry = new Map<string, () => void>()
 
-const keybindStore = create<KeybindState>()(
+export const keybindStore = create<KeybindState>()(
   persist(
     (set, get) => ({
       keybinds: new Map<string, PersistedKeybind>(),
@@ -66,31 +66,18 @@ const keybindStore = create<KeybindState>()(
   ),
 )
 
+// Export hook for registering keybinds
 export const useRegisterKeybind = () =>
   keybindStore((state) => state.registerKeybind)
 
-export const useKeybindList = () =>
-  keybindStore((state) => state.getKeybindList)
+// Export hook that returns platform-filtered keybind array with stable references
+export const useKeybindList = () => {
+  const keybindsMap = keybindStore((state) => state.keybinds)
+  const getKeybindList = keybindStore((state) => state.getKeybindList)
 
-function getCurrentPlatform(): Platform {
-  if (typeof __DARWIN__ !== "undefined" && __DARWIN__) return Platform.DARWIN
-  if (typeof __WIN32__ !== "undefined" && __WIN32__) return Platform.WIN32
-  if (typeof __LINUX__ !== "undefined" && __LINUX__) return Platform.LINUX
-
-  if (typeof navigator !== "undefined") {
-    const userAgent = navigator.userAgent.toLowerCase()
-    if (userAgent.includes("mac")) return Platform.DARWIN
-    if (userAgent.includes("win")) return Platform.WIN32
-    return Platform.LINUX
-  }
-
-  return Platform.LINUX
-}
-
-export const useKeybindListAccessor = () => {
-  const getKeybindList = useKeybindList()
-  const currentPlatform = getCurrentPlatform()
-
-  return () =>
-    getKeybindList().filter((keybind) => keybind.platform === currentPlatform)
+  return useMemo(() => {
+    const currentPlatform = getCurrentPlatform()
+    const allKeybinds = getKeybindList()
+    return allKeybinds.filter((keybind) => keybind.platform === currentPlatform)
+  }, [keybindsMap, getKeybindList])
 }

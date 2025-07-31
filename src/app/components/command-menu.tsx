@@ -2,12 +2,11 @@ import { useState } from "react"
 
 import { useRegisterKeybind } from "@/app/hooks/use-register-keybind"
 import { formatKeybindForDisplay } from "@/app/lib/utils"
-import { useKeybindListAccessor } from "@/app/stores/keybind/store"
+import { useKeybindList } from "@/app/stores/keybind/store"
 import { Platform } from "@/app/stores/keybind/types"
 import {
   CommandDialog,
   CommandEmpty,
-  CommandGroup,
   CommandInput,
   CommandItem,
   CommandList,
@@ -16,8 +15,6 @@ import {
 
 export function CommandMenu() {
   const [open, setOpen] = useState(false)
-  const getKeybinds = useKeybindListAccessor()
-  const keybinds = getKeybinds()
 
   useRegisterKeybind({
     id: "toggle-command-menu-win32",
@@ -48,23 +45,30 @@ export function CommandMenu() {
       <CommandInput placeholder="Type a command or search..." />
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
-        <CommandGroup heading="Commands">
-          {keybinds.map((keybind) => (
-            <CommandItem
-              key={keybind.id}
-              onSelect={() => {
-                keybind.callback()
-                setOpen(false)
-              }}
-            >
-              <span>{keybind.description}</span>
-              <CommandShortcut>
-                {formatKeybindForDisplay(keybind.key)}
-              </CommandShortcut>
-            </CommandItem>
-          ))}
-        </CommandGroup>
+        <CommandItems />
       </CommandList>
     </CommandDialog>
+  )
+}
+
+function CommandItems() {
+  const keybinds = useKeybindList()
+
+  return (
+    <>
+      {keybinds.map((keybind) => (
+        <CommandItem
+          key={keybind.id}
+          onSelect={() => {
+            keybind.callback()
+          }}
+        >
+          <span>{keybind.description}</span>
+          <CommandShortcut>
+            {formatKeybindForDisplay(keybind.key)}
+          </CommandShortcut>
+        </CommandItem>
+      ))}
+    </>
   )
 }
