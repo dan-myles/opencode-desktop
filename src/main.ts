@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from "electron"
+import { app, BrowserWindow } from "electron"
 import squirrelStartup from "electron-squirrel-startup"
 
 import { createAppWindow } from "./window"

@@ -75,6 +75,8 @@ bin/                      # Opencode CLI binary location
 - When pushing a large commit write a commit summary after the conventional commit message, after \n
 - DON'T show git diffs, sometimes they are too large!
 - DO NOT make functions like `renderSomeItem` make them react components instead
+- We are using SHADCN, which is our component library in `@/app/components/ui`, use these ALL THE TIME
+- When making other styles, ALWAYS use our theme variables in `@/app/styles/globals.css`
 
 1. **Always run type checking** after code changes: `pnpm typecheck`, do this over starting the development server
 2. **Follow existing patterns** - check similar components/functions before creating new ones
