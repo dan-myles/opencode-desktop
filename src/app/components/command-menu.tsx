@@ -6,6 +6,7 @@ import { useKeybindList } from "@/app/stores/keybind/store"
 import {
   CommandDialog,
   CommandEmpty,
+  CommandGroup,
   CommandInput,
   CommandItem,
   CommandList,
@@ -44,7 +45,7 @@ export function CommandMenu() {
       <CommandInput placeholder="Type a command or search..." />
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
-        <CommandItems setOpen={setOpen} />
+        <KeybindCommands setOpen={setOpen} />
       </CommandList>
     </CommandDialog>
   )
@@ -54,11 +55,11 @@ interface CommandItemsProps {
   setOpen: Dispatch<SetStateAction<Boolean>>
 }
 
-function CommandItems({ setOpen }: CommandItemsProps) {
+function KeybindCommands({ setOpen }: CommandItemsProps) {
   const keybinds = useKeybindList()
 
   return (
-    <>
+    <CommandGroup heading="Commands">
       {keybinds.map((keybind) => (
         <CommandItem
           key={keybind.id}
@@ -73,6 +74,6 @@ function CommandItems({ setOpen }: CommandItemsProps) {
           </CommandShortcut>
         </CommandItem>
       ))}
-    </>
+    </CommandGroup>
   )
 }
