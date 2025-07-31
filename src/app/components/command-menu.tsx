@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { Dispatch, SetStateAction, useState } from "react"
 
 import { useRegisterKeybind } from "@/app/hooks/use-register-keybind"
 import { formatKeybindForDisplay } from "@/app/lib/utils"
@@ -44,13 +44,17 @@ export function CommandMenu() {
       <CommandInput placeholder="Type a command or search..." />
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
-        <CommandItems />
+        <CommandItems setOpen={setOpen} />
       </CommandList>
     </CommandDialog>
   )
 }
 
-function CommandItems() {
+interface CommandItemsProps {
+  setOpen: Dispatch<SetStateAction<Boolean>>
+}
+
+function CommandItems({ setOpen }: CommandItemsProps) {
   const keybinds = useKeybindList()
 
   return (
@@ -60,6 +64,7 @@ function CommandItems() {
           key={keybind.id}
           onSelect={() => {
             keybind.callback()
+            setOpen(false)
           }}
         >
           <span>{keybind.description}</span>
