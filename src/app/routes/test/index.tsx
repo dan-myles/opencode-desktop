@@ -63,14 +63,14 @@ function RouteComponent() {
         </CardHeader>
         <CardContent className="space-y-2">
           <div className="flex items-center gap-2">
-            <Label>Path:</Label>
-            <CodeBox>{binary.data?.path}</CodeBox>
-          </div>
-          <div className="flex items-center gap-2">
             <Label>Status:</Label>
             <Badge variant={binary.data?.exists ? "default" : "destructive"}>
               {binary.data?.exists ? "Found" : "Not Found"}
             </Badge>
+          </div>
+          <div className="flex items-center gap-2">
+            <Label>Path:</Label>
+            <CodeBox>{binary.data?.path}</CodeBox>
           </div>
           <div className="flex items-center gap-2">
             <Label>Environment:</Label>
@@ -130,16 +130,20 @@ function RouteComponent() {
                 value={host}
                 onChange={(e) => setHost(e.target.value)}
                 placeholder="localhost"
+                disabled={status?.data?.isRunning}
               />
             </div>
             <div>
-              <Label htmlFor="port" className="mb-2">Port</Label>
+              <Label htmlFor="port" className="mb-2">
+                Port
+              </Label>
               <Input
                 id="port"
                 type="number"
                 value={port}
                 onChange={(e) => setPort(Number(e.target.value))}
                 placeholder="3000"
+                disabled={status?.data?.isRunning}
               />
             </div>
           </div>
