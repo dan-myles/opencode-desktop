@@ -9,9 +9,11 @@ import {
   CommandList,
   CommandShortcut,
 } from "./ui/command"
+import { useSidebar } from "./ui/sidebar"
 
 export function CommandMenu() {
   const [open, setOpen] = useState(false)
+  const { toggleSidebar } = useSidebar()
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -20,6 +22,7 @@ export function CommandMenu() {
         setOpen((open) => !open)
       }
     }
+
     document.addEventListener("keydown", down)
     return () => document.removeEventListener("keydown", down)
   }, [])
@@ -30,12 +33,10 @@ export function CommandMenu() {
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
         <CommandGroup heading="Suggestions">
-          <CommandItem>
-            <span>Calendar</span>
-            <CommandShortcut>⌘P</CommandShortcut>
+          <CommandItem onSelect={() => toggleSidebar()}>
+            <span>Toggle Sidebar</span>
+            <CommandShortcut>⌘S</CommandShortcut>
           </CommandItem>
-          <CommandItem>Search Emoji</CommandItem>
-          <CommandItem>Calculator</CommandItem>
         </CommandGroup>
       </CommandList>
     </CommandDialog>
