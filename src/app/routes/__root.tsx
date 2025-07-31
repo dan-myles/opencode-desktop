@@ -1,12 +1,15 @@
+import { useEffect, useState } from "react"
 import { QueryClientProvider } from "@tanstack/react-query"
 import { createRootRoute, Outlet } from "@tanstack/react-router"
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools"
-import { useState, useEffect } from "react"
 
 import { ThemeProvider } from "@/app/components/providers/theme.provider"
 import { AppSidebar } from "@/app/components/sidebar"
 import { Titlebar } from "@/app/components/titlebar"
-import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/app/components/ui/sidebar"
+import {
+  SidebarInset,
+  SidebarProvider,
+} from "@/app/components/ui/sidebar"
 import { getQueryClient } from "../lib/query-client"
 
 export const Route = createRootRoute({
@@ -52,17 +55,14 @@ function RootDocument() {
             onOpenChange={handleOpenChange}
             style={
               {
-                "--sidebar-width": "16rem",
-                "--sidebar-width-icon": "0rem",
+                "--sidebar-width": "15.5rem",
+                "--sidebar-width-icon": "3rem",
               } as React.CSSProperties
             }
           >
             <Titlebar />
             <AppSidebar />
-            <SidebarInset className="flex-1 overflow-auto relative">
-              {!sidebarOpen && (
-                <SidebarTrigger className="absolute bottom-4 left-4 z-10 animate-in fade-in duration-700" />
-              )}
+            <SidebarInset className="flex-1 overflow-auto">
               <div className="flex flex-1 flex-col gap-4 p-4">
                 <Outlet />
               </div>
