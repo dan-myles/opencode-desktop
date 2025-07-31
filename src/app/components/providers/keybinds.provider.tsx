@@ -49,7 +49,6 @@ function matchesKeybind(event: KeyboardEvent, targetKeybind: string): boolean {
 }
 
 export function KeybindsProvider({ children }: KeybindsProviderProps) {
-  // Use the single hook that returns platform-filtered keybind array
   const keybinds = useKeybindList()
 
   useEffect(() => {

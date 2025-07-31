@@ -1,6 +1,7 @@
-type Id = "toggle-sidebar" | "toggle-command-menu"
-
-type KeybindId = `${Id}-${Platform}` | `${Id}-${"win32" | "darwin" | "linux"}`
+type KeybindId =
+  | "toggle-sidebar"
+  | "toggle-command-menu"
+  | "toggle-light-dark-mode"
 
 type Modifier = "ctrl" | "cmd" | "alt" | "shift"
 
@@ -70,13 +71,8 @@ export type KeybindString =
   | `${Modifier}+${Modifier}+${Key}`
   | `${Modifier}+${Modifier}+${Modifier}+${Key}`
 
-export enum Platform {
-  DARWIN = "darwin",
-  WIN32 = "win32",
-  LINUX = "linux",
-}
+export type Platform = "darwin" | "win32" | "linux"
 
-// Persisted keybind data (no callbacks)
 export interface PersistedKeybind {
   id: KeybindId
   key: KeybindString

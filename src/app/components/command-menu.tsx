@@ -3,7 +3,6 @@ import { useState } from "react"
 import { useRegisterKeybind } from "@/app/hooks/use-register-keybind"
 import { formatKeybindForDisplay } from "@/app/lib/utils"
 import { useKeybindList } from "@/app/stores/keybind/store"
-import { Platform } from "@/app/stores/keybind/types"
 import {
   CommandDialog,
   CommandEmpty,
@@ -17,27 +16,27 @@ export function CommandMenu() {
   const [open, setOpen] = useState(false)
 
   useRegisterKeybind({
-    id: "toggle-command-menu-win32",
+    id: "toggle-command-menu",
     key: "ctrl+k",
     description: "Toggle command menu",
     callback: () => setOpen((open) => !open),
-    platform: Platform.WIN32,
+    platform: "win32",
   })
 
   useRegisterKeybind({
-    id: "toggle-command-menu-darwin",
+    id: "toggle-command-menu",
     key: "cmd+k",
     description: "Toggle command menu",
     callback: () => setOpen((open) => !open),
-    platform: Platform.DARWIN,
+    platform: "darwin",
   })
 
   useRegisterKeybind({
-    id: "toggle-command-menu-linux",
+    id: "toggle-command-menu",
     key: "ctrl+k",
     description: "Toggle command menu",
     callback: () => setOpen((open) => !open),
-    platform: Platform.LINUX,
+    platform: "linux",
   })
 
   return (

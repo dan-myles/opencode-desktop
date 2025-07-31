@@ -7,22 +7,20 @@ import { getCurrentPlatform } from "@/app/lib/utils"
 
 const callbackRegistry = new Map<string, () => void>()
 
-export const keybindStore = create<KeybindState>()(
+const keybindStore = create<KeybindState>()(
   persist(
     (set, get) => ({
       keybinds: new Map<string, PersistedKeybind>(),
 
       registerKeybind: (keybind: Keybind) => {
-        // Store callback in registry (not persisted)
-        callbackRegistry.set(keybind.id, keybind.callback)
-
-        // Store metadata in Zustand (persisted)
         set((state) => {
+          const id = `${keybind.id}-${keybind.platform}`
+          callbackRegistry.set(id, keybind.callback)
           const newKeybinds = new Map(state.keybinds)
           const { callback, ...persistedKeybind } = keybind
 
-          if (keybind.override || !newKeybinds.has(keybind.id)) {
-            newKeybinds.set(keybind.id, persistedKeybind)
+          if (keybind.override || !newKeybinds.has(id)) {
+            newKeybinds.set(id, persistedKeybind)
           }
 
           return { keybinds: newKeybinds }
@@ -33,7 +31,9 @@ export const keybindStore = create<KeybindState>()(
         // Combine persisted data with callbacks from registry
         return Array.from(get().keybinds.values()).map((keybind) => ({
           ...keybind,
-          callback: callbackRegistry.get(keybind.id) || (() => {}),
+          callback:
+            callbackRegistry.get(`${keybind.id}-${keybind.platform}`) ||
+            (() => {}),
         }))
       },
     }),
@@ -66,18 +66,21 @@ export const keybindStore = create<KeybindState>()(
   ),
 )
 
-// Export hook for registering keybinds
 export const useRegisterKeybind = () =>
   keybindStore((state) => state.registerKeybind)
 
-// Export hook that returns platform-filtered keybind array with stable references
 export const useKeybindList = () => {
   const keybindsMap = keybindStore((state) => state.keybinds)
-  const getKeybindList = keybindStore((state) => state.getKeybindList)
+  const expanded = Array.from(keybindsMap.values()).map((keybind) => {
+    return {
+      ...keybind,
+      callback:
+        callbackRegistry.get(`${keybind.id}-${keybind.platform}`) || (() => {}),
+    }
+  })
 
   return useMemo(() => {
-    const currentPlatform = getCurrentPlatform()
-    const allKeybinds = getKeybindList()
-    return allKeybinds.filter((keybind) => keybind.platform === currentPlatform)
-  }, [keybindsMap, getKeybindList])
+    const filter = expanded.filter((k) => k.platform === getCurrentPlatform())
+    return filter
+  }, [keybindsMap])
 }

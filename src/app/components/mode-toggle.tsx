@@ -8,9 +8,21 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/app/components/ui/dropdown-menu"
+import { useRegisterKeybind } from "../hooks/use-register-keybind"
 
 export function ModeToggle() {
-  const { setTheme } = useTheme()
+  const { theme, setTheme } = useTheme()
+
+  useRegisterKeybind({
+    id: "toggle-light-dark-mode",
+    key: "cmd+t",
+    description: "Toggle light/dark mode",
+    callback: () => {
+      if (theme === "dark") setTheme("light")
+      if (theme === "light") setTheme("dark")
+    },
+    platform: "darwin",
+  })
 
   return (
     <DropdownMenu>

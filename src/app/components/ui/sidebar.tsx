@@ -71,7 +71,7 @@ function SidebarProvider({
 
   // Initialize state from localStorage
   const [_open, _setOpen] = React.useState(() => {
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       const stored = localStorage.getItem(SIDEBAR_STORAGE_KEY)
       return stored !== null ? JSON.parse(stored) : defaultOpen
     }
@@ -89,7 +89,7 @@ function SidebarProvider({
       }
 
       // Save to localStorage instead of cookies
-      if (typeof window !== 'undefined') {
+      if (typeof window !== "undefined") {
         localStorage.setItem(SIDEBAR_STORAGE_KEY, JSON.stringify(openState))
       }
     },
@@ -103,27 +103,27 @@ function SidebarProvider({
 
   // Register keybinds for sidebar toggle
   useRegisterKeybind({
-    id: "toggle-sidebar-win32",
+    id: "toggle-sidebar",
     key: "ctrl+s",
     description: "Toggle sidebar",
     callback: toggleSidebar,
-    platform: Platform.WIN32,
+    platform: "win32",
   })
 
   useRegisterKeybind({
-    id: "toggle-sidebar-darwin",
+    id: "toggle-sidebar",
     key: "cmd+s",
     description: "Toggle sidebar",
     callback: toggleSidebar,
-    platform: Platform.DARWIN,
+    platform: "darwin",
   })
 
   useRegisterKeybind({
-    id: "toggle-sidebar-linux",
+    id: "toggle-sidebar",
     key: "ctrl+s",
     description: "Toggle sidebar",
     callback: toggleSidebar,
-    platform: Platform.LINUX,
+    platform: "linux",
   })
 
   // We add a state so that we can do data-state="expanded" or "collapsed".

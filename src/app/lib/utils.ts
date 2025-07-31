@@ -49,16 +49,16 @@ export function formatKeybindForDisplay(key: string): string {
 }
 
 export function getCurrentPlatform(): Platform {
-  if (typeof __DARWIN__ !== "undefined" && __DARWIN__) return Platform.DARWIN
-  if (typeof __WIN32__ !== "undefined" && __WIN32__) return Platform.WIN32
-  if (typeof __LINUX__ !== "undefined" && __LINUX__) return Platform.LINUX
+  if (typeof __DARWIN__ !== "undefined" && __DARWIN__) return "darwin"
+  if (typeof __WIN32__ !== "undefined" && __WIN32__) return "win32"
+  if (typeof __LINUX__ !== "undefined" && __LINUX__) return "linux"
 
   if (typeof navigator !== "undefined") {
     const userAgent = navigator.userAgent.toLowerCase()
-    if (userAgent.includes("mac")) return Platform.DARWIN
-    if (userAgent.includes("win")) return Platform.WIN32
-    return Platform.LINUX
+    if (userAgent.includes("mac")) return "darwin"
+    if (userAgent.includes("win")) return "win32"
+    return "linux"
   }
 
-  return Platform.LINUX
+  return "linux"
 }

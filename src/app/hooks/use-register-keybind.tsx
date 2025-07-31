@@ -1,16 +1,18 @@
 import { useEffect } from "react"
 
 import type { Keybind } from "@/app/stores/keybind/types"
-import { keybindStore } from "../stores/keybind/store"
+import {
+  useRegisterKeybind as useRK,
+} from "@/app/stores/keybind/store"
 
 type UseRegisterKeybindParams = Keybind
 
 export function useRegisterKeybind(params: UseRegisterKeybindParams) {
-  const registerKeybind = keybindStore((state) => state.registerKeybind)
+  const register = useRK()
 
   useEffect(() => {
-    registerKeybind({
+    register({
       ...params,
     })
-  }, [registerKeybind, params])
+  }, [params])
 }
