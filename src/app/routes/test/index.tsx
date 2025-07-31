@@ -122,7 +122,9 @@ function RouteComponent() {
         <CardContent className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="host">Host</Label>
+              <Label htmlFor="host" className="mb-2">
+                Host
+              </Label>
               <Input
                 id="host"
                 value={host}
@@ -131,7 +133,7 @@ function RouteComponent() {
               />
             </div>
             <div>
-              <Label htmlFor="port">Port</Label>
+              <Label htmlFor="port" className="mb-2">Port</Label>
               <Input
                 id="port"
                 type="number"
