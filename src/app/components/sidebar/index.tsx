@@ -67,11 +67,18 @@ export function AppSidebar() {
             className="flex items-center justify-between px-2
               group-data-[collapsible=icon]:justify-center"
           >
-            <Button variant="ghost" size="icon" asChild>
-              <Link to="/settings">
-                <Settings className="h-4 w-4" />
-              </Link>
-            </Button>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button variant="ghost" size="icon" asChild>
+                  <Link to="/settings">
+                    <Settings className="h-4 w-4" />
+                  </Link>
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="right">
+                <span>Settings</span>
+              </TooltipContent>
+            </Tooltip>
             <Tooltip>
               <TooltipTrigger asChild>
                 <SidebarTrigger />
