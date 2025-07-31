@@ -1,5 +1,9 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 
+import { useRegisterKeybind } from "@/app/hooks/use-register-keybind"
+import { formatKeybindForDisplay } from "@/app/lib/utils"
+import { useKeybindListAccessor } from "@/app/stores/keybind/store"
+import { Platform } from "@/app/stores/keybind/types"
 import {
   CommandDialog,
   CommandEmpty,
@@ -9,34 +13,56 @@ import {
   CommandList,
   CommandShortcut,
 } from "./ui/command"
-import { useSidebar } from "./ui/sidebar"
 
 export function CommandMenu() {
   const [open, setOpen] = useState(false)
-  const { toggleSidebar } = useSidebar()
+  const getKeybinds = useKeybindListAccessor()
+  const keybinds = getKeybinds()
 
-  useEffect(() => {
-    const down = (e: KeyboardEvent) => {
-      if (e.key === "k" && (e.metaKey || e.ctrlKey)) {
-        e.preventDefault()
-        setOpen((open) => !open)
-      }
-    }
+  useRegisterKeybind({
+    id: "toggle-command-menu-win32",
+    key: "ctrl+k",
+    description: "Toggle command menu",
+    callback: () => setOpen((open) => !open),
+    platform: Platform.WIN32,
+  })
 
-    document.addEventListener("keydown", down)
-    return () => document.removeEventListener("keydown", down)
-  }, [])
+  useRegisterKeybind({
+    id: "toggle-command-menu-darwin",
+    key: "cmd+k",
+    description: "Toggle command menu",
+    callback: () => setOpen((open) => !open),
+    platform: Platform.DARWIN,
+  })
+
+  useRegisterKeybind({
+    id: "toggle-command-menu-linux",
+    key: "ctrl+k",
+    description: "Toggle command menu",
+    callback: () => setOpen((open) => !open),
+    platform: Platform.LINUX,
+  })
 
   return (
     <CommandDialog open={open} onOpenChange={setOpen}>
       <CommandInput placeholder="Type a command or search..." />
       <CommandList>
         <CommandEmpty>No results found.</CommandEmpty>
-        <CommandGroup heading="Suggestions">
-          <CommandItem onSelect={() => toggleSidebar()}>
-            <span>Toggle Sidebar</span>
-            <CommandShortcut>⌘S</CommandShortcut>
-          </CommandItem>
+        <CommandGroup heading="Commands">
+          {keybinds.map((keybind) => (
+            <CommandItem
+              key={keybind.id}
+              onSelect={() => {
+                keybind.callback()
+                setOpen(false)
+              }}
+            >
+              <span>{keybind.description}</span>
+              <CommandShortcut>
+                {formatKeybindForDisplay(keybind.key)}
+              </CommandShortcut>
+            </CommandItem>
+          ))}
         </CommandGroup>
       </CommandList>
     </CommandDialog>

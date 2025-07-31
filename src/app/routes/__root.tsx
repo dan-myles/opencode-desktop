@@ -1,6 +1,7 @@
 import { QueryClientProvider } from "@tanstack/react-query"
 import { createRootRoute, Outlet } from "@tanstack/react-router"
 
+import { KeybindsProvider } from "@/app/components/providers/keybinds.provider"
 import { ThemeProvider } from "@/app/components/providers/theme.provider"
 import { AppSidebar } from "@/app/components/sidebar"
 import { Titlebar } from "@/app/components/titlebar"
@@ -19,16 +20,18 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
-        <SidebarProvider
-          style={
-            {
-              "--sidebar-width": "15.5rem",
-              "--sidebar-width-icon": "3rem",
-            } as React.CSSProperties
-          }
-        >
-          <RootDocument />
-        </SidebarProvider>
+        <KeybindsProvider>
+          <SidebarProvider
+            style={
+              {
+                "--sidebar-width": "15.5rem",
+                "--sidebar-width-icon": "3rem",
+              } as React.CSSProperties
+            }
+          >
+            <RootDocument />
+          </SidebarProvider>
+        </KeybindsProvider>
       </ThemeProvider>
     </QueryClientProvider>
   )

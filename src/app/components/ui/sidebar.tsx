@@ -23,14 +23,14 @@ import {
   TooltipTrigger,
 } from "@/app/components/ui/tooltip"
 import { useIsMobile } from "@/app/hooks/use-mobile"
+import { useRegisterKeybind } from "@/app/hooks/use-register-keybind"
 import { cn } from "@/app/lib/utils"
+import { Platform } from "@/app/stores/keybind/types"
 
-const SIDEBAR_COOKIE_NAME = "sidebar_state"
-const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
+const SIDEBAR_STORAGE_KEY = "sidebar_state"
 const SIDEBAR_WIDTH = "16rem"
 const SIDEBAR_WIDTH_MOBILE = "18rem"
 const SIDEBAR_WIDTH_ICON = "5rem"
-const SIDEBAR_KEYBOARD_SHORTCUT = "s"
 
 type SidebarContextProps = {
   state: "expanded" | "collapsed"
@@ -69,9 +69,15 @@ function SidebarProvider({
   const isMobile = useIsMobile()
   const [openMobile, setOpenMobile] = React.useState(false)
 
-  // This is the internal state of the sidebar.
-  // We use openProp and setOpenProp for control from outside the component.
-  const [_open, _setOpen] = React.useState(defaultOpen)
+  // Initialize state from localStorage
+  const [_open, _setOpen] = React.useState(() => {
+    if (typeof window !== 'undefined') {
+      const stored = localStorage.getItem(SIDEBAR_STORAGE_KEY)
+      return stored !== null ? JSON.parse(stored) : defaultOpen
+    }
+    return defaultOpen
+  })
+
   const open = openProp ?? _open
   const setOpen = React.useCallback(
     (value: boolean | ((value: boolean) => boolean)) => {
@@ -82,8 +88,10 @@ function SidebarProvider({
         _setOpen(openState)
       }
 
-      // This sets the cookie to keep the sidebar state.
-      document.cookie = `${SIDEBAR_COOKIE_NAME}=${openState}; path=/; max-age=${SIDEBAR_COOKIE_MAX_AGE}`
+      // Save to localStorage instead of cookies
+      if (typeof window !== 'undefined') {
+        localStorage.setItem(SIDEBAR_STORAGE_KEY, JSON.stringify(openState))
+      }
     },
     [setOpenProp, open],
   )
@@ -93,21 +101,30 @@ function SidebarProvider({
     return isMobile ? setOpenMobile((open) => !open) : setOpen((open) => !open)
   }, [isMobile, setOpen, setOpenMobile])
 
-  // Adds a keyboard shortcut to toggle the sidebar.
-  React.useEffect(() => {
-    const handleKeyDown = (event: KeyboardEvent) => {
-      if (
-        event.key === SIDEBAR_KEYBOARD_SHORTCUT &&
-        (event.metaKey || event.ctrlKey)
-      ) {
-        event.preventDefault()
-        toggleSidebar()
-      }
-    }
+  // Register keybinds for sidebar toggle
+  useRegisterKeybind({
+    id: "toggle-sidebar-win32",
+    key: "ctrl+s",
+    description: "Toggle sidebar",
+    callback: toggleSidebar,
+    platform: Platform.WIN32,
+  })
 
-    window.addEventListener("keydown", handleKeyDown)
-    return () => window.removeEventListener("keydown", handleKeyDown)
-  }, [toggleSidebar])
+  useRegisterKeybind({
+    id: "toggle-sidebar-darwin",
+    key: "cmd+s",
+    description: "Toggle sidebar",
+    callback: toggleSidebar,
+    platform: Platform.DARWIN,
+  })
+
+  useRegisterKeybind({
+    id: "toggle-sidebar-linux",
+    key: "ctrl+s",
+    description: "Toggle sidebar",
+    callback: toggleSidebar,
+    platform: Platform.LINUX,
+  })
 
   // We add a state so that we can do data-state="expanded" or "collapsed".
   // This makes it easier to style the sidebar with Tailwind classes.
