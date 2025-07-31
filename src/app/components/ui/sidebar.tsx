@@ -25,9 +25,8 @@ import {
 import { useIsMobile } from "@/app/hooks/use-mobile"
 import { useRegisterKeybind } from "@/app/hooks/use-register-keybind"
 import { cn } from "@/app/lib/utils"
-import { Platform } from "@/app/stores/keybind/types"
 
-const SIDEBAR_STORAGE_KEY = "sidebar_state"
+const SIDEBAR_STORAGE_KEY = "sidebar-state"
 const SIDEBAR_WIDTH = "16rem"
 const SIDEBAR_WIDTH_MOBILE = "18rem"
 const SIDEBAR_WIDTH_ICON = "5rem"

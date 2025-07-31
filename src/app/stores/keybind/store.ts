@@ -28,7 +28,6 @@ const keybindStore = create<KeybindState>()(
       },
 
       getKeybindList: () => {
-        // Combine persisted data with callbacks from registry
         return Array.from(get().keybinds.values()).map((keybind) => ({
           ...keybind,
           callback:
@@ -69,7 +68,7 @@ const keybindStore = create<KeybindState>()(
 export const useRegisterKeybind = () =>
   keybindStore((state) => state.registerKeybind)
 
-export const useKeybindList = () => {
+export function useKeybindList() {
   const keybindsMap = keybindStore((state) => state.keybinds)
   const expanded = Array.from(keybindsMap.values()).map((keybind) => {
     return {
@@ -83,4 +82,43 @@ export const useKeybindList = () => {
     const filter = expanded.filter((k) => k.platform === getCurrentPlatform())
     return filter
   }, [keybindsMap])
+}
+
+export function useKeybindMap() {
+  const keybindsFromStore = keybindStore((state) => state.keybinds)
+
+  return useMemo(() => {
+    const currentPlatform = getCurrentPlatform()
+    const resultKeybindMap = new Map<string, Keybind>()
+
+    keybindsFromStore.forEach((keybind) => {
+      if (keybind.platform === currentPlatform) {
+        const callback =
+          callbackRegistry.get(`${keybind.id}-${keybind.platform}`) ||
+          (() => {})
+
+        const normalizedKey = normalizeKeybindStringForMap(keybind.key)
+
+        resultKeybindMap.set(normalizedKey, {
+          ...keybind,
+          callback: callback,
+        })
+      }
+    })
+
+    return resultKeybindMap
+  }, [keybindsFromStore])
+}
+
+function normalizeKeybindStringForMap(keybindString: string): string {
+  // Sort modifiers to ensure "ctrl+shift+a" is same as "shift+ctrl+a"
+  const parts = keybindString
+    .toLowerCase()
+    .split("+")
+    .map((s) => s.trim())
+    .sort()
+  const key = parts.pop()
+  const modifiers = parts.sort()
+
+  return [...modifiers, key].join("+")
 }
