@@ -17,7 +17,6 @@ function RootComponent() {
   const queryClient = getQueryClient()
 
   return (
-    <>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider>
           <SidebarProvider
@@ -32,7 +31,6 @@ function RootComponent() {
           </SidebarProvider>
         </ThemeProvider>
       </QueryClientProvider>
-    </>
   )
 }
 

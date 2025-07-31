@@ -1,13 +1,18 @@
 import { spawn } from "node:child_process"
-import { 
-  getOpencodeBinaryPath, 
-  validateBinaryPath, 
-  isServerRunning, 
-  getServerProcessInfo,
-  setOpencodeServerProcess 
-} from "./server"
 
-export async function startServer(input: { port: number; host: string }) {
+import {
+  getOpencodeBinaryPath,
+  getServerProcessInfo,
+  isServerRunning,
+  setOpencodeServerProcess,
+  validateBinaryPath,
+} from "./server"
+import { StartMutation } from "./types"
+
+// Start the server when file is imported
+startServer({ port: 3000, host: "localhost" })
+
+export async function startServer(input: StartMutation) {
   // Check if server is already running
   if (isServerRunning()) {
     const { pid } = getServerProcessInfo()
@@ -94,7 +99,7 @@ export async function startServer(input: { port: number; host: string }) {
 
 export function stopServer() {
   const { process: serverProcess } = getServerProcessInfo()
-  
+
   if (!isServerRunning() || !serverProcess) {
     return {
       success: false,
@@ -124,3 +129,4 @@ export function stopServer() {
     }
   }
 }
+

@@ -1,6 +1,7 @@
 import z from "zod"
 
 export const startSchema = z.object({
-  port: z.number().optional().default(3000),
-  host: z.string().optional().default("localhost"),
+  port: z.optional(z.number()).default(3000),
+  host: z.optional(z.string()).default("localhost"),
 })
+export type StartMutation = z.infer<typeof startSchema>
