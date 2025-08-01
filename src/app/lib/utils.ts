@@ -45,7 +45,7 @@ export function formatKeybindForDisplay(key: string): string {
           return part.toUpperCase()
       }
     })
-    .join("")
+    .join(" ")
 }
 
 export function getCurrentPlatform(): Platform {

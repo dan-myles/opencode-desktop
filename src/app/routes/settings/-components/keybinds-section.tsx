@@ -52,7 +52,7 @@ function getCategoryColor(
 ): "default" | "secondary" | "outline" {
   switch (category) {
     case "Navigation":
-      return "default"
+      return "secondary"
     case "UI Controls":
       return "secondary"
     case "Settings":
@@ -100,12 +100,6 @@ export function KeybindsSection() {
                       </Badge>
                     </div>
                     <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <TableHead className="w-[60%]">Description</TableHead>
-                          <TableHead className="text-right">Shortcut</TableHead>
-                        </TableRow>
-                      </TableHeader>
                       <TableBody>
                         {categoryKeybinds.map((keybind) => (
                           <TableRow key={`${keybind.id}-${keybind.platform}`}>
@@ -113,10 +107,7 @@ export function KeybindsSection() {
                               {keybind.description}
                             </TableCell>
                             <TableCell className="text-right">
-                              <Badge
-                                variant="outline"
-                                className="font-mono text-xs"
-                              >
+                              <Badge className="font-mono text-xs">
                                 {formatKeybindForDisplay(keybind.key)}
                               </Badge>
                             </TableCell>
