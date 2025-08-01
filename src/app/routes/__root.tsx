@@ -1,6 +1,5 @@
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client"
 import { createRootRoute, Outlet } from "@tanstack/react-router"
-import { Toaster } from "sonner"
 
 import { CommandMenu } from "@/app/components/command-menu"
 import { FloatingSidebarTrigger } from "@/app/components/floating-sidebar-trigger"
@@ -9,6 +8,7 @@ import { ThemeProvider } from "@/app/components/providers/theme.provider"
 import { AppSidebar } from "@/app/components/sidebar"
 import { Titlebar } from "@/app/components/titlebar"
 import { SidebarProvider } from "@/app/components/ui/sidebar"
+import { Toaster } from "@/app/components/ui/sonner"
 import { getQueryClient, persister } from "@/app/lib/query-client"
 
 export const Route = createRootRoute({
@@ -51,9 +51,9 @@ function RootDocument() {
           <Outlet />
         </div>
       </div>
-      <Toaster />
       <CommandMenu />
       <FloatingSidebarTrigger />
+      <Toaster position="top-right" />
     </>
   )
 }

@@ -1,6 +1,8 @@
-import { useState } from "react"
+import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { Code2 } from "lucide-react"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
 
 import { Badge } from "@/app/components/ui/badge"
 import { Button } from "@/app/components/ui/button"
@@ -12,29 +14,53 @@ import {
   CardTitle,
 } from "@/app/components/ui/card"
 import { CodeBox } from "@/app/components/ui/code-box"
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+} from "@/app/components/ui/form"
 import { Input } from "@/app/components/ui/input"
 import { Label } from "@/app/components/ui/label"
 import { api } from "@/app/lib/api"
+import { startSchema } from "@/server/routers/opencode/types"
 
 export function DeveloperSection() {
   const queryClient = useQueryClient()
-  const [port, setPort] = useState(3000)
-  const [host, setHost] = useState("localhost")
   const binary = useQuery(api.opencode.path.queryOptions())
   const status = useQuery(api.opencode.status.queryOptions())
 
+  const form = useForm({
+    resolver: zodResolver(startSchema),
+    defaultValues: {
+      host: "localhost",
+      port: 3000,
+    },
+  })
+
   const startServer = useMutation(
     api.opencode.start.mutationOptions({
-      onSuccess: () => {
+      onSuccess: (data) => {
         queryClient.invalidateQueries(api.opencode.status.queryFilter())
+        if (data.success) {
+          toast.success(data.message)
+        } else {
+          toast.error(data.message)
+        }
       },
     }),
   )
 
   const stopServer = useMutation(
     api.opencode.stop.mutationOptions({
-      onSuccess: () => {
+      onSuccess: (data) => {
         queryClient.invalidateQueries(api.opencode.status.queryFilter())
+        if (data.success) {
+          toast.success(data.message)
+        } else {
+          toast.error(data.message)
+        }
       },
     }),
   )
@@ -113,7 +139,7 @@ export function DeveloperSection() {
                 <div className="flex items-center gap-2">
                   <Label className="text-xs">URL:</Label>
                   <CodeBox className="text-xs">
-                    http://{host}:{port}
+                    http://{form.watch("host")}:{form.watch("port")}
                   </CodeBox>
                 </div>
               </>
@@ -130,40 +156,54 @@ export function DeveloperSection() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <Label htmlFor="host" className="mb-2 text-xs">
-                  Host
-                </Label>
-                <Input
-                  id="host"
-                  value={host}
-                  onChange={(e) => setHost(e.target.value)}
-                  placeholder="localhost"
-                  disabled={status?.data?.isRunning}
-                  className="text-sm"
+            <Form {...form}>
+              <div className="grid grid-cols-2 gap-4">
+                <FormField
+                  control={form.control}
+                  name="host"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-xs">Host</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          placeholder="localhost"
+                          disabled={status?.data?.isRunning}
+                          className="text-sm"
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="port"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel className="text-xs">Port</FormLabel>
+                      <FormControl>
+                        <Input
+                          {...field}
+                          type="number"
+                          placeholder="3000"
+                          disabled={status?.data?.isRunning}
+                          className="text-sm"
+                          onChange={(e) =>
+                            field.onChange(Number(e.target.value))
+                          }
+                        />
+                      </FormControl>
+                    </FormItem>
+                  )}
                 />
               </div>
-              <div>
-                <Label htmlFor="port" className="mb-2 text-xs">
-                  Port
-                </Label>
-                <Input
-                  id="port"
-                  type="number"
-                  value={port}
-                  onChange={(e) => setPort(Number(e.target.value))}
-                  placeholder="3000"
-                  disabled={status?.data?.isRunning}
-                  className="text-sm"
-                />
-              </div>
-            </div>
+            </Form>
 
             <div className="flex gap-2">
               <Button
                 onClick={() => {
-                  startServer.mutate({ host, port })
+                  const values = form.getValues()
+                  startServer.mutate(values)
                 }}
                 disabled={
                   status.data?.isRunning ||
@@ -187,47 +227,9 @@ export function DeveloperSection() {
                 {stopServer.isPending ? "Stopping..." : "Stop Server"}
               </Button>
             </div>
-
-            {/* Display mutation results */}
-            {startServer.data && (
-              <div
-                className={`rounded p-3 text-sm ${
-                  startServer.data.success
-                    ? `bg-primary/10 text-primary-foreground border-primary/20
-                      border`
-                    : `bg-destructive/10 text-destructive-foreground
-                      border-destructive/20 border`
-                }`}
-              >
-                {startServer.data.message}
-                {startServer.data.url && (
-                  <div className="mt-1">
-                    Server URL:{" "}
-                    <CodeBox className="text-xs">
-                      {startServer.data.url}
-                    </CodeBox>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {stopServer.data && (
-              <div
-                className={`rounded p-3 text-sm ${
-                  stopServer.data.success
-                    ? `bg-primary/10 text-primary-foreground border-primary/20
-                      border`
-                    : `bg-destructive/10 text-destructive-foreground
-                      border-destructive/20 border`
-                }`}
-              >
-                {stopServer.data.message}
-              </div>
-            )}
           </CardContent>
         </Card>
       </div>
     </section>
   )
 }
-
