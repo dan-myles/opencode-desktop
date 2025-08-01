@@ -1,4 +1,8 @@
-import { getOpencodeBinaryPath, validateBinaryPath, getServerProcessInfo } from "./server"
+import {
+  getOpencodeBinaryPath,
+  getServerProcessInfo,
+  validateBinaryPath,
+} from "./server"
 
 export function getBinaryInfo() {
   const binaryPath = getOpencodeBinaryPath()
@@ -20,3 +24,4 @@ export function getServerStatus() {
     uptime: isRunning ? process.uptime() : null,
   }
 }
+

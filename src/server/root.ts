@@ -1,11 +1,11 @@
-import { opencodeRouter } from "./routers/opencode/opencode.router"
+import { binaryRouter } from "./routers/binary/binary.router"
 import { createTRPCRouter } from "./trpc"
 
 /**
  * This is the primary router for your server.
  */
 export const appRouter = createTRPCRouter({
-  opencode: opencodeRouter,
+  binary: binaryRouter,
 })
 
 // export type definition of API

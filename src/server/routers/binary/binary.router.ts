@@ -1,10 +1,10 @@
 import type { TRPCRouterRecord } from "@trpc/server"
 import { publicProcedure } from "@/server/trpc"
-import { startServer, stopServer } from "./opencode.mutations"
-import { getBinaryInfo, getServerStatus } from "./opencode.queries"
+import { startServer, stopServer } from "./binary.mutations"
+import { getBinaryInfo, getServerStatus } from "./binary.queries"
 import { startSchema } from "./types"
 
-export const opencodeRouter = {
+export const binaryRouter = {
   path: publicProcedure.query(() => {
     return getBinaryInfo()
   }),
@@ -20,5 +20,4 @@ export const opencodeRouter = {
   status: publicProcedure.query(() => {
     return getServerStatus()
   }),
-
 } satisfies TRPCRouterRecord

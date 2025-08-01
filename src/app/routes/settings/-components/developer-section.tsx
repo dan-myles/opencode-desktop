@@ -24,12 +24,12 @@ import {
 import { Input } from "@/app/components/ui/input"
 import { Label } from "@/app/components/ui/label"
 import { api } from "@/app/lib/api"
-import { startSchema } from "@/server/routers/opencode/types"
+import { startSchema } from "@/server/routers/binary/types"
 
 export function DeveloperSection() {
   const queryClient = useQueryClient()
-  const binary = useQuery(api.opencode.path.queryOptions())
-  const status = useQuery(api.opencode.status.queryOptions())
+  const binary = useQuery(api.binary.path.queryOptions())
+  const status = useQuery(api.binary.status.queryOptions())
 
   const defaultValues = startSchema.parse({})
 
@@ -39,9 +39,9 @@ export function DeveloperSection() {
   })
 
   const startServer = useMutation(
-    api.opencode.start.mutationOptions({
+    api.binary.start.mutationOptions({
       onSuccess: (data) => {
-        queryClient.invalidateQueries(api.opencode.status.queryFilter())
+        queryClient.invalidateQueries(api.binary.status.queryFilter())
         toast.success(data.message)
       },
       onError: (data) => {
@@ -51,9 +51,9 @@ export function DeveloperSection() {
   )
 
   const stopServer = useMutation(
-    api.opencode.stop.mutationOptions({
+    api.binary.stop.mutationOptions({
       onSuccess: (data) => {
-        queryClient.invalidateQueries(api.opencode.status.queryFilter())
+        queryClient.invalidateQueries(api.binary.status.queryFilter())
         toast.success(data.message)
       },
       onError: (data) => {
