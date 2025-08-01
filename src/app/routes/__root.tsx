@@ -10,6 +10,7 @@ import { SidebarProvider } from "@/app/components/ui/sidebar"
 import { Toaster } from "@/app/components/ui/sonner"
 import { getQueryClient, persister } from "@/app/lib/query-client"
 import { KeybindProvider } from "../components/providers/keybind.provider"
+import { RegistryProvider } from "../components/providers/registry.provider"
 
 export const Route = createRootRoute({
   component: RootComponent,
@@ -25,16 +26,18 @@ function RootComponent() {
     >
       <ThemeProvider>
         <KeybindProvider>
-          <SidebarProvider
-            style={
-              {
-                "--sidebar-width": "15.5rem",
-                "--sidebar-width-icon": "3rem",
-              } as React.CSSProperties
-            }
-          >
-            <RootDocument />
-          </SidebarProvider>
+          <RegistryProvider>
+            <SidebarProvider
+              style={
+                {
+                  "--sidebar-width": "15.5rem",
+                  "--sidebar-width-icon": "3rem",
+                } as React.CSSProperties
+              }
+            >
+              <RootDocument />
+            </SidebarProvider>
+          </RegistryProvider>
         </KeybindProvider>
       </ThemeProvider>
     </PersistQueryClientProvider>
