@@ -10,7 +10,7 @@ import {
 import { StartMutation } from "./types"
 
 // Start the server when file is imported
-startServer({ port: 3000, host: "localhost" })
+startServer({ port: 4096, host: "localhost" })
 
 export async function startServer(input: StartMutation) {
   // Check if server is already running
@@ -129,4 +129,3 @@ export function stopServer() {
     }
   }
 }
-

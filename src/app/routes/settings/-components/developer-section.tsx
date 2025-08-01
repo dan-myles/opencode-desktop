@@ -31,12 +31,11 @@ export function DeveloperSection() {
   const binary = useQuery(api.opencode.path.queryOptions())
   const status = useQuery(api.opencode.status.queryOptions())
 
+  const defaultValues = startSchema.parse({})
+
   const form = useForm({
     resolver: zodResolver(startSchema),
-    defaultValues: {
-      host: "localhost",
-      port: 3000,
-    },
+    defaultValues,
   })
 
   const startServer = useMutation(
@@ -164,7 +163,7 @@ export function DeveloperSection() {
                     <FormControl>
                       <Input
                         {...field}
-                        placeholder="localhost"
+                        placeholder={defaultValues.host}
                         disabled={status?.data?.isRunning}
                         className="text-sm"
                       />
@@ -182,7 +181,7 @@ export function DeveloperSection() {
                       <Input
                         {...field}
                         type="number"
-                        placeholder="3000"
+                        placeholder={defaultValues.port.toString()}
                         disabled={status?.data?.isRunning}
                         className="text-sm"
                         onChange={(e) => field.onChange(Number(e.target.value))}

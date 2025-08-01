@@ -20,4 +20,5 @@ export const opencodeRouter = {
   status: publicProcedure.query(() => {
     return getServerStatus()
   }),
+
 } satisfies TRPCRouterRecord
