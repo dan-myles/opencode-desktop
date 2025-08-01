@@ -1,5 +1,6 @@
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client"
 import { createRootRoute, Outlet } from "@tanstack/react-router"
+import { Toaster } from "sonner"
 
 import { CommandMenu } from "@/app/components/command-menu"
 import { FloatingSidebarTrigger } from "@/app/components/floating-sidebar-trigger"
@@ -50,6 +51,7 @@ function RootDocument() {
           <Outlet />
         </div>
       </div>
+      <Toaster />
       <CommandMenu />
       <FloatingSidebarTrigger />
     </>
