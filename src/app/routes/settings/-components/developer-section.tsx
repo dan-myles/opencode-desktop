@@ -55,11 +55,10 @@ export function DeveloperSection() {
     api.opencode.stop.mutationOptions({
       onSuccess: (data) => {
         queryClient.invalidateQueries(api.opencode.status.queryFilter())
-        if (data.success) {
-          toast.success(data.message)
-        } else {
-          toast.error(data.message)
-        }
+        toast.success(data.message)
+      },
+      onError: (data) => {
+        toast.error(data.message)
       },
     }),
   )
