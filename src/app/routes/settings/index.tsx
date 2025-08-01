@@ -12,14 +12,14 @@ export const Route = createFileRoute("/settings/")({
 function RouteComponent() {
   const navigate = useNavigate()
 
-  useRegisterKeybind({
-    id: "navigate-settings",
-    darwinKey: "cmd+,",
-    win32Key: "ctrl+,",
-    linuxKey: "ctrl+,",
-    callback: () => navigate({ to: "/settings", viewTransition: true }),
-    description: "Open settings",
-  })
+  // useRegisterKeybind({
+  //   id: "navigate-settings",
+  //   darwinKey: "cmd+,",
+  //   win32Key: "ctrl+,",
+  //   linuxKey: "ctrl+,",
+  //   callback: () => navigate({ to: "/settings", viewTransition: true }),
+  //   description: "Open settings",
+  // })
 
   return (
     <div className="container mx-auto space-y-6 p-6">

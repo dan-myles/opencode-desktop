@@ -1,6 +1,5 @@
 import { Keyboard } from "lucide-react"
 
-import type { Keybind } from "@/app/stores/keybind/types"
 import { Badge } from "@/app/components/ui/badge"
 import {
   Card,
@@ -63,66 +62,66 @@ function getCategoryColor(
 }
 
 export function KeybindsSection() {
-  const keybinds = useKeybindList()
-  const groupedKeybinds = groupKeybindsByCategory(keybinds)
-
-  return (
-    <section className="space-y-6">
-      <div className="flex items-center gap-2">
-        <Keyboard className="h-5 w-5" />
-        <h2 className="text-xl font-semibold">Keyboard Shortcuts</h2>
-      </div>
-
-      <Card className="bg-background/50">
-        <CardHeader>
-          <CardTitle>Active Keybinds</CardTitle>
-          <CardDescription>
-            All registered keyboard shortcuts for the current platform
-          </CardDescription>
-        </CardHeader>
-        <CardContent>
-          {Object.keys(groupedKeybinds).length === 0 ? (
-            <p className="text-muted-foreground py-8 text-center">
-              No keybinds registered
-            </p>
-          ) : (
-            <div className="space-y-6">
-              {Object.entries(groupedKeybinds).map(
-                ([category, categoryKeybinds]) => (
-                  <div key={category}>
-                    <div className="mb-3 flex items-center gap-2">
-                      <h3 className="text-sm font-medium">{category}</h3>
-                      <Badge
-                        variant={getCategoryColor(category)}
-                        className="text-xs"
-                      >
-                        {categoryKeybinds.length}
-                      </Badge>
-                    </div>
-                    <Table>
-                      <TableBody>
-                        {categoryKeybinds.map((keybind) => (
-                          <TableRow key={`${keybind.id}-${keybind.platform}`}>
-                            <TableCell className="font-medium">
-                              {keybind.description}
-                            </TableCell>
-                            <TableCell className="text-right">
-                              <Badge className="font-mono text-xs">
-                                {formatKeybindForDisplay(keybind.key)}
-                              </Badge>
-                            </TableCell>
-                          </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </div>
-                ),
-              )}
-            </div>
-          )}
-        </CardContent>
-      </Card>
-    </section>
-  )
+  // const keybinds = useKeybindList()
+  // const groupedKeybinds = groupKeybindsByCategory(keybinds)
+  //
+  // return (
+  //   <section className="space-y-6">
+  //     <div className="flex items-center gap-2">
+  //       <Keyboard className="h-5 w-5" />
+  //       <h2 className="text-xl font-semibold">Keyboard Shortcuts</h2>
+  //     </div>
+  //
+  //     <Card className="bg-background/50">
+  //       <CardHeader>
+  //         <CardTitle>Active Keybinds</CardTitle>
+  //         <CardDescription>
+  //           All registered keyboard shortcuts for the current platform
+  //         </CardDescription>
+  //       </CardHeader>
+  //       <CardContent>
+  //         {Object.keys(groupedKeybinds).length === 0 ? (
+  //           <p className="text-muted-foreground py-8 text-center">
+  //             No keybinds registered
+  //           </p>
+  //         ) : (
+  //           <div className="space-y-6">
+  //             {Object.entries(groupedKeybinds).map(
+  //               ([category, categoryKeybinds]) => (
+  //                 <div key={category}>
+  //                   <div className="mb-3 flex items-center gap-2">
+  //                     <h3 className="text-sm font-medium">{category}</h3>
+  //                     <Badge
+  //                       variant={getCategoryColor(category)}
+  //                       className="text-xs"
+  //                     >
+  //                       {categoryKeybinds.length}
+  //                     </Badge>
+  //                   </div>
+  //                   <Table>
+  //                     <TableBody>
+  //                       {categoryKeybinds.map((keybind) => (
+  //                         <TableRow key={`${keybind.id}-${keybind.platform}`}>
+  //                           <TableCell className="font-medium">
+  //                             {keybind.description}
+  //                           </TableCell>
+  //                           <TableCell className="text-right">
+  //                             <Badge className="font-mono text-xs">
+  //                               {formatKeybindForDisplay(keybind.key)}
+  //                             </Badge>
+  //                           </TableCell>
+  //                         </TableRow>
+  //                       ))}
+  //                     </TableBody>
+  //                   </Table>
+  //                 </div>
+  //               ),
+  //             )}
+  //           </div>
+  //         )}
+  //       </CardContent>
+  //     </Card>
+  //   </section>
+  // )
+  return null
 }
-

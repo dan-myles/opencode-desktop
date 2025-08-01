@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router"
-import { Home, Settings, Terminal, TestTube } from "lucide-react"
+import { Home, Settings, Terminal } from "lucide-react"
 
 import { Button } from "@/app/components/ui/button"
 import {

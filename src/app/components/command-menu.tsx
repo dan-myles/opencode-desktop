@@ -1,8 +1,5 @@
 import { Dispatch, SetStateAction, useState } from "react"
 
-import { useRegisterKeybind } from "@/app/hooks/use-register-keybind"
-import { formatKeybindForDisplay } from "@/app/lib/utils"
-import { useKeybindList } from "@/app/stores/keybind/store"
 import {
   CommandDialog,
   CommandEmpty,
@@ -16,14 +13,14 @@ import {
 export function CommandMenu() {
   const [open, setOpen] = useState(false)
 
-  useRegisterKeybind({
-    id: "toggle-command-menu",
-    darwinKey: "cmd+k",
-    win32Key: "ctrl+k",
-    linuxKey: "ctrl+k",
-    description: "Toggle command menu",
-    callback: () => setOpen((open) => !open),
-  })
+  // useRegisterKeybind({
+  //   id: "toggle-command-menu",
+  //   darwinKey: "cmd+k",
+  //   win32Key: "ctrl+k",
+  //   linuxKey: "ctrl+k",
+  //   description: "Toggle command menu",
+  //   callback: () => setOpen((open) => !open),
+  // })
 
   return (
     <CommandDialog open={open} onOpenChange={setOpen}>
@@ -41,24 +38,25 @@ interface CommandItemsProps {
 }
 
 function KeybindCommands({ setOpen }: CommandItemsProps) {
-  const keybinds = useKeybindList()
-
-  return (
-    <CommandGroup heading="Commands">
-      {keybinds.map((keybind) => (
-        <CommandItem
-          key={keybind.id}
-          onSelect={() => {
-            keybind.callback()
-            setOpen(false)
-          }}
-        >
-          <span>{keybind.description}</span>
-          <CommandShortcut>
-            {formatKeybindForDisplay(keybind.key)}
-          </CommandShortcut>
-        </CommandItem>
-      ))}
-    </CommandGroup>
-  )
+  // const keybinds = useKeybindList()
+  //
+  // return (
+  //   <CommandGroup heading="Commands">
+  //     {keybinds.map((keybind) => (
+  //       <CommandItem
+  //         key={keybind.id}
+  //         onSelect={() => {
+  //           keybind.callback()
+  //           setOpen(false)
+  //         }}
+  //       >
+  //         <span>{keybind.description}</span>
+  //         <CommandShortcut>
+  //           {formatKeybindForDisplay(keybind.key)}
+  //         </CommandShortcut>
+  //       </CommandItem>
+  //     ))}
+  //   </CommandGroup>
+  // )
+  return null
 }

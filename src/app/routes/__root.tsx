@@ -3,7 +3,6 @@ import { createRootRoute, Outlet } from "@tanstack/react-router"
 
 import { CommandMenu } from "@/app/components/command-menu"
 import { FloatingSidebarTrigger } from "@/app/components/floating-sidebar-trigger"
-import { KeybindsProvider } from "@/app/components/providers/keybinds.provider"
 import { ThemeProvider } from "@/app/components/providers/theme.provider"
 import { AppSidebar } from "@/app/components/sidebar"
 import { Titlebar } from "@/app/components/titlebar"
@@ -24,18 +23,16 @@ function RootComponent() {
       persistOptions={{ persister }}
     >
       <ThemeProvider>
-        <KeybindsProvider>
-          <SidebarProvider
-            style={
-              {
-                "--sidebar-width": "15.5rem",
-                "--sidebar-width-icon": "3rem",
-              } as React.CSSProperties
-            }
-          >
-            <RootDocument />
-          </SidebarProvider>
-        </KeybindsProvider>
+        <SidebarProvider
+          style={
+            {
+              "--sidebar-width": "15.5rem",
+              "--sidebar-width-icon": "3rem",
+            } as React.CSSProperties
+          }
+        >
+          <RootDocument />
+        </SidebarProvider>
       </ThemeProvider>
     </PersistQueryClientProvider>
   )

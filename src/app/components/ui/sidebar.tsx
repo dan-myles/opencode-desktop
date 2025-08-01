@@ -101,14 +101,14 @@ function SidebarProvider({
   }, [isMobile, setOpen, setOpenMobile])
 
   // Register keybinds for sidebar toggle
-  useRegisterKeybind({
-    id: "toggle-sidebar",
-    win32Key: "ctrl+s",
-    linuxKey: "ctrl+s",
-    darwinKey: "cmd+s",
-    description: "Toggle sidebar",
-    callback: toggleSidebar,
-  })
+  // useRegisterKeybind({
+  //   id: "toggle-sidebar",
+  //   win32Key: "ctrl+s",
+  //   linuxKey: "ctrl+s",
+  //   darwinKey: "cmd+s",
+  //   description: "Toggle sidebar",
+  //   callback: toggleSidebar,
+  // })
 
   // We add a state so that we can do data-state="expanded" or "collapsed".
   // This makes it easier to style the sidebar with Tailwind classes.
