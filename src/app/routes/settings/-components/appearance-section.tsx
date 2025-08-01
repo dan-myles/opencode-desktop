@@ -55,7 +55,7 @@ export function AppearanceSection() {
         <h2 className="text-xl font-semibold">Appearance</h2>
       </div>
 
-      <Card>
+      <Card className="bg-background/50">
         <CardHeader>
           <CardTitle>Theme Settings</CardTitle>
           <CardDescription>

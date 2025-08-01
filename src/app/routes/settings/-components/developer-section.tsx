@@ -66,7 +66,7 @@ export function DeveloperSection() {
 
   return (
     <section
-      className="border-destructive/30 bg-accent/50 space-y-6 rounded-lg
+      className="border-accent-foreground/20 bg-accent/20 space-y-6 rounded-lg
         border-2 border-dashed p-6"
     >
       <div className="flex items-center gap-2">

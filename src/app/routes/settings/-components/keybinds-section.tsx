@@ -1,5 +1,6 @@
 import { Keyboard } from "lucide-react"
 
+import type { Keybind } from "@/app/stores/keybind/types"
 import { Badge } from "@/app/components/ui/badge"
 import {
   Card,
@@ -18,7 +19,6 @@ import {
 } from "@/app/components/ui/table"
 import { formatKeybindForDisplay } from "@/app/lib/utils"
 import { useKeybindList } from "@/app/stores/keybind/store"
-import type { Keybind } from "@/app/stores/keybind/types"
 
 interface GroupedKeybinds {
   [category: string]: Keybind[]
@@ -47,7 +47,9 @@ function groupKeybindsByCategory(keybinds: Keybind[]): GroupedKeybinds {
   return groups
 }
 
-function getCategoryColor(category: string): "default" | "secondary" | "outline" {
+function getCategoryColor(
+  category: string,
+): "default" | "secondary" | "outline" {
   switch (category) {
     case "Navigation":
       return "default"
@@ -71,7 +73,7 @@ export function KeybindsSection() {
         <h2 className="text-xl font-semibold">Keyboard Shortcuts</h2>
       </div>
 
-      <Card>
+      <Card className="bg-background/50">
         <CardHeader>
           <CardTitle>Active Keybinds</CardTitle>
           <CardDescription>
@@ -80,43 +82,51 @@ export function KeybindsSection() {
         </CardHeader>
         <CardContent>
           {Object.keys(groupedKeybinds).length === 0 ? (
-            <p className="text-muted-foreground text-center py-8">
+            <p className="text-muted-foreground py-8 text-center">
               No keybinds registered
             </p>
           ) : (
             <div className="space-y-6">
-              {Object.entries(groupedKeybinds).map(([category, categoryKeybinds]) => (
-                <div key={category}>
-                  <div className="flex items-center gap-2 mb-3">
-                    <h3 className="font-medium text-sm">{category}</h3>
-                    <Badge variant={getCategoryColor(category)} className="text-xs">
-                      {categoryKeybinds.length}
-                    </Badge>
-                  </div>
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead className="w-[60%]">Description</TableHead>
-                        <TableHead className="text-right">Shortcut</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {categoryKeybinds.map((keybind) => (
-                        <TableRow key={`${keybind.id}-${keybind.platform}`}>
-                          <TableCell className="font-medium">
-                            {keybind.description}
-                          </TableCell>
-                          <TableCell className="text-right">
-                            <Badge variant="outline" className="font-mono text-xs">
-                              {formatKeybindForDisplay(keybind.key)}
-                            </Badge>
-                          </TableCell>
+              {Object.entries(groupedKeybinds).map(
+                ([category, categoryKeybinds]) => (
+                  <div key={category}>
+                    <div className="mb-3 flex items-center gap-2">
+                      <h3 className="text-sm font-medium">{category}</h3>
+                      <Badge
+                        variant={getCategoryColor(category)}
+                        className="text-xs"
+                      >
+                        {categoryKeybinds.length}
+                      </Badge>
+                    </div>
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead className="w-[60%]">Description</TableHead>
+                          <TableHead className="text-right">Shortcut</TableHead>
                         </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </div>
-              ))}
+                      </TableHeader>
+                      <TableBody>
+                        {categoryKeybinds.map((keybind) => (
+                          <TableRow key={`${keybind.id}-${keybind.platform}`}>
+                            <TableCell className="font-medium">
+                              {keybind.description}
+                            </TableCell>
+                            <TableCell className="text-right">
+                              <Badge
+                                variant="outline"
+                                className="font-mono text-xs"
+                              >
+                                {formatKeybindForDisplay(keybind.key)}
+                              </Badge>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                ),
+              )}
             </div>
           )}
         </CardContent>
@@ -124,3 +134,4 @@ export function KeybindsSection() {
     </section>
   )
 }
+
