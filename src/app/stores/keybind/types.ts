@@ -2,6 +2,7 @@ type KeybindId =
   | "toggle-sidebar"
   | "toggle-command-menu"
   | "toggle-light-dark-mode"
+  | "navigate-settings"
 
 type Modifier = "ctrl" | "cmd" | "alt" | "shift"
 

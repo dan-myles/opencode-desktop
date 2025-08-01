@@ -1,14 +1,14 @@
-import { QueryClientProvider } from "@tanstack/react-query"
+import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client"
 import { createRootRoute, Outlet } from "@tanstack/react-router"
 
+import { CommandMenu } from "@/app/components/command-menu"
+import { FloatingSidebarTrigger } from "@/app/components/floating-sidebar-trigger"
 import { KeybindsProvider } from "@/app/components/providers/keybinds.provider"
 import { ThemeProvider } from "@/app/components/providers/theme.provider"
 import { AppSidebar } from "@/app/components/sidebar"
 import { Titlebar } from "@/app/components/titlebar"
 import { SidebarProvider } from "@/app/components/ui/sidebar"
-import { CommandMenu } from "../components/command-menu"
-import { FloatingSidebarTrigger } from "../components/floating-sidebar-trigger"
-import { getQueryClient } from "../lib/query-client"
+import { getQueryClient, persister } from "@/app/lib/query-client"
 
 export const Route = createRootRoute({
   component: RootComponent,
@@ -18,7 +18,10 @@ function RootComponent() {
   const queryClient = getQueryClient()
 
   return (
-    <QueryClientProvider client={queryClient}>
+    <PersistQueryClientProvider
+      client={queryClient}
+      persistOptions={{ persister }}
+    >
       <ThemeProvider>
         <KeybindsProvider>
           <SidebarProvider
@@ -33,7 +36,7 @@ function RootComponent() {
           </SidebarProvider>
         </KeybindsProvider>
       </ThemeProvider>
-    </QueryClientProvider>
+    </PersistQueryClientProvider>
   )
 }
 

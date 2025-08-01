@@ -27,11 +27,6 @@ const navigation = [
     url: "/",
     icon: Home,
   },
-  {
-    title: "Test",
-    url: "/test",
-    icon: TestTube,
-  },
 ]
 
 export function AppSidebar() {

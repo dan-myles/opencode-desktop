@@ -89,9 +89,12 @@ importers:
       '@radix-ui/react-tooltip':
         specifier: ^1.2.7
         version: 1.2.7(@types/react-dom@19.1.6(@types/react@19.1.8))(@types/react@19.1.8)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      '@tanstack/query-async-storage-persister':
+        specifier: ^5.83.1
+        version: 5.83.1
       '@tanstack/query-persist-client-core':
         specifier: ^5.83.0
-        version: 5.83.0
+        version: 5.83.1
       '@tanstack/query-sync-storage-persister':
         specifier: ^5.83.0
         version: 5.83.0
@@ -197,6 +200,9 @@ importers:
       zod:
         specifier: ^4.0.10
         version: 4.0.10
+      zustand:
+        specifier: ^5.0.7
+        version: 5.0.7(@types/react@19.1.8)(react@19.1.1)(use-sync-external-store@1.5.0(react@19.1.1))
     devDependencies:
       '@electron-forge/cli':
         specifier: ^7.8.1
@@ -1894,11 +1900,20 @@ packages:
     resolution: {integrity: sha512-I3YTkbe4RZQN54Qw4+IUhOjqG2DdbG2+EBWuQfew4MEk0eddLYAQVa50BZVww4/D2eh5I9vEk2Fd1Y0Wty7pug==}
     engines: {node: '>=12'}
 
+  '@tanstack/query-async-storage-persister@5.83.1':
+    resolution: {integrity: sha512-P3QzGBn9/nxaCst1hNYDQbbJDKFxTBsGTMjf0YtsKs7sSeNp7wVgUKjOVJpbvhdpFKHqTDYOdjOf2Qeb4bJ9tQ==}
+
   '@tanstack/query-core@5.83.0':
     resolution: {integrity: sha512-0M8dA+amXUkyz5cVUm/B+zSk3xkQAcuXuz5/Q/LveT4ots2rBpPTZOzd7yJa2Utsf8D2Upl5KyjhHRY+9lB/XA==}
 
+  '@tanstack/query-core@5.83.1':
+    resolution: {integrity: sha512-OG69LQgT7jSp+5pPuCfzltq/+7l2xoweggjme9vlbCPa/d7D7zaqv5vN/S82SzSYZ4EDLTxNO1PWrv49RAS64Q==}
+
   '@tanstack/query-persist-client-core@5.83.0':
     resolution: {integrity: sha512-hdKgHkr1MYnwZX+QHj/9JjXZx9gL2RUCD5xSX0EHZiqUQhMk4Gcryq9xosn8LmYRMlhkjk7n9uV+X4UXRvgoIg==}
+
+  '@tanstack/query-persist-client-core@5.83.1':
+    resolution: {integrity: sha512-GPWt1tj8kmo3LA1WPpSmJA3JGCdQfaggb1LheFEfr3RuwbTchWd09xD/fZ40m9ai0pJupvyguLiWF8On8sQWPw==}
 
   '@tanstack/query-sync-storage-persister@5.83.0':
     resolution: {integrity: sha512-/+aTnnNGC0mIEcWZuXc40FLUWIicROVNenBN13bxEGJ+wh95KVOKvdt0RmM29fRDFCAGY5QkwMJunhvemNm7BA==}
@@ -4725,6 +4740,24 @@ packages:
   zod@4.0.10:
     resolution: {integrity: sha512-3vB+UU3/VmLL2lvwcY/4RV2i9z/YU0DTV/tDuYjrwmx5WeJ7hwy+rGEEx8glHp6Yxw7ibRbKSaIFBgReRPe5KA==}
 
+  zustand@5.0.7:
+    resolution: {integrity: sha512-Ot6uqHDW/O2VdYsKLLU8GQu8sCOM1LcoE8RwvLv9uuRT9s6SOHCKs0ZEOhxg+I1Ld+A1Q5lwx+UlKXXUoCZITg==}
+    engines: {node: '>=12.20.0'}
+    peerDependencies:
+      '@types/react': '>=18.0.0'
+      immer: '>=9.0.6'
+      react: '>=18.0.0'
+      use-sync-external-store: '>=1.2.0'
+    peerDependenciesMeta:
+      '@types/react':
+        optional: true
+      immer:
+        optional: true
+      react:
+        optional: true
+      use-sync-external-store:
+        optional: true
+
 snapshots:
 
   '@ampproject/remapping@2.3.0':
@@ -6499,11 +6532,21 @@ snapshots:
 
   '@tanstack/history@1.129.7': {}
 
+  '@tanstack/query-async-storage-persister@5.83.1':
+    dependencies:
+      '@tanstack/query-persist-client-core': 5.83.1
+
   '@tanstack/query-core@5.83.0': {}
+
+  '@tanstack/query-core@5.83.1': {}
 
   '@tanstack/query-persist-client-core@5.83.0':
     dependencies:
       '@tanstack/query-core': 5.83.0
+
+  '@tanstack/query-persist-client-core@5.83.1':
+    dependencies:
+      '@tanstack/query-core': 5.83.1
 
   '@tanstack/query-sync-storage-persister@5.83.0':
     dependencies:
@@ -9367,3 +9410,9 @@ snapshots:
   zod@3.25.76: {}
 
   zod@4.0.10: {}
+
+  zustand@5.0.7(@types/react@19.1.8)(react@19.1.1)(use-sync-external-store@1.5.0(react@19.1.1)):
+    optionalDependencies:
+      '@types/react': 19.1.8
+      react: 19.1.1
+      use-sync-external-store: 1.5.0(react@19.1.1)
