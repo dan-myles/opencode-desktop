@@ -103,26 +103,11 @@ function SidebarProvider({
   // Register keybinds for sidebar toggle
   useRegisterKeybind({
     id: "toggle-sidebar",
-    key: "ctrl+s",
+    win32Key: "ctrl+s",
+    linuxKey: "ctrl+s",
+    darwinKey: "cmd+s",
     description: "Toggle sidebar",
     callback: toggleSidebar,
-    platform: "win32",
-  })
-
-  useRegisterKeybind({
-    id: "toggle-sidebar",
-    key: "cmd+s",
-    description: "Toggle sidebar",
-    callback: toggleSidebar,
-    platform: "darwin",
-  })
-
-  useRegisterKeybind({
-    id: "toggle-sidebar",
-    key: "ctrl+s",
-    description: "Toggle sidebar",
-    callback: toggleSidebar,
-    platform: "linux",
   })
 
   // We add a state so that we can do data-state="expanded" or "collapsed".

@@ -14,26 +14,11 @@ function RouteComponent() {
 
   useRegisterKeybind({
     id: "navigate-settings",
+    darwinKey: "cmd+,",
+    win32Key: "ctrl+,",
+    linuxKey: "ctrl+,",
     callback: () => navigate({ to: "/settings", viewTransition: true }),
     description: "Open settings",
-    key: "cmd+,",
-    platform: "darwin",
-  })
-
-  useRegisterKeybind({
-    id: "navigate-settings",
-    callback: () => navigate({ to: "/settings", viewTransition: true }),
-    description: "Open settings",
-    key: "ctrl+,",
-    platform: "win32",
-  })
-
-  useRegisterKeybind({
-    id: "navigate-settings",
-    callback: () => navigate({ to: "/settings", viewTransition: true }),
-    description: "Open settings",
-    key: "ctrl+,",
-    platform: "linux",
   })
 
   return (

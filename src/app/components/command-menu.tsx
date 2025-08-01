@@ -18,26 +18,11 @@ export function CommandMenu() {
 
   useRegisterKeybind({
     id: "toggle-command-menu",
-    key: "ctrl+k",
+    darwinKey: "cmd+k",
+    win32Key: "ctrl+k",
+    linuxKey: "ctrl+k",
     description: "Toggle command menu",
     callback: () => setOpen((open) => !open),
-    platform: "win32",
-  })
-
-  useRegisterKeybind({
-    id: "toggle-command-menu",
-    key: "cmd+k",
-    description: "Toggle command menu",
-    callback: () => setOpen((open) => !open),
-    platform: "darwin",
-  })
-
-  useRegisterKeybind({
-    id: "toggle-command-menu",
-    key: "ctrl+k",
-    description: "Toggle command menu",
-    callback: () => setOpen((open) => !open),
-    platform: "linux",
   })
 
   return (
