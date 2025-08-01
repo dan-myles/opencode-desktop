@@ -66,96 +66,82 @@ export function DeveloperSection() {
   )
 
   return (
-    <section
-      className="border-accent/50 bg-accent/20 rounded-lg border-2 border-dashed
-        p-4"
-    >
-      <div className="space-y-4">
-        <div className="flex items-center gap-2">
-          <Code2 className="text-accent-foreground h-4 w-4" />
-          <h2 className="text-accent-foreground text-lg font-semibold">
-            Developer Area
-          </h2>
-          <Badge variant="secondary" className="text-xs">
-            Advanced
-          </Badge>
-        </div>
+    <section className="space-y-6">
+      <div className="flex items-center gap-2">
+        <Code2 className="h-5 w-5" />
+        <h2 className="text-xl font-semibold">Developer Area</h2>
+        <Badge variant="secondary" className="text-xs">
+          Advanced
+        </Badge>
+      </div>
 
-        {/* Binary Information */}
-        <Card className="bg-background/50">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base">Binary Information</CardTitle>
-            <CardDescription className="text-sm">
-              Information about the opencode binary
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-2 text-sm">
-            <div className="flex items-center gap-2">
-              <Label className="text-xs">Status:</Label>
-              <Badge
-                variant={binary.data?.exists ? "default" : "destructive"}
-                className="text-xs"
-              >
-                {binary.data?.exists ? "Found" : "Not Found"}
-              </Badge>
+      <Card>
+        <CardHeader>
+          <CardTitle>OpenCode Server</CardTitle>
+          <CardDescription>
+            Manage the opencode development server and binary information
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          {/* Binary Information */}
+          <div className="space-y-3">
+            <h3 className="font-medium text-sm">Binary Information</h3>
+            <div className="space-y-2 text-sm">
+              <div className="flex items-center gap-2">
+                <Label className="text-xs">Status:</Label>
+                <Badge
+                  variant={binary.data?.exists ? "default" : "destructive"}
+                  className="text-xs"
+                >
+                  {binary.data?.exists ? "Found" : "Not Found"}
+                </Badge>
+              </div>
+              <div className="flex items-center gap-2">
+                <Label className="text-xs">Path:</Label>
+                <CodeBox className="text-xs">{binary.data?.path}</CodeBox>
+              </div>
+              <div className="flex items-center gap-2">
+                <Label className="text-xs">Environment:</Label>
+                <Badge variant="outline" className="text-xs">
+                  {binary.data?.isDev ? "Development" : "Production"}
+                </Badge>
+              </div>
             </div>
-            <div className="flex items-center gap-2">
-              <Label className="text-xs">Path:</Label>
-              <CodeBox className="text-xs">{binary.data?.path}</CodeBox>
-            </div>
-            <div className="flex items-center gap-2">
-              <Label className="text-xs">Environment:</Label>
-              <Badge variant="outline" className="text-xs">
-                {binary.data?.isDev ? "Development" : "Production"}
-              </Badge>
-            </div>
-          </CardContent>
-        </Card>
+          </div>
 
-        {/* Server Status */}
-        <Card className="bg-background/50">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base">Server Status</CardTitle>
-            <CardDescription className="text-sm">
-              Current status of the opencode server
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-2 text-sm">
-            <div className="flex items-center gap-2">
-              <Label className="text-xs">Status:</Label>
-              <Badge
-                variant={status.data?.isRunning ? "default" : "secondary"}
-                className="text-xs"
-              >
-                {status.data?.isRunning ? "Running" : "Stopped"}
-              </Badge>
+          {/* Server Status */}
+          <div className="space-y-3">
+            <h3 className="font-medium text-sm">Server Status</h3>
+            <div className="space-y-2 text-sm">
+              <div className="flex items-center gap-2">
+                <Label className="text-xs">Status:</Label>
+                <Badge
+                  variant={status.data?.isRunning ? "default" : "secondary"}
+                  className="text-xs"
+                >
+                  {status.data?.isRunning ? "Running" : "Stopped"}
+                </Badge>
+              </div>
+              {status.data?.isRunning && (
+                <>
+                  <div className="flex items-center gap-2">
+                    <Label className="text-xs">PID:</Label>
+                    <CodeBox className="text-xs">{status.data?.pid}</CodeBox>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Label className="text-xs">URL:</Label>
+                    <CodeBox className="text-xs">
+                      http://{form.watch("host")}:{form.watch("port")}
+                    </CodeBox>
+                  </div>
+                </>
+              )}
             </div>
-            {status.data?.isRunning && (
-              <>
-                <div className="flex items-center gap-2">
-                  <Label className="text-xs">PID:</Label>
-                  <CodeBox className="text-xs">{status.data?.pid}</CodeBox>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Label className="text-xs">URL:</Label>
-                  <CodeBox className="text-xs">
-                    http://{form.watch("host")}:{form.watch("port")}
-                  </CodeBox>
-                </div>
-              </>
-            )}
-          </CardContent>
-        </Card>
+          </div>
 
-        {/* Server Controls */}
-        <Card className="bg-background/50">
-          <CardHeader className="pb-3">
-            <CardTitle className="text-base">Server Controls</CardTitle>
-            <CardDescription className="text-sm">
-              Start and stop the opencode server
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
+          {/* Server Controls */}
+          <div className="space-y-3">
+            <h3 className="font-medium text-sm">Server Controls</h3>
             <Form {...form}>
               <div className="grid grid-cols-2 gap-4">
                 <FormField
@@ -227,9 +213,9 @@ export function DeveloperSection() {
                 {stopServer.isPending ? "Stopping..." : "Stop Server"}
               </Button>
             </div>
-          </CardContent>
-        </Card>
-      </div>
+          </div>
+        </CardContent>
+      </Card>
     </section>
   )
 }

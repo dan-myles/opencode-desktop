@@ -3,6 +3,7 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router"
 import { useRegisterKeybind } from "@/app/hooks/use-register-keybind"
 import { AppearanceSection } from "./-components/appearance-section"
 import { DeveloperSection } from "./-components/developer-section"
+import { KeybindsSection } from "./-components/keybinds-section"
 
 export const Route = createFileRoute("/settings/")({
   component: RouteComponent,
@@ -14,7 +15,7 @@ function RouteComponent() {
   useRegisterKeybind({
     id: "navigate-settings",
     callback: () => navigate({ to: "/settings", viewTransition: true }),
-    description: "Open Settings",
+    description: "Open settings",
     key: "cmd+,",
     platform: "darwin",
   })
@@ -22,7 +23,7 @@ function RouteComponent() {
   useRegisterKeybind({
     id: "navigate-settings",
     callback: () => navigate({ to: "/settings", viewTransition: true }),
-    description: "Open Settings",
+    description: "Open settings",
     key: "ctrl+,",
     platform: "win32",
   })
@@ -30,7 +31,7 @@ function RouteComponent() {
   useRegisterKeybind({
     id: "navigate-settings",
     callback: () => navigate({ to: "/settings", viewTransition: true }),
-    description: "Open Settings",
+    description: "Open settings",
     key: "ctrl+,",
     platform: "linux",
   })
@@ -42,6 +43,7 @@ function RouteComponent() {
       </div>
 
       <AppearanceSection />
+      <KeybindsSection />
       <DeveloperSection />
     </div>
   )

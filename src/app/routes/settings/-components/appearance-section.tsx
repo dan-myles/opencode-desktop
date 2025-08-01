@@ -50,18 +50,19 @@ export function AppearanceSection() {
 
   return (
     <section className="space-y-6">
-      <h2 className="text-xl font-semibold">Appearance</h2>
+      <div className="flex items-center gap-2">
+        <Palette className="h-5 w-5" />
+        <h2 className="text-xl font-semibold">Appearance</h2>
+      </div>
+
       <Card>
         <CardHeader>
-          <div className="flex items-center gap-2">
-            <Palette className="h-5 w-5" />
-            <CardTitle>Theme</CardTitle>
-          </div>
+          <CardTitle>Theme Settings</CardTitle>
           <CardDescription>
             Choose how the application looks and feels
           </CardDescription>
         </CardHeader>
-        <CardContent className="flex flex-col gap-4">
+        <CardContent className="space-y-6">
           <div className="flex items-center justify-between">
             <div className="space-y-1">
               <Label htmlFor="theme-select">Color theme</Label>
