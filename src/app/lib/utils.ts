@@ -2,8 +2,6 @@ import type { ClassValue } from "clsx"
 import { clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 
-import { Platform } from "@/app/stores/keybind/types"
-
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
@@ -48,7 +46,7 @@ export function formatKeybindForDisplay(key: string): string {
     .join(" ")
 }
 
-export function getCurrentPlatform(): Platform {
+export function getCurrentPlatform(): "darwin" | "win32" | "linux" {
   if (typeof __DARWIN__ !== "undefined" && __DARWIN__) return "darwin"
   if (typeof __WIN32__ !== "undefined" && __WIN32__) return "win32"
   if (typeof __LINUX__ !== "undefined" && __LINUX__) return "linux"

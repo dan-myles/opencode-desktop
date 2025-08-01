@@ -22,8 +22,8 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/app/components/ui/tooltip"
+import { useRegisterKeybind } from "@/app/hooks/use-keybind"
 import { useIsMobile } from "@/app/hooks/use-mobile"
-import { useRegisterKeybind } from "@/app/hooks/use-register-keybind"
 import { cn } from "@/app/lib/utils"
 
 const SIDEBAR_STORAGE_KEY = "sidebar-state"
@@ -100,15 +100,16 @@ function SidebarProvider({
     return isMobile ? setOpenMobile((open) => !open) : setOpen((open) => !open)
   }, [isMobile, setOpen, setOpenMobile])
 
-  // Register keybinds for sidebar toggle
-  // useRegisterKeybind({
-  //   id: "toggle-sidebar",
-  //   win32Key: "ctrl+s",
-  //   linuxKey: "ctrl+s",
-  //   darwinKey: "cmd+s",
-  //   description: "Toggle sidebar",
-  //   callback: toggleSidebar,
-  // })
+  useRegisterKeybind({
+    id: "toggle-sidebar",
+    keys: {
+      win32: "ctrl+s",
+      linux: "ctrl+s",
+      darwin: "cmd+s",
+    },
+    description: "Toggle sidebar",
+    callback: toggleSidebar,
+  })
 
   // We add a state so that we can do data-state="expanded" or "collapsed".
   // This makes it easier to style the sidebar with Tailwind classes.

@@ -1,5 +1,7 @@
-import { Dispatch, SetStateAction, useState } from "react"
+import { Dispatch, SetStateAction, useCallback, useState } from "react"
 
+import { useKeybindList, useRegisterKeybind } from "../hooks/use-keybind"
+import { formatKeybindForDisplay, getCurrentPlatform } from "../lib/utils"
 import {
   CommandDialog,
   CommandEmpty,
@@ -13,14 +15,16 @@ import {
 export function CommandMenu() {
   const [open, setOpen] = useState(false)
 
-  // useRegisterKeybind({
-  //   id: "toggle-command-menu",
-  //   darwinKey: "cmd+k",
-  //   win32Key: "ctrl+k",
-  //   linuxKey: "ctrl+k",
-  //   description: "Toggle command menu",
-  //   callback: () => setOpen((open) => !open),
-  // })
+  useRegisterKeybind({
+    id: "toggle-command-menu",
+    keys: {
+      darwin: "cmd+k",
+      win32: "ctrl+k",
+      linux: "ctrl+k",
+    },
+    description: "Toggle command menu",
+    callback: useCallback(() => setOpen((open) => !open), [setOpen]),
+  })
 
   return (
     <CommandDialog open={open} onOpenChange={setOpen}>
@@ -38,25 +42,31 @@ interface CommandItemsProps {
 }
 
 function KeybindCommands({ setOpen }: CommandItemsProps) {
-  // const keybinds = useKeybindList()
-  //
-  // return (
-  //   <CommandGroup heading="Commands">
-  //     {keybinds.map((keybind) => (
-  //       <CommandItem
-  //         key={keybind.id}
-  //         onSelect={() => {
-  //           keybind.callback()
-  //           setOpen(false)
-  //         }}
-  //       >
-  //         <span>{keybind.description}</span>
-  //         <CommandShortcut>
-  //           {formatKeybindForDisplay(keybind.key)}
-  //         </CommandShortcut>
-  //       </CommandItem>
-  //     ))}
-  //   </CommandGroup>
-  // )
-  return null
+  const keybinds = useKeybindList()
+  const platform = getCurrentPlatform()
+
+  return (
+    <CommandGroup heading="Commands">
+      {keybinds.map((keybind) => (
+        <CommandItem
+          key={keybind.id}
+          onSelect={() => {
+            keybind.callback()
+            setOpen(false)
+          }}
+        >
+          <span>{keybind.description}</span>
+          <CommandShortcut>
+            {platform === "linux"
+              ? formatKeybindForDisplay(keybind.keys.linux!)
+              : platform === "win32"
+                ? formatKeybindForDisplay(keybind.keys.win32!)
+                : platform === "darwin"
+                  ? formatKeybindForDisplay(keybind.keys.darwin!)
+                  : null}
+          </CommandShortcut>
+        </CommandItem>
+      ))}
+    </CommandGroup>
+  )
 }
