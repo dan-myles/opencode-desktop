@@ -7,10 +7,8 @@ import { api } from "@/app/lib/api"
 
 export function useSessionNavigation() {
   const navigate = useNavigate()
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const params = useParams({ strict: false })
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-  const currentSessionId = params.sessionId as string | undefined
+  const currentSessionId = params.sessionId
 
   const { data: sessions } = useQuery(api.session.list.queryOptions())
 
