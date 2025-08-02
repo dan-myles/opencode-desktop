@@ -11,9 +11,10 @@ interface FilePartProps {
     url?: string
     size?: number
   }
+  isUser: boolean
 }
 
-export function FilePart({ part }: FilePartProps) {
+export function FilePart({ part, isUser }: FilePartProps) {
   const filename = String(part.filename || "Unknown file")
   const mime = String(part.mime || "application/octet-stream")
   const size = part.size
@@ -31,13 +32,21 @@ export function FilePart({ part }: FilePartProps) {
     }
   }
 
+  if (isUser) {
+    // User files: Simple display within blue bubble
+    return <div className="text-sm text-blue-100">📎 {filename}</div>
+  }
+
+  // Assistant files: Clean display using theme colors
   return (
-    <div className="bg-muted/30 rounded-lg border p-3">
+    <div className="bg-primary/10 border-primary/20 rounded-lg border p-3">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <File className="text-muted-foreground h-5 w-5" />
+          <File className="text-primary h-5 w-5" />
           <div>
-            <div className="text-sm font-medium">{filename}</div>
+            <div className="text-foreground text-sm font-medium">
+              {filename}
+            </div>
             <div
               className="text-muted-foreground flex items-center gap-2 text-xs"
             >
@@ -53,7 +62,7 @@ export function FilePart({ part }: FilePartProps) {
             variant="ghost"
             size="sm"
             onClick={handleDownload}
-            className="h-8 w-8 p-0"
+            className="text-primary hover:bg-primary/20 h-8 w-8 p-0"
           >
             <Download className="h-4 w-4" />
           </Button>

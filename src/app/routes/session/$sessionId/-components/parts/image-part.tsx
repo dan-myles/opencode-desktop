@@ -8,26 +8,50 @@ interface ImagePartProps {
     filename?: string
     alt?: string
   }
+  isUser: boolean
 }
 
-export function ImagePart({ part }: ImagePartProps) {
+export function ImagePart({ part, isUser }: ImagePartProps) {
   const url = part.url
   const filename = String(part.filename || "Image")
   const alt = String(part.alt || filename)
 
   if (!url) {
     return (
-      <div className="bg-muted/30 flex items-center gap-2 rounded-lg border p-4">
-        <ImageIcon className="text-muted-foreground h-5 w-5" />
-        <span className="text-muted-foreground text-sm">
-          Image not available
-        </span>
+      <div
+        className={`flex items-center gap-2 rounded-lg p-3 ${
+          isUser ? "text-blue-200" : "bg-muted border-border border"
+        }`}
+      >
+        <ImageIcon
+          className={`h-5 w-5
+            ${isUser ? "text-blue-200" : "text-muted-foreground"}`}
+        />
+        <span className="text-sm">Image not available</span>
       </div>
     )
   }
 
+  if (isUser) {
+    // User images: Simple display within blue bubble
+    return (
+      <div className="overflow-hidden rounded">
+        <img
+          src={url}
+          alt={alt}
+          className="h-auto max-w-full rounded"
+          style={{ maxHeight: "200px" }}
+        />
+        {filename && (
+          <div className="mt-1 text-xs text-blue-200">{filename}</div>
+        )}
+      </div>
+    )
+  }
+
+  // Assistant images: Clean, borderless display
   return (
-    <div className="bg-muted/30 overflow-hidden rounded-lg border">
+    <div className="overflow-hidden rounded-lg">
       <img
         src={url}
         alt={alt}
@@ -35,7 +59,7 @@ export function ImagePart({ part }: ImagePartProps) {
         style={{ maxHeight: "400px" }}
       />
       {filename && (
-        <div className="text-muted-foreground border-t p-2 text-xs">
+        <div className="text-muted-foreground bg-muted p-2 text-xs">
           {filename}
         </div>
       )}

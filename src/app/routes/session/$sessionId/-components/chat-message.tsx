@@ -1,7 +1,4 @@
-import { Bot, User } from "lucide-react"
-
 import type { MessageWithParts, Part } from "@/server/routers/session/types"
-import { Avatar, AvatarFallback } from "@/app/components/ui/avatar"
 import { CodePart } from "./parts/code-part"
 import { ErrorPart } from "./parts/error-part"
 import { FilePart } from "./parts/file-part"
@@ -14,25 +11,25 @@ interface ChatMessageProps {
   message: MessageWithParts
 }
 
-function renderPart(part: Part) {
+function renderPart(part: Part, isUser: boolean) {
   switch (part.type) {
     case "text":
-      return <TextPart key={part.id} part={part} />
+      return <TextPart key={part.id} part={part} isUser={isUser} />
     case "tool":
     case "tool_use":
     case "tool_result":
-      return <ToolPart key={part.id} part={part} />
+      return <ToolPart key={part.id} part={part} isUser={isUser} />
     case "code":
-      return <CodePart key={part.id} part={part} />
+      return <CodePart key={part.id} part={part} isUser={isUser} />
     case "file":
-      return <FilePart key={part.id} part={part} />
+      return <FilePart key={part.id} part={part} isUser={isUser} />
     case "error":
-      return <ErrorPart key={part.id} part={part} />
+      return <ErrorPart key={part.id} part={part} isUser={isUser} />
     case "step-start":
     case "step-finish":
-      return <StepPart key={part.id} part={part} />
+      return <StepPart key={part.id} part={part} isUser={isUser} />
     case "image":
-      return <ImagePart key={part.id} part={part} />
+      return <ImagePart key={part.id} part={part} isUser={isUser} />
     case "snapshot":
     case "patch":
       return (
@@ -43,16 +40,20 @@ function renderPart(part: Part) {
             code: JSON.stringify(part, null, 2),
             language: "json",
           }}
+          isUser={isUser}
         />
       )
     default:
       // Fallback for unknown types
       return (
-        <div key={part.id} className="bg-muted/30 rounded-lg border p-3">
+        <div
+          key={part.id}
+          className={isUser ? "text-blue-100" : "bg-muted rounded-lg p-3"}
+        >
           <div className="text-muted-foreground mb-2 font-mono text-xs">
             {part.type}
           </div>
-          <pre className="text-xs whitespace-pre-wrap">
+          <pre className="text-foreground text-xs whitespace-pre-wrap">
             {JSON.stringify(part, null, 2)}
           </pre>
         </div>
@@ -63,43 +64,47 @@ function renderPart(part: Part) {
 export function ChatMessage({ message }: ChatMessageProps) {
   const isUser = message.info.role === "user"
 
-  return (
-    <div className={`flex gap-3 ${isUser ? "flex-row-reverse" : ""}`}>
-      <Avatar className="h-8 w-8 flex-shrink-0">
-        <AvatarFallback
-          className={
-            isUser ? "bg-blue-500 text-white" : "bg-green-500 text-white"
-          }
-        >
-          {isUser ? <User className="h-4 w-4" /> : <Bot className="h-4 w-4" />}
-        </AvatarFallback>
-      </Avatar>
-
-      <div className={`min-w-0 flex-1 ${isUser ? "max-w-[80%]" : ""}`}>
-        <div
-          className={`rounded-lg p-4 ${
-            isUser ? "ml-auto bg-blue-500 text-white" : "bg-background border"
-            }`}
-        >
-          <div className="mb-2 flex items-center gap-2">
-            <span
-              className={`text-sm font-medium ${isUser ? "text-blue-100" : ""}`}
-            >
-              {isUser ? "You" : "Assistant"}
-            </span>
-            <span
-              className={`text-xs
-                ${isUser ? "text-blue-200" : "text-muted-foreground"}`}
-            >
-              {new Date(message.info.time.created * 1000).toLocaleTimeString()}
-            </span>
+  if (isUser) {
+    // User messages: Keep blue bubble styling, no avatar
+    return (
+      <div className="flex justify-end">
+        <div className="max-w-[80%]">
+          <div className="ml-auto rounded-lg bg-blue-500 p-4 text-white">
+            <div className="mb-2 flex items-center gap-2">
+              <span className="text-sm font-medium text-blue-100">You</span>
+              <span className="text-xs text-blue-200">
+                {new Date(
+                  message.info.time.created * 1000,
+                ).toLocaleTimeString()}
+              </span>
+            </div>
+            {message.parts.length > 0 && (
+              <div className="space-y-3">
+                {message.parts.map((part) => renderPart(part, true))}
+              </div>
+            )}
           </div>
-
-          {message.parts.length > 0 && (
-            <div className="space-y-3">{message.parts.map(renderPart)}</div>
-          )}
         </div>
       </div>
+    )
+  }
+
+  // Assistant messages: Clean, borderless design, no avatar
+  return (
+    <div className="w-full">
+      <div className="mb-2 flex items-center gap-2">
+        <span className="text-muted-foreground text-sm font-medium">
+          Assistant
+        </span>
+        <span className="text-muted-foreground text-xs">
+          {new Date(message.info.time.created * 1000).toLocaleTimeString()}
+        </span>
+      </div>
+      {message.parts.length > 0 && (
+        <div className="space-y-4">
+          {message.parts.map((part) => renderPart(part, false))}
+        </div>
+      )}
     </div>
   )
 }
