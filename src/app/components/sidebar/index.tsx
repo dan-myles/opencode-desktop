@@ -8,6 +8,7 @@ import {
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuItem,
@@ -20,6 +21,7 @@ import {
 } from "@/app/components/ui/tooltip"
 import { Shorcut } from "../shortcut"
 import { MenuButton } from "./menu-button"
+import { SessionList } from "./session-list"
 
 const navigation = [
   {
@@ -56,6 +58,13 @@ export function AppSidebar() {
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+
+        <SidebarGroup className="flex-1">
+          <SidebarGroupLabel>Sessions</SidebarGroupLabel>
+          <SidebarGroupContent className="flex-1">
+            <SessionList />
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>

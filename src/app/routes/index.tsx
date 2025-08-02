@@ -12,7 +12,6 @@ export const Route = createFileRoute("/")({
 function Index() {
   const { setOpen, open } = useSidebar()
   const { data } = useQuery(api.session.list.queryOptions())
-  console.log(data)
 
   return (
     <div className="p-2">
@@ -23,6 +22,9 @@ function Index() {
             setOpen(!open)
           }}
         ></Button>
+        {data?.map((s, idx) => (
+          <div key={idx}>{s.title}</div>
+        ))}
       </div>
     </div>
   )

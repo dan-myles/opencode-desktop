@@ -16,7 +16,6 @@ import { getServerProcessInfo } from "./routers/binary/server"
  * @see https://trpc.io/docs/server/context
  */
 export const createTRPCContext = async () => {
-  console.log("SERVER PROCD")
   const { isRunning } = getServerProcessInfo()
 
   const client = isRunning

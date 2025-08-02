@@ -17,7 +17,7 @@ function createQueryClient() {
   return new QueryClient({
     defaultOptions: {
       queries: {
-        staleTime: 30 * 1000,
+        staleTime: 60 * 1000 * 5,
         gcTime: 1000 * 60 * 60 * 24, // 24 hours
       },
       dehydrate: {

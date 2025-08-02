@@ -30,7 +30,7 @@ function RootComponent() {
             <SidebarProvider
               style={
                 {
-                  "--sidebar-width": "15.5rem",
+                  "--sidebar-width": "17rem",
                   "--sidebar-width-icon": "3rem",
                 } as React.CSSProperties
               }
@@ -47,11 +47,13 @@ function RootComponent() {
 function RootDocument() {
   return (
     <>
-      <div className="h-screen w-full">
-        <div className="flex flex-row">
-          <Titlebar />
+      <div className="flex h-screen w-full flex-col">
+        <Titlebar />
+        <div className="flex min-h-0 flex-1 flex-row">
           <AppSidebar />
-          <Outlet />
+          <main className="min-w-0 flex-1 overflow-x-hidden overflow-y-auto">
+            <Outlet />
+          </main>
         </div>
       </div>
       <CommandMenu />

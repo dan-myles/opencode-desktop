@@ -9,7 +9,7 @@ import "@/app/styles/globals.css"
 const router = createRouter({
   routeTree,
   scrollRestoration: true,
-  defaultPreload: "intent",
+  defaultPreload: "viewport",
 })
 
 const rootElement = document.getElementById("root") as HTMLDivElement
