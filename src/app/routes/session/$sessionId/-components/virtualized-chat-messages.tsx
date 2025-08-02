@@ -120,7 +120,7 @@ export function VirtualizedChatMessages({
 
           return (
             <div
-              className="absolute top-0 left-0 w-full px-20 pb-4"
+              className="absolute top-0 left-0 w-full px-40 pb-4"
               key={virtualItem.key}
               data-index={virtualItem.index}
               ref={virtualizer.measureElement}
