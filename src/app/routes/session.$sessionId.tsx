@@ -1,47 +1,23 @@
-import { useQuery } from "@tanstack/react-query"
+import { useSuspenseQuery } from "@tanstack/react-query"
 import { createFileRoute } from "@tanstack/react-router"
 
 import type { MessageWithParts, Part } from "@/server/routers/session/types"
-import { api } from "@/app/lib/api"
+import { api } from "../lib/api"
 
 export const Route = createFileRoute("/session/$sessionId")({
   component: SessionPage,
+  loader: async ({ context: { api, queryClient }, params }) => {
+    queryClient.prefetchQuery(
+      api.session.messages.queryOptions({ id: params.sessionId }),
+    )
+  },
 })
 
 function SessionPage() {
   const { sessionId } = Route.useParams()
-  const {
-    data: session,
-    isLoading,
-    error,
-  } = useQuery(api.session.messages.queryOptions({ id: sessionId }))
-
-  if (error) {
-    return (
-      <div className="flex h-full items-center justify-center">
-        <div className="text-center">
-          <h2 className="mb-2 text-lg font-semibold">Session not found</h2>
-          <p className="text-muted-foreground">
-            The session you're looking for doesn't exist or couldn't be loaded.
-          </p>
-        </div>
-      </div>
-    )
-  }
-
-  if (isLoading) {
-    return (
-      <div className="flex h-full items-center justify-center">
-        <div className="text-center">
-          <div
-            className="border-primary mx-auto mb-4 h-8 w-8 animate-spin
-              rounded-full border-b-2"
-          ></div>
-          <p className="text-muted-foreground">Loading session...</p>
-        </div>
-      </div>
-    )
-  }
+  const { data: session } = useSuspenseQuery(
+    api.session.messages.queryOptions({ id: sessionId }),
+  )
 
   return (
     <div className="flex h-full max-w-full flex-col">

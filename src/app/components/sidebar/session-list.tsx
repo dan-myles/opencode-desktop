@@ -1,7 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 
 import type { Session } from "@/server/routers/session/types"
-import { ScrollArea } from "@/app/components/ui/scroll-area"
 import { api } from "@/app/lib/api"
 import { NewSessionButton } from "./new-session-button"
 import { SessionItem } from "./session-item"
@@ -40,7 +39,7 @@ export function SessionList() {
         <NewSessionButton />
       </div>
 
-      <div className="max-w-full space-y-1 p-2">
+      <div className="max-w-full p-2">
         {sortedSessions.length === 0 ? (
           <div className="text-muted-foreground py-8 text-center text-sm">
             No sessions yet

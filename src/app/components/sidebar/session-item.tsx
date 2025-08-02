@@ -1,16 +1,6 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { Link, useParams } from "@tanstack/react-router"
-import { MoreHorizontal, Trash2 } from "lucide-react"
 
 import type { Session } from "@/server/routers/session/types"
-import { Button } from "@/app/components/ui/button"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/app/components/ui/dropdown-menu"
-import { api } from "@/app/lib/api"
 import { cn } from "@/app/lib/utils"
 
 interface SessionItemProps {
@@ -26,7 +16,7 @@ export function SessionItem({ session }: SessionItemProps) {
       to="/session/$sessionId"
       params={{ sessionId: session.id }}
       className={cn(
-        `hover:bg-accent group flex items-center gap-2 rounded-md p-2
+        `hover:bg-accent group flex items-center gap-2 rounded-md p-3
         transition-colors`,
         isActive && "bg-primary text-primary-foreground hover:bg-primary/90",
       )}
