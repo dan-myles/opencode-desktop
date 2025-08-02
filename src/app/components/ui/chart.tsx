@@ -1,3 +1,9 @@
+// NOTE: This is a ShadCN component, so we will ignore ESLint errors for now
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 import * as React from "react"
 import * as RechartsPrimitive from "recharts"
 
@@ -354,9 +360,7 @@ function getPayloadConfigFromPayload(
     ] as string
   }
 
-  return configLabelKey in config
-    ? config[configLabelKey]
-    : config[key]
+  return configLabelKey in config ? config[configLabelKey] : config[key]
 }
 
 export {

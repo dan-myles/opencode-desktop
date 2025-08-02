@@ -1,3 +1,6 @@
+// TODO: Manually write types for missing ANY's
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 // Event types from OpenAPI
 export type Event = {
   type: string

@@ -1,3 +1,9 @@
+// NOTE: ANY is used for  preconfigured components, however we should fix this soon
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
+import type { JSX } from "react"
 import { lazy, memo, Suspense, useMemo } from "react"
 import Markdown from "react-markdown"
 import {
@@ -65,7 +71,7 @@ export const MarkdownRenderer = memo(
       // Pre-configured components for better performance
       const components = {
         code(props: any) {
-          const { children, className, node, ...rest } = props
+          const { children, className, ...rest } = props
           const match = /language-(\w+)/.exec(className || "")
 
           return match ? (

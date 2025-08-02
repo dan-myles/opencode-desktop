@@ -1,11 +1,5 @@
-import {
-  createContext,
-  type ReactNode,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react"
+import type { ReactNode } from "react"
+import { createContext, useCallback, useEffect, useMemo, useState } from "react"
 
 import type { Keybind, KeybindDefinition, KeybindId } from "./keybind.types"
 import { getCurrentPlatform } from "@/app/lib/utils"
@@ -25,6 +19,8 @@ export function KeybindProvider({ children }: { children: ReactNode }) {
     () => {
       if (typeof window !== "undefined") {
         const stored = localStorage.getItem(KEYBIND_LOCALSTORAGE_KEY)
+        // TODO: Add types to this
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
         return stored !== null ? JSON.parse(stored) : new Map()
       }
 
@@ -47,6 +43,8 @@ export function KeybindProvider({ children }: { children: ReactNode }) {
 
     setCallbacks((prev) => {
       const newMap = new Map(prev)
+      // TODO: Fix this ESLint error
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
       newMap.set(keybind.id, callback)
       return newMap
     })

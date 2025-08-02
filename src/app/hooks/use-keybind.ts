@@ -29,5 +29,5 @@ export function useRegisterKeybind(keybind: Keybind) {
 
   useEffect(() => {
     ctx.registerKeybind(keybind)
-  }, [ctx.registerKeybind, keybind.callback, JSON.stringify(keybind)])
+  }, [ctx, ctx.registerKeybind, keybind, keybind.callback])
 }

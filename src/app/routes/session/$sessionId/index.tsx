@@ -1,3 +1,7 @@
+// TODO: Figure out how to get types from context, probably
+// has to do with how typesafe routing is broken... Vite issue maybe
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { createFileRoute } from "@tanstack/react-router"
 import { Send } from "lucide-react"

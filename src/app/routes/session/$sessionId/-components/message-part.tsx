@@ -1,3 +1,11 @@
+// TODO: Handle ESLint warnings & errors
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable-next-line react-hooks/react-compiler */
+/* eslint-disable react-hooks/rules-of-hooks */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 import { memo, useCallback } from "react"
 import {
   AlertTriangle,

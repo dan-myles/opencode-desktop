@@ -1,3 +1,7 @@
+// TODO: Wrap sessions in a useMemo call, and type correctly
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 import { useCallback } from "react"
 import { useQuery } from "@tanstack/react-query"
 import { useNavigate, useParams } from "@tanstack/react-router"

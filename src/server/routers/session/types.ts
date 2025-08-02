@@ -1,3 +1,6 @@
+// TODO: Manually write types for missing ANY's
+/* eslint-disable @typescript-eslint/no-explicit-any */
+
 import { z } from "zod"
 
 // Request schemas

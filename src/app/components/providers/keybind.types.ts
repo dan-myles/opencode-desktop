@@ -88,5 +88,5 @@ export interface KeybindDefinition {
 }
 
 export interface Keybind extends KeybindDefinition {
-  callback: () => void
+  callback: (() => Promise<void>) | (() => void)
 }

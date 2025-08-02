@@ -1,8 +1,14 @@
+// NOTE: This is a ShadCN component, so we will ignore errors for now
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+
 "use client"
 
+import type { VariantProps } from "class-variance-authority"
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
-import { cva, type VariantProps } from "class-variance-authority"
+import { cva } from "class-variance-authority"
 import { PanelLeftIcon } from "lucide-react"
 
 import { Button } from "@/app/components/ui/button"

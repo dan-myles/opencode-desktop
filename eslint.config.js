@@ -8,6 +8,7 @@ export default tseslint.config(
       ".vite/",
       ".tanstack/",
       "node_modules/",
+      "src/server/sdk/gen/",
       "forge.env.d.ts",
     ],
   },
@@ -21,6 +22,7 @@ export default tseslint.config(
     rules: {
       "react-hooks/react-compiler": "error",
       "@typescript-eslint/array-type": "off",
+      "@typescript-eslint/no-floating-promises": "off",
       "@typescript-eslint/consistent-type-definitions": "off",
       "@typescript-eslint/require-await": "off",
       "@typescript-eslint/no-unused-vars": [
