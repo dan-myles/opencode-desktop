@@ -28,9 +28,9 @@ export function KeybindProvider({ children }: { children: ReactNode }) {
     },
   )
 
-  const [callbacks, setCallbacks] = useState<Map<KeybindId, () => void>>(
-    new Map(),
-  )
+  const [callbacks, setCallbacks] = useState<
+    Map<KeybindId, (() => Promise<void>) | (() => void)>
+  >(new Map())
 
   const registerKeybind = useCallback((keybind: Keybind) => {
     const { callback, ...definition } = keybind
@@ -43,8 +43,6 @@ export function KeybindProvider({ children }: { children: ReactNode }) {
 
     setCallbacks((prev) => {
       const newMap = new Map(prev)
-      // TODO: Fix this ESLint error
-      // eslint-disable-next-line @typescript-eslint/no-misused-promises
       newMap.set(keybind.id, callback)
       return newMap
     })
