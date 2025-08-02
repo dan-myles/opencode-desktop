@@ -31,7 +31,7 @@ function SessionPage() {
       {/* Floating header */}
       <SessionHeader sessionId={sessionId} />
 
-      {/* Full-screen messages background */}
+      {/* Chat messages background */}
       <div className="absolute inset-0">
         <VirtualizedChatMessages messages={session || []} />
       </div>
@@ -44,7 +44,7 @@ function SessionPage() {
         <div className="pointer-events-auto w-full max-w-2xl">
           {/* Backdrop blur container */}
           <div
-            className="bg-background/80 relative rounded-xl border shadow-2xl
+            className="bg-background/20 relative rounded-xl border shadow-2xl
               backdrop-blur-md"
           >
             {/* Chat input area */}

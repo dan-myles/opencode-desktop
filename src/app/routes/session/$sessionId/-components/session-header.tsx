@@ -52,10 +52,13 @@ export function SessionHeader({ sessionId }: SessionHeaderProps) {
   if (!session) return null
 
   return (
-    <div className="pointer-events-none absolute top-0 right-0 left-0 z-10 p-3">
-      <div className="pointer-events-auto mx-auto max-w-2xl">
+    <div
+      className="pointer-events-none absolute top-0 right-0 left-0 z-20 flex
+        justify-center p-3"
+    >
+      <div className="pointer-events-auto w-full max-w-3xl">
         <div
-          className="bg-background/80 border-border/50 rounded-lg border
+          className="bg-background/20 border-border/20 rounded-lg border
             shadow-lg backdrop-blur-md"
         >
           <div className="flex items-center justify-between px-3 py-2">
