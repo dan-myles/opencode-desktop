@@ -3,6 +3,8 @@ export type KeybindId =
   | "toggle-command-menu"
   | "toggle-light-dark-mode"
   | "navigate-settings"
+  | "navigate-session-up"
+  | "navigate-session-down"
 
 type Modifier = "ctrl" | "cmd" | "alt" | "shift"
 

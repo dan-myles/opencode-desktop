@@ -1,6 +1,8 @@
 import { useQuery } from "@tanstack/react-query"
 
 import type { Session } from "@/server/routers/session/types"
+import { useRegisterKeybind } from "@/app/hooks/use-keybind"
+import { useSessionNavigation } from "@/app/hooks/use-session-navigation"
 import { api } from "@/app/lib/api"
 import { NewSessionButton } from "./new-session-button"
 import { SessionItem } from "./session-item"
@@ -11,6 +13,31 @@ export function SessionList() {
     isLoading,
     error,
   } = useQuery(api.session.list.queryOptions())
+
+  const { navigateToPreviousSession, navigateToNextSession } =
+    useSessionNavigation()
+
+  useRegisterKeybind({
+    id: "navigate-session-up",
+    keys: {
+      darwin: "cmd+p",
+      win32: "ctrl+p",
+      linux: "ctrl+p",
+    },
+    description: "Navigate to previous session",
+    callback: navigateToPreviousSession,
+  })
+
+  useRegisterKeybind({
+    id: "navigate-session-down",
+    keys: {
+      darwin: "cmd+n",
+      win32: "ctrl+n",
+      linux: "ctrl+n",
+    },
+    description: "Navigate to next session",
+    callback: navigateToNextSession,
+  })
 
   if (error) {
     return (
