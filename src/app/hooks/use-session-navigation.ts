@@ -19,7 +19,11 @@ export function useSessionNavigation() {
 
   const navigateToSession = useCallback(
     (sessionId: string) => {
-      navigate({ to: "/session/$sessionId", params: { sessionId } })
+      navigate({
+        to: "/session/$sessionId",
+        params: { sessionId },
+        viewTransition: true,
+      })
     },
     [navigate],
   )

@@ -191,7 +191,7 @@
 .group[data-collapsible="icon"] [data-slot="sidebar-gap"] {
   min-width: 5rem !important;
 }
-
+/* Warp/Rotate Transition */
 html:active-view-transition-type(warp) {
   &::view-transition-old(post) {
     animation: 400ms ease-out both warp-out;
