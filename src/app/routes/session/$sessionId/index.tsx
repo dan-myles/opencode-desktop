@@ -23,21 +23,42 @@ function SessionPage() {
   )
 
   return (
-    <div className="flex h-full max-w-full flex-col">
-      {/* Messages area - virtualized */}
-      <VirtualizedChatMessages messages={session || []} />
+    <div className="relative h-full max-w-full">
+      {/* Full-screen messages background */}
+      <div className="absolute inset-0">
+        <VirtualizedChatMessages messages={session || []} />
+      </div>
 
-      {/* Chat input area - fixed at bottom */}
-      <div className="bg-background border-t p-4">
-        <div className="flex gap-2">
-          <Input
-            placeholder="Type your message..."
-            className="flex-1"
-            disabled
-          />
-          <Button size="icon" disabled>
-            <Send className="h-4 w-4" />
-          </Button>
+      {/* Floating bottom-docked chatbox */}
+      <div
+        className="pointer-events-none absolute right-0 bottom-0 left-0 flex
+          justify-center p-6"
+      >
+        <div className="pointer-events-auto w-full max-w-2xl">
+          {/* Backdrop blur container */}
+          <div
+            className="bg-background/80 relative rounded-xl border shadow-2xl
+              backdrop-blur-md"
+          >
+            {/* Chat input area */}
+            <div className="p-6">
+              <div className="flex gap-3">
+                <Input
+                  placeholder="Type your message..."
+                  className="bg-background/50 border-border/50 flex-1
+                    backdrop-blur-sm"
+                  disabled
+                />
+                <Button
+                  size="icon"
+                  disabled
+                  className="bg-primary/90 hover:bg-primary"
+                >
+                  <Send className="h-4 w-4" />
+                </Button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

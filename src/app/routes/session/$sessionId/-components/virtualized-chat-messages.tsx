@@ -76,7 +76,7 @@ export function VirtualizedChatMessages({
 
   if (messages.length === 0) {
     return (
-      <div className="flex flex-1 items-center justify-center">
+      <div className="flex h-full items-center justify-center opacity-60">
         <div className="text-muted-foreground py-8 text-center">
           No messages in this session yet. Start a conversation below!
         </div>
@@ -85,7 +85,7 @@ export function VirtualizedChatMessages({
   }
 
   return (
-    <div ref={parentRef} className="flex-1 overflow-y-auto">
+    <div ref={parentRef} className="h-full overflow-y-auto opacity-60">
       <div
         style={{
           height: `${virtualizer.getTotalSize()}px`,
@@ -107,7 +107,7 @@ export function VirtualizedChatMessages({
                 left: 0,
                 width: "100%",
                 transform: `translateY(${virtualItem.start}px)`,
-                padding: "0 16px 16px 16px",
+                padding: "0 24px 16px 24px",
               }}
             >
               <ChatMessage message={message} />
