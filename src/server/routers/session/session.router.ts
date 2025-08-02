@@ -16,6 +16,11 @@ export const sessionRouter = {
     return response.data
   }),
 
+  get: serverProcedure.input(sessionIdSchema).query(async ({ input, ctx }) => {
+    const sessions = await ctx.client.session.list()
+    return sessions.data?.find((session) => session.id === input.id)
+  }),
+
   create: serverProcedure.mutation(async ({ ctx }) => {
     const response = await ctx.client.session.create()
     return response.data

@@ -112,13 +112,7 @@ export function VirtualizedChatMessages({
       className="h-full overflow-y-auto pt-[7rem] opacity-60"
       style={{ transform: "scaleY(-1)" }}
     >
-      <div
-        style={{
-          height: `${virtualizer.getTotalSize()}px`,
-          width: "100%",
-          position: "relative",
-        }}
-      >
+      <div className={`h-[${virtualizer.getTotalSize()}] relative w-full`}>
         {virtualizer.getVirtualItems().map((virtualItem) => {
           // Calculate reverse index for message access
           const reverseIndex = messages.length - 1 - virtualItem.index
@@ -126,16 +120,12 @@ export function VirtualizedChatMessages({
 
           return (
             <div
+              className="absolute top-0 left-0 w-full px-20"
               key={virtualItem.key}
               data-index={virtualItem.index}
               ref={virtualizer.measureElement}
               style={{
-                position: "absolute",
-                top: 0,
-                left: 0,
-                width: "100%",
                 transform: `translateY(${virtualItem.start}px) scaleY(-1)`,
-                padding: "0 24px 16px 24px",
               }}
             >
               <ChatMessage message={message} />

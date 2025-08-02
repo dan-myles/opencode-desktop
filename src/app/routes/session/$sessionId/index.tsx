@@ -5,6 +5,7 @@ import { Send } from "lucide-react"
 import { Button } from "@/app/components/ui/button"
 import { Input } from "@/app/components/ui/input"
 import { api } from "@/app/lib/api"
+import { SessionHeader } from "./-components/session-header"
 import { VirtualizedChatMessages } from "./-components/virtualized-chat-messages"
 
 export const Route = createFileRoute("/session/$sessionId/")({
@@ -12,6 +13,9 @@ export const Route = createFileRoute("/session/$sessionId/")({
   loader: async ({ context: { api, queryClient }, params }) => {
     queryClient.prefetchQuery(
       api.session.messages.queryOptions({ id: params.sessionId }),
+    )
+    queryClient.prefetchQuery(
+      api.session.get.queryOptions({ id: params.sessionId }),
     )
   },
 })
@@ -24,6 +28,9 @@ function SessionPage() {
 
   return (
     <div className="relative h-full max-w-full">
+      {/* Floating header */}
+      <SessionHeader sessionId={sessionId} />
+
       {/* Full-screen messages background */}
       <div className="absolute inset-0">
         <VirtualizedChatMessages messages={session || []} />
