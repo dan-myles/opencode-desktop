@@ -18,6 +18,12 @@ const router = createRouter({
   },
 })
 
+declare module "@tanstack/react-router" {
+  interface Register {
+    router: typeof router
+  }
+}
+
 const rootElement = document.getElementById("root") as HTMLDivElement
 const root = ReactDOM.createRoot(rootElement)
 root.render(

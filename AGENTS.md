@@ -77,6 +77,7 @@ bin/                      # Opencode CLI binary location
 - DO NOT make functions like `renderSomeItem` make them react components instead
 - We are using SHADCN, which is our component library in `@/app/components/ui`, use these ALL THE TIME
 - When making other styles, ALWAYS use our theme variables in `@/app/styles/globals.css`
+- Try not to leave comments, only do so if they are very necessary!
 
 1. **Always run type checking** after code changes: `pnpm typecheck`, do this over starting the development server
 2. **Follow existing patterns** - check similar components/functions before creating new ones
