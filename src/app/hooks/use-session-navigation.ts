@@ -1,8 +1,4 @@
-// TODO: Wrap sessions in a useMemo call, and type correctly
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-
-import { useCallback } from "react"
+import { useCallback, useMemo } from "react"
 import { useQuery } from "@tanstack/react-query"
 import { useNavigate, useParams } from "@tanstack/react-router"
 
@@ -11,15 +7,20 @@ import { api } from "@/app/lib/api"
 
 export function useSessionNavigation() {
   const navigate = useNavigate()
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const params = useParams({ strict: false })
-  const currentSessionId = params.sessionId
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+  const currentSessionId = params.sessionId as string | undefined
 
   const { data: sessions } = useQuery(api.session.list.queryOptions())
 
-  const sortedSessions =
-    sessions?.sort(
-      (a: Session, b: Session) => b.time.updated - a.time.updated,
-    ) || []
+  const sortedSessions = useMemo(
+    () =>
+      (sessions as Session[] | undefined)?.sort(
+        (a: Session, b: Session) => b.time.updated - a.time.updated,
+      ) || [],
+    [sessions],
+  )
 
   const navigateToSession = useCallback(
     (sessionId: string) => {
@@ -87,5 +88,5 @@ export function useSessionNavigation() {
     navigateToNextSession,
     currentSessionId,
     sessionsCount: sortedSessions.length,
-  }
+  } as const
 }
