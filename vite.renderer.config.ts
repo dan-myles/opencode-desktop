@@ -1,6 +1,7 @@
 import type { ConfigEnv } from "vite"
 import tailwindcss from "@tailwindcss/vite"
 import { tanstackRouter } from "@tanstack/router-plugin/vite"
+import react from "@vitejs/plugin-react"
 import { defineConfig } from "vite"
 import svgrPlugin from "vite-plugin-svgr"
 import viteTsconfigPaths from "vite-tsconfig-paths"
@@ -29,6 +30,18 @@ export default defineConfig((env) => {
       tanstackRouter({
         target: "react",
         autoCodeSplitting: true,
+      }),
+      react({
+        babel: {
+          plugins: [
+            [
+              "babel-plugin-react-compiler",
+              {
+                sources: ["src/app"],
+              },
+            ],
+          ],
+        },
       }),
       pluginExposeRenderer(name),
       svgrPlugin(),

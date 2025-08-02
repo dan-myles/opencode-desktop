@@ -11,7 +11,7 @@ import "@/app/styles/globals.css"
 const router = createRouter({
   routeTree,
   scrollRestoration: true,
-  defaultPreload: "viewport",
+  defaultPreload: "intent",
   context: {
     api,
     queryClient: getQueryClient(),
