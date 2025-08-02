@@ -69,10 +69,32 @@ export function VirtualizedChatMessages({
   const virtualizer = useVirtualizer({
     count: messages.length,
     getScrollElement: () => parentRef.current,
-    estimateSize: (index) => estimateMessageSize(messages[index]),
+    // Calculate reverse index for size estimation
+    estimateSize: (index) => {
+      const reverseIndex = messages.length - 1 - index
+      return estimateMessageSize(messages[reverseIndex])
+    },
     overscan: 5,
-    getItemKey: (index) => messages[index]?.info.id || index,
+    // Calculate reverse index for keys
+    getItemKey: (index) => {
+      const reverseIndex = messages.length - 1 - index
+      return messages[reverseIndex]?.info.id || index
+    },
   })
+
+  // Invert wheel scroll for natural scrolling behavior
+  useEffect(() => {
+    const el = parentRef.current
+    if (!el) return
+
+    const invertedWheelScroll = (event: WheelEvent) => {
+      el.scrollTop -= event.deltaY
+      event.preventDefault()
+    }
+
+    el.addEventListener("wheel", invertedWheelScroll, false)
+    return () => el.removeEventListener("wheel", invertedWheelScroll)
+  }, [])
 
   if (messages.length === 0) {
     return (
@@ -85,7 +107,11 @@ export function VirtualizedChatMessages({
   }
 
   return (
-    <div ref={parentRef} className="h-full overflow-y-auto opacity-60">
+    <div
+      ref={parentRef}
+      className="h-full overflow-y-auto opacity-60"
+      style={{ transform: "scaleY(-1)" }}
+    >
       <div
         style={{
           height: `${virtualizer.getTotalSize()}px`,
@@ -94,7 +120,9 @@ export function VirtualizedChatMessages({
         }}
       >
         {virtualizer.getVirtualItems().map((virtualItem) => {
-          const message = messages[virtualItem.index]
+          // Calculate reverse index for message access
+          const reverseIndex = messages.length - 1 - virtualItem.index
+          const message = messages[reverseIndex]
 
           return (
             <div
@@ -106,7 +134,7 @@ export function VirtualizedChatMessages({
                 top: 0,
                 left: 0,
                 width: "100%",
-                transform: `translateY(${virtualItem.start}px)`,
+                transform: `translateY(${virtualItem.start}px) scaleY(-1)`,
                 padding: "0 24px 16px 24px",
               }}
             >
