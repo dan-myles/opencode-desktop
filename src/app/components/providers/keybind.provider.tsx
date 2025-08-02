@@ -19,9 +19,9 @@ export function KeybindProvider({ children }: { children: ReactNode }) {
     () => {
       if (typeof window !== "undefined") {
         const stored = localStorage.getItem(KEYBIND_LOCALSTORAGE_KEY)
-        // TODO: Add types to this
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-        return stored !== null ? JSON.parse(stored) : new Map()
+        return stored !== null
+          ? new Map(JSON.parse(stored) as [KeybindId, KeybindDefinition][])
+          : new Map()
       }
 
       return new Map()
