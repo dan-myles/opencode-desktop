@@ -28,7 +28,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/app/components/ui/tooltip"
-import { useRegisterKeybind } from "@/app/hooks/useRegisterKeybind"
+import { useRegisterKeybind } from "@/app/hooks/use-keybind"
 import { useIsMobile } from "@/app/hooks/use-mobile"
 import { cn } from "@/app/lib/utils"
 
