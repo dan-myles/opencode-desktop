@@ -1,4 +1,4 @@
-import { ReactNode, useCallback } from "react"
+import { type ReactNode, useCallback } from "react"
 import { useNavigate } from "@tanstack/react-router"
 
 import { useRegisterKeybind } from "@/app/hooks/use-keybind"

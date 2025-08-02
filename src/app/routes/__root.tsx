@@ -1,4 +1,4 @@
-import { QueryClient } from "@tanstack/react-query"
+import { type QueryClient } from "@tanstack/react-query"
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client"
 import {
   createRootRouteWithContext,
@@ -12,7 +12,7 @@ import { AppSidebar } from "@/app/components/sidebar"
 import { Titlebar } from "@/app/components/titlebar"
 import { SidebarProvider } from "@/app/components/ui/sidebar"
 import { Toaster } from "@/app/components/ui/sonner"
-import { api } from "@/app/lib/api"
+import { type api } from "@/app/lib/api"
 import { getQueryClient, persister } from "@/app/lib/query-client"
 import { KeybindProvider } from "../components/providers/keybind.provider"
 import { RegistryProvider } from "../components/providers/registry.provider"

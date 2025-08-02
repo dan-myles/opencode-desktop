@@ -1,7 +1,7 @@
 import { use, useEffect } from "react"
 
 import { KeybindContext } from "@/app/components/providers/keybind.provider"
-import { Keybind } from "@/app/components/providers/keybind.types"
+import { type Keybind } from "@/app/components/providers/keybind.types"
 
 export function useKeybindMap() {
   const ctx = use(KeybindContext)

@@ -53,7 +53,7 @@ export function getBuildDefine(env: ConfigEnv<"build">) {
   const { command, forgeConfig } = env
   const names = forgeConfig.renderer
     .filter(({ name }) => name != null)
-    .map(({ name }) => name as string)
+    .map(({ name }) => name)
   const defineKeys = getDefineKeys(names)
   const define = Object.entries(defineKeys).reduce(
     (acc, [name, keys]) => {

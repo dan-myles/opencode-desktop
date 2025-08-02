@@ -7,7 +7,7 @@ import {
   setOpencodeServerProcess,
   validateBinaryPath,
 } from "./server"
-import { StartMutation } from "./types"
+import { type StartMutation } from "./types"
 
 // Start the server when file is imported
 startServer({ port: 4096, host: "localhost" })

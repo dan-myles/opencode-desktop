@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction, useCallback, useState } from "react"
+import { type Dispatch, type SetStateAction, useCallback, useState } from "react"
 
 import { useKeybindList, useRegisterKeybind } from "../hooks/use-keybind"
 import { formatKeybindForDisplay, getCurrentPlatform } from "../lib/utils"
@@ -38,7 +38,7 @@ export function CommandMenu() {
 }
 
 interface CommandItemsProps {
-  setOpen: Dispatch<SetStateAction<Boolean>>
+  setOpen: Dispatch<SetStateAction<boolean>>
 }
 
 function KeybindCommands({ setOpen }: CommandItemsProps) {

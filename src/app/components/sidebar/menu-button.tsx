@@ -1,5 +1,5 @@
 import { Link, useLocation } from "@tanstack/react-router"
-import { LucideIcon } from "lucide-react"
+import { type LucideIcon } from "lucide-react"
 
 import { SidebarMenuButton } from "@/app/components/ui/sidebar"
 
