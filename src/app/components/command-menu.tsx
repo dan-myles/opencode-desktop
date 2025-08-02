@@ -1,6 +1,7 @@
 import { type Dispatch, type SetStateAction, useCallback, useState } from "react"
 
-import { useKeybindList, useRegisterKeybind } from "../hooks/use-keybind"
+import { useKeybindList } from "../hooks/use-keybind"
+import { useRegisterKeybind } from "../hooks/useRegisterKeybind"
 import { formatKeybindForDisplay, getCurrentPlatform } from "../lib/utils"
 import {
   CommandDialog,

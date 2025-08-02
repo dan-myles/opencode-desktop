@@ -2,7 +2,7 @@ import type { ReactNode } from "react"
 import { useCallback } from "react"
 import { useNavigate } from "@tanstack/react-router"
 
-import { useRegisterKeybind } from "@/app/hooks/use-keybind"
+import { useRegisterKeybind } from "@/app/hooks/useRegisterKeybind"
 
 /**
  * Registry Provider

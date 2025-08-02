@@ -1,5 +1,5 @@
 import { Link } from "@tanstack/react-router"
-import { Home, Settings, Terminal } from "lucide-react"
+import { Settings, Terminal } from "lucide-react"
 
 import { Button } from "@/app/components/ui/button"
 import {
@@ -10,8 +10,6 @@ import {
   SidebarGroupContent,
   SidebarGroupLabel,
   SidebarHeader,
-  SidebarMenu,
-  SidebarMenuItem,
   SidebarTrigger,
 } from "@/app/components/ui/sidebar"
 import {
@@ -20,16 +18,7 @@ import {
   TooltipTrigger,
 } from "@/app/components/ui/tooltip"
 import { Shorcut } from "../shortcut"
-import { MenuButton } from "./menu-button"
 import { SessionList } from "./session-list"
-
-const navigation = [
-  {
-    title: "Home",
-    url: "/",
-    icon: Home,
-  },
-]
 
 export function AppSidebar() {
   return (
@@ -45,22 +34,6 @@ export function AppSidebar() {
       </SidebarHeader>
 
       <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {navigation.map((item) => (
-                <SidebarMenuItem key={item.title}>
-                  <MenuButton
-                    title={item.title}
-                    url={item.url}
-                    icon={item.icon}
-                  />
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-
         <SidebarGroup className="flex-1">
           <SidebarGroupLabel>Sessions</SidebarGroupLabel>
           <SidebarGroupContent className="flex-1">
