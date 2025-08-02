@@ -22,7 +22,7 @@
     "lint:fix": "eslint --fix .",
     "format": "prettier --check . --ignore-path ./.prettierignore",
     "format:fix": "prettier --write . --ignore-path ./.prettierignore",
-    "clean": "git clean -xdf node_modules .vite .tanstack"
+    "clean": "git clean -xdf node_modules .vite .tanstack out"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.0",
