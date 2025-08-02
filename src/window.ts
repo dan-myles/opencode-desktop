@@ -4,6 +4,7 @@ import windowStateKeeper from "electron-window-state"
 import { createIPCHandler } from "trpc-electron/main"
 
 import { appRouter } from "./server/root"
+import { createTRPCContext } from "./server/trpc"
 
 let appWindow: BrowserWindow
 
@@ -73,7 +74,11 @@ export function createAppWindow(): BrowserWindow {
   })
 
   // Init TRPC link
-  createIPCHandler({ router: appRouter, windows: [appWindow] })
+  createIPCHandler({
+    router: appRouter,
+    windows: [appWindow],
+    createContext: () => createTRPCContext(),
+  })
 
   return appWindow
 }

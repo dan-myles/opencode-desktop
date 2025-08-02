@@ -1,7 +1,9 @@
+import { useQuery } from "@tanstack/react-query"
 import { createFileRoute } from "@tanstack/react-router"
 
 import { Button } from "@/app/components/ui/button"
 import { useSidebar } from "@/app/components/ui/sidebar"
+import { api } from "../lib/api"
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -9,6 +11,8 @@ export const Route = createFileRoute("/")({
 
 function Index() {
   const { setOpen, open } = useSidebar()
+  const { data } = useQuery(api.session.list.queryOptions())
+  console.log(data)
 
   return (
     <div className="p-2">

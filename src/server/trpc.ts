@@ -15,7 +15,8 @@ import { getServerProcessInfo } from "./routers/binary/server"
  *
  * @see https://trpc.io/docs/server/context
  */
-export const createTRPCContext = async (opts: { headers: Headers }) => {
+export const createTRPCContext = async () => {
+  console.log("SERVER PROCD")
   const { isRunning } = getServerProcessInfo()
 
   const client = isRunning
@@ -25,7 +26,6 @@ export const createTRPCContext = async (opts: { headers: Headers }) => {
     : null
 
   return {
-    ...opts,
     client,
     isServerRunning: isRunning,
   }
@@ -73,10 +73,6 @@ const logMiddleware = t.middleware(async ({ next, path }) => {
 
 /**
  * Public (unauthenticated) procedure
- *
- * This is the base piece you use to build new queries and mutations on your tRPC API. It does not
- * guarantee that a user querying is authorized, but you can still access user session data if they
- * are logged in.
  */
 export const publicProcedure = t.procedure.use(logMiddleware)
 

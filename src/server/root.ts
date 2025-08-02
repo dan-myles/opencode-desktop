@@ -6,7 +6,7 @@ import { fileRouter } from "./routers/file/file.router"
 import { findRouter } from "./routers/find/find.router"
 import { sessionRouter } from "./routers/session/session.router"
 import { tuiRouter } from "./routers/tui/tui.router"
-import { createTRPCContext, createTRPCRouter } from "./trpc"
+import { createTRPCRouter } from "./trpc"
 
 /**
  * This is the primary router for your server.
@@ -24,6 +24,3 @@ export const appRouter = createTRPCRouter({
 
 // export type definition of API
 export type AppRouter = typeof appRouter
-
-// export context for tRPC handler setup
-export { createTRPCContext }
