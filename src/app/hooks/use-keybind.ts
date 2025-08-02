@@ -29,5 +29,7 @@ export function useRegisterKeybind(keybind: Keybind) {
 
   useEffect(() => {
     ctx.registerKeybind(keybind)
-  }, [ctx, ctx.registerKeybind, keybind, keybind.callback])
+    // eslint-disable-next-line react-hooks/react-compiler
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [ctx.registerKeybind, keybind.callback, JSON.stringify(keybind)])
 }
