@@ -4,8 +4,8 @@ import { Send } from "lucide-react"
 
 import { Button } from "@/app/components/ui/button"
 import { Input } from "@/app/components/ui/input"
-import { useModel } from "@/app/hooks/use-model"
 import { api } from "@/app/lib/api"
+import { useModelStore } from "@/app/stores/model.store"
 import { SessionHeader } from "./-components/session-header"
 import { VirtualizedChatMessages } from "./-components/virtualized-chat-messages"
 
@@ -23,7 +23,7 @@ export const Route = createFileRoute("/session/$sessionId/")({
 
 function SessionPage() {
   const { sessionId } = Route.useParams()
-  const { currentModel: selectedModel } = useModel()
+  const selectedModel = useModelStore((state) => state.currentModel)
   const { data: session } = useSuspenseQuery(
     api.session.messages.queryOptions({ id: sessionId }),
   )
