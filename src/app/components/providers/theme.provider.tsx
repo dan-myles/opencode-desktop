@@ -1,73 +1,38 @@
-import { createContext, useContext, useEffect, useState } from "react"
+import { useEffect } from "react"
 
-type Theme = "dark" | "light" | "system"
+import { useThemeStore } from "@/app/stores/theme.store"
 
-type ThemeProviderProps = {
-  children: React.ReactNode
-  defaultTheme?: Theme
-  storageKey?: string
-}
+export function ThemeProvider({ children }: { children: React.ReactNode }) {
+  const { theme, resolvedTheme, setTheme, setSystemTheme } = useThemeStore()
 
-type ThemeProviderState = {
-  theme: Theme
-  setTheme: (theme: Theme) => void
-}
-
-const initialState: ThemeProviderState = {
-  theme: "system",
-  setTheme: () => null,
-}
-
-const ThemeProviderContext = createContext<ThemeProviderState>(initialState)
-
-export function ThemeProvider({
-  children,
-  defaultTheme = "system",
-  storageKey = "vite-ui-theme",
-  ...props
-}: ThemeProviderProps) {
-  const [theme, setTheme] = useState<Theme>(
-    () => (localStorage.getItem(storageKey) as Theme) || defaultTheme,
-  )
-
+  // System theme detection
   useEffect(() => {
-    const root = window.document.documentElement
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)")
 
-    root.classList.remove("light", "dark")
-
-    if (theme === "system") {
-      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
-        .matches
-        ? "dark"
-        : "light"
-
-      root.classList.add(systemTheme)
-      return
+    const handleChange = (e: MediaQueryListEvent) => {
+      setSystemTheme(e.matches ? "dark" : "light")
     }
 
-    root.classList.add(theme)
-  }, [theme])
+    // Set initial system theme
+    setSystemTheme(mediaQuery.matches ? "dark" : "light")
 
-  const value = {
-    theme,
-    setTheme: (theme: Theme) => {
-      localStorage.setItem(storageKey, theme)
-      setTheme(theme)
-    },
-  }
+    // Listen for system theme changes
+    mediaQuery.addEventListener("change", handleChange)
 
-  return (
-    <ThemeProviderContext.Provider {...props} value={value}>
-      {children}
-    </ThemeProviderContext.Provider>
-  )
-}
+    return () => mediaQuery.removeEventListener("change", handleChange)
+  }, [setSystemTheme])
 
-export const useTheme = () => {
-  const context = useContext(ThemeProviderContext)
+  // Initialize theme on mount
+  useEffect(() => {
+    // Trigger theme application on initial load
+    setTheme(theme)
+  }, [setTheme, theme])
 
-  if (context === undefined)
-    throw new Error("useTheme must be used within a ThemeProvider")
+  // Apply theme changes to document
+  useEffect(() => {
+    document.documentElement.classList.remove("light", "dark")
+    document.documentElement.classList.add(resolvedTheme)
+  }, [resolvedTheme])
 
-  return context
+  return <>{children}</>
 }

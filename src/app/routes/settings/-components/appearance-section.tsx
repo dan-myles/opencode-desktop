@@ -1,7 +1,6 @@
 import { useState } from "react"
 import { Monitor, Moon, Palette, Sun } from "lucide-react"
 
-import { useTheme } from "@/app/components/providers/theme.provider"
 import { Badge } from "@/app/components/ui/badge"
 import {
   Card,
@@ -17,9 +16,10 @@ import {
   SelectItem,
   SelectTrigger,
 } from "@/app/components/ui/select"
+import { useThemeStore } from "@/app/stores/theme.store"
 
 export function AppearanceSection() {
-  const { theme, setTheme } = useTheme()
+  const { theme, setTheme } = useThemeStore()
   const [colorScheme, setColorScheme] = useState("tangerine")
 
   const getThemeIcon = (themeValue: string) => {

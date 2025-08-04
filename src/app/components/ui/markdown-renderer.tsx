@@ -13,8 +13,8 @@ import {
 import rehypeSanitize from "rehype-sanitize"
 import remarkGfm from "remark-gfm"
 
-import { useTheme } from "@/app/components/providers/theme.provider"
 import { cn } from "@/app/lib/utils"
+import { useThemeStore } from "@/app/stores/theme.store"
 
 // Lazy load SyntaxHighlighter for better performance
 const SyntaxHighlighter = lazy(() =>
@@ -44,7 +44,8 @@ interface MarkdownRendererProps {
 
 export const MarkdownRenderer = memo(
   ({ children, className }: MarkdownRendererProps) => {
-    const { theme } = useTheme()
+    const { resolvedTheme } = useThemeStore()
+    const theme = resolvedTheme
     const isDark = theme === "dark"
 
     // Create cache key from content and theme
