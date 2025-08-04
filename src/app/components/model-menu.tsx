@@ -1,5 +1,6 @@
 import { useCallback, useState } from "react"
 import { useQuery } from "@tanstack/react-query"
+import { useLocation } from "@tanstack/react-router"
 import { Check, Cpu, Eye, Wrench, Zap } from "lucide-react"
 
 import type { Model } from "@/server/routers/config/types"
@@ -18,9 +19,12 @@ import {
 
 export function ModelMenu() {
   const [open, setOpen] = useState(false)
+  const location = useLocation()
   const currentModel = useModelStore((state) => state.currentModel)
   const setCurrentModel = useModelStore((state) => state.setCurrentModel)
   const { data: providersData } = useQuery(api.config.providers.queryOptions())
+  const isOnAllowedRoute =
+    location.pathname === "/" || location.pathname.startsWith("/session/")
 
   useRegisterKeybind({
     id: "toggle-model-menu",
@@ -48,6 +52,10 @@ export function ModelMenu() {
     if (model.attachment) icons.push(<Eye key="vision" className="h-3 w-3" />)
     if (model.temperature) icons.push(<Zap key="temp" className="h-3 w-3" />)
     return icons
+  }
+
+  if (!isOnAllowedRoute) {
+    return null
   }
 
   return (
