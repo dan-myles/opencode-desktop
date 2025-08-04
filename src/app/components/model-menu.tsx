@@ -3,8 +3,8 @@ import { useQuery } from "@tanstack/react-query"
 import { Check, Cpu, Eye, Wrench, Zap } from "lucide-react"
 
 import type { Model } from "@/server/routers/config/types"
+import { useRegisterKeybind } from "@/app/stores/keybind.store"
 import { useModelStore } from "@/app/stores/model.store"
-import { useRegisterKeybind } from "../hooks/use-keybind"
 import { api } from "../lib/api"
 import { Badge } from "./ui/badge"
 import {
@@ -18,7 +18,8 @@ import {
 
 export function ModelMenu() {
   const [open, setOpen] = useState(false)
-  const { setCurrentModel, currentModel } = useModelStore()
+  const currentModel = useModelStore((state) => state.currentModel)
+  const setCurrentModel = useModelStore((state) => state.setCurrentModel)
   const { data: providersData } = useQuery(api.config.providers.queryOptions())
 
   useRegisterKeybind({

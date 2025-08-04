@@ -28,9 +28,9 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/app/components/ui/tooltip"
-import { useRegisterKeybind } from "@/app/hooks/use-keybind"
 import { useIsMobile } from "@/app/hooks/use-mobile"
 import { cn } from "@/app/lib/utils"
+import { useRegisterKeybind } from "@/app/stores/keybind.store"
 
 const SIDEBAR_STORAGE_KEY = "sidebar-state"
 const SIDEBAR_WIDTH = "16rem"

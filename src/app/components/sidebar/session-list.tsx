@@ -1,9 +1,9 @@
 import { useQuery } from "@tanstack/react-query"
 
 import type { Session } from "@/server/routers/session/types"
-import { useRegisterKeybind } from "@/app/hooks/use-keybind"
 import { useSessionNavigation } from "@/app/hooks/use-session-navigation"
 import { api } from "@/app/lib/api"
+import { useRegisterKeybind } from "@/app/stores/keybind.store"
 import { NewSessionButton } from "./new-session-button"
 import { SessionItem } from "./session-item"
 

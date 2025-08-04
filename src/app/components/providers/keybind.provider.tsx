@@ -1,87 +1,10 @@
 import type { ReactNode } from "react"
-import { createContext, useCallback, useEffect, useMemo, useState } from "react"
+import { useEffect } from "react"
 
-import type { Keybind, KeybindDefinition, KeybindId } from "./keybind.types"
-import { getCurrentPlatform } from "@/app/lib/utils"
-
-interface KeybindContextValue {
-  registerKeybind: (keybind: Keybind) => void
-  keybindList: Keybind[]
-  keybindMap: Map<string, Keybind>
-}
-
-const KEYBIND_LOCALSTORAGE_KEY = "keybind-store"
-
-export const KeybindContext = createContext<KeybindContextValue | null>(null)
+import { useKeybindStore } from "@/app/stores/keybind.store"
 
 export function KeybindProvider({ children }: { children: ReactNode }) {
-  const [keybinds, setKeybinds] = useState<Map<KeybindId, KeybindDefinition>>(
-    () => {
-      if (typeof window !== "undefined") {
-        const stored = localStorage.getItem(KEYBIND_LOCALSTORAGE_KEY)
-        return stored !== null
-          ? new Map(JSON.parse(stored) as [KeybindId, KeybindDefinition][])
-          : new Map()
-      }
-
-      return new Map()
-    },
-  )
-
-  const [callbacks, setCallbacks] = useState<
-    Map<KeybindId, (() => Promise<void>) | (() => void)>
-  >(new Map())
-
-  const registerKeybind = useCallback((keybind: Keybind) => {
-    const { callback, ...definition } = keybind
-
-    setKeybinds((prev) => {
-      const newMap = new Map(prev)
-      newMap.set(keybind.id, definition)
-      return newMap
-    })
-
-    setCallbacks((prev) => {
-      const newMap = new Map(prev)
-      newMap.set(keybind.id, callback)
-      return newMap
-    })
-  }, [])
-
-  const keybindList = useMemo(() => {
-    const currentPlatform = getCurrentPlatform()
-    return Array.from(keybinds.values())
-      .filter((def) => def.keys[currentPlatform])
-      .map((def) => ({
-        ...def,
-        callback: callbacks.get(def.id) || (() => {}),
-      }))
-  }, [keybinds, callbacks])
-
-  const keybindMap = useMemo(() => {
-    const currentPlatform = getCurrentPlatform()
-    const map = new Map<string, Keybind>()
-
-    keybinds.forEach((definition) => {
-      const platformKey = definition.keys[currentPlatform]
-      if (platformKey) {
-        const callback = callbacks.get(definition.id) || (() => {})
-        const normalizedKey = normalizeKeybindString(platformKey)
-        map.set(normalizedKey, { ...definition, callback })
-      }
-    })
-
-    return map
-  }, [keybinds, callbacks])
-
-  useEffect(() => {
-    try {
-      const serialized = Array.from(keybinds.entries())
-      localStorage.setItem(KEYBIND_LOCALSTORAGE_KEY, JSON.stringify(serialized))
-    } catch (error) {
-      console.warn("Failed to save keybind definitions to localStorage:", error)
-    }
-  }, [keybinds])
+  const getKeybindMap = useKeybindStore((state) => state.getKeybindMap)
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
@@ -96,6 +19,7 @@ export function KeybindProvider({ children }: { children: ReactNode }) {
       // }
 
       const eventKeybindString = createEventKeybindLookupString(event)
+      const keybindMap = getKeybindMap()
       const matchedKeybind = keybindMap.get(eventKeybindString)
 
       if (matchedKeybind) {
@@ -107,35 +31,13 @@ export function KeybindProvider({ children }: { children: ReactNode }) {
 
     document.addEventListener("keydown", handleKeyDown, true)
     return () => document.removeEventListener("keydown", handleKeyDown, true)
-  }, [keybindMap])
+  }, [getKeybindMap])
 
-  const value = useMemo(
-    () => ({
-      registerKeybind,
-      keybindList,
-      keybindMap,
-    }),
-    [registerKeybind, keybindList, keybindMap],
-  )
-
-  return (
-    <KeybindContext.Provider value={value}>{children}</KeybindContext.Provider>
-  )
+  return <>{children}</>
 }
 
 function normalizeKey(key: string): string {
   return key.toLowerCase().replace(/\s+/g, "")
-}
-
-function normalizeKeybindString(keybindString: string): string {
-  const parts = keybindString
-    .toLowerCase()
-    .split("+")
-    .map((s) => s.trim())
-  const key = parts.pop()
-  const modifiers = parts.filter((p) => p !== key).sort()
-
-  return [...modifiers, key].join("+")
 }
 
 function createEventKeybindLookupString(event: KeyboardEvent): string {
