@@ -44,7 +44,7 @@ function SessionPage() {
         <div className="pointer-events-auto w-full max-w-2xl">
           {/* Backdrop blur container */}
           <div
-            className="bg-background/20 relative rounded-xl border shadow-2xl
+            className="bg-background/80 relative rounded-xl border shadow-2xl
               backdrop-blur-md"
           >
             {/* Chat input area */}
@@ -52,15 +52,9 @@ function SessionPage() {
               <div className="flex gap-3">
                 <Input
                   placeholder="Type your message..."
-                  className="bg-background/50 border-border/50 flex-1
-                    backdrop-blur-sm"
-                  disabled
+                  className="bg-background border-border flex-1"
                 />
-                <Button
-                  size="icon"
-                  disabled
-                  className="bg-primary/90 hover:bg-primary"
-                >
+                <Button size="icon" className="bg-primary hover:bg-primary/90">
                   <Send className="h-4 w-4" />
                 </Button>
               </div>
