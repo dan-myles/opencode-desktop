@@ -1,12 +1,11 @@
 import { type QueryClient } from "@tanstack/react-query"
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client"
-import {
-  createRootRouteWithContext,
-  Outlet,
-} from "@tanstack/react-router"
+import { createRootRouteWithContext, Outlet } from "@tanstack/react-router"
 
 import { CommandMenu } from "@/app/components/command-menu"
 import { FloatingSidebarTrigger } from "@/app/components/floating-sidebar-trigger"
+import { ModelMenu } from "@/app/components/model-menu"
+import { ModelProvider } from "@/app/components/providers/model.provider"
 import { ThemeProvider } from "@/app/components/providers/theme.provider"
 import { AppSidebar } from "@/app/components/sidebar"
 import { Titlebar } from "@/app/components/titlebar"
@@ -36,18 +35,20 @@ function RootComponent() {
     >
       <ThemeProvider>
         <KeybindProvider>
-          <RegistryProvider>
-            <SidebarProvider
-              style={
-                {
-                  "--sidebar-width": "17rem",
-                  "--sidebar-width-icon": "3rem",
-                } as React.CSSProperties
-              }
-            >
-              <RootDocument />
-            </SidebarProvider>
-          </RegistryProvider>
+          <ModelProvider>
+            <RegistryProvider>
+              <SidebarProvider
+                style={
+                  {
+                    "--sidebar-width": "17rem",
+                    "--sidebar-width-icon": "3rem",
+                  } as React.CSSProperties
+                }
+              >
+                <RootDocument />
+              </SidebarProvider>
+            </RegistryProvider>
+          </ModelProvider>
         </KeybindProvider>
       </ThemeProvider>
     </PersistQueryClientProvider>
@@ -67,6 +68,7 @@ function RootDocument() {
         </div>
       </div>
       <CommandMenu />
+      <ModelMenu />
       <FloatingSidebarTrigger />
       <Toaster position="top-right" />
     </>

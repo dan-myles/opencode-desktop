@@ -1,10 +1,10 @@
-import { useSuspenseQuery } from "@tanstack/react-query"
+import { useQuery, useSuspenseQuery } from "@tanstack/react-query"
 import { createFileRoute } from "@tanstack/react-router"
 import { Send } from "lucide-react"
 
-import type { AssistantMessage } from "@/server/routers/session/types"
 import { Button } from "@/app/components/ui/button"
 import { Input } from "@/app/components/ui/input"
+import { useModel } from "@/app/hooks/use-model"
 import { api } from "@/app/lib/api"
 import { SessionHeader } from "./-components/session-header"
 import { VirtualizedChatMessages } from "./-components/virtualized-chat-messages"
@@ -23,18 +23,53 @@ export const Route = createFileRoute("/session/$sessionId/")({
 
 function SessionPage() {
   const { sessionId } = Route.useParams()
+  const { currentModel: selectedModel } = useModel()
   const { data: session } = useSuspenseQuery(
     api.session.messages.queryOptions({ id: sessionId }),
   )
+  const { data: providersData } = useQuery(api.config.providers.queryOptions())
 
-  const latestAssistantMessage = session
-    ?.filter((msg) => msg.info.role === "assistant")
-    ?.at(-1)
+  // Get the model to display (selected or default)
+  const displayModel =
+    selectedModel ||
+    (providersData
+      ? {
+          providerID: Object.keys(providersData.default)[0],
+          modelID: Object.values(providersData.default)[0],
+        }
+      : null)
 
-  const currentModel =
-    latestAssistantMessage?.info.role === "assistant"
-      ? (latestAssistantMessage.info as AssistantMessage)
-      : null
+  // Get the pretty name for the model with brand
+  const getModelDisplayContent = () => {
+    if (!displayModel || !providersData) return null
+
+    const provider = providersData.providers.find(
+      (p) => p.id === displayModel.providerID,
+    )
+    if (!provider) {
+      return (
+        <span className="text-xs">
+          {displayModel.providerID}/{displayModel.modelID}
+        </span>
+      )
+    }
+
+    const model = provider.models[displayModel.modelID]
+    if (!model) {
+      return (
+        <span className="text-xs">
+          {displayModel.providerID}/{displayModel.modelID}
+        </span>
+      )
+    }
+
+    return (
+      <span className="text-xs">
+        <span className="text-muted-foreground">{provider.name}</span>{" "}
+        <span className="text-foreground">{model.name}</span>
+      </span>
+    )
+  }
 
   return (
     <div className="relative h-full max-w-full">
@@ -72,15 +107,13 @@ function SessionPage() {
           </div>
 
           {/* Floating model indicator */}
-          {currentModel?.providerID && currentModel?.modelID && (
+          {displayModel && (
             <div className="pointer-events-auto absolute top-full right-4 -mt-3">
               <div
-                className="bg-background/80 border-border text-muted-foreground
-                  rounded-full border px-3 py-1.5 shadow-lg backdrop-blur-md"
+                className="bg-background/80 border-border rounded-full border
+                  px-3 py-1.5 shadow-lg backdrop-blur-md"
               >
-                <span className="font-mono text-xs">
-                  {currentModel.providerID}/{currentModel.modelID}
-                </span>
+                {getModelDisplayContent()}
               </div>
             </div>
           )}

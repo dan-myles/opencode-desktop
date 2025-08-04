@@ -1,6 +1,7 @@
 export type KeybindId =
   | "toggle-sidebar"
   | "toggle-command-menu"
+  | "toggle-model-menu"
   | "toggle-light-dark-mode"
   | "navigate-settings"
   | "navigate-session-up"
