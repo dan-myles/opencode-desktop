@@ -1,11 +1,12 @@
 import { useState } from "react"
-import { useMutation, useQueryClient } from "@tanstack/react-query"
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { createFileRoute, useNavigate } from "@tanstack/react-router"
-import { Send } from "lucide-react"
+import { Settings } from "lucide-react"
 
 import type { Session } from "@/server/routers/session/types"
+import { ChatInputBox } from "@/app/components/chat-input-box"
 import { Button } from "@/app/components/ui/button"
-import { Input } from "@/app/components/ui/input"
+import { useModelStore } from "@/app/stores/model.store"
 import { api } from "../lib/api"
 import { formatKeybindForDisplay, getCurrentPlatform } from "../lib/utils"
 
@@ -17,6 +18,22 @@ function Index() {
   const [message, setMessage] = useState("")
   const navigate = useNavigate()
   const queryClient = useQueryClient()
+  const currentModel = useModelStore((state) => state.currentModel)
+  const { data: providersData } = useQuery(api.config.providers.queryOptions())
+
+  const getDefaultModel = () => {
+    if (currentModel) return currentModel
+    if (providersData?.default) {
+      const firstProvider = Object.keys(providersData.default)[0]
+      if (firstProvider) {
+        return {
+          providerID: firstProvider,
+          modelID: providersData.default[firstProvider],
+        }
+      }
+    }
+    return { providerID: "anthropic", modelID: "claude-3-5-sonnet-20241022" }
+  }
 
   const createSession = useMutation(
     api.session.create.mutationOptions({
@@ -24,10 +41,11 @@ function Index() {
         queryClient.invalidateQueries(api.session.list.queryOptions())
 
         if (message.trim()) {
+          const model = getDefaultModel()
           await chatMutation.mutateAsync({
             id: session.id,
-            providerID: "anthropic",
-            modelID: "claude-3-5-sonnet-20241022",
+            providerID: model.providerID,
+            modelID: model.modelID,
             parts: [
               {
                 type: "text" as const,
@@ -47,16 +65,9 @@ function Index() {
 
   const chatMutation = useMutation(api.session.chat.mutationOptions())
 
-  const handleSendMessage = () => {
-    if (!message.trim()) return
+  const handleSendMessage = (messageText: string) => {
+    setMessage(messageText)
     createSession.mutate()
-  }
-
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault()
-      handleSendMessage()
-    }
   }
 
   const isLoading = createSession.isPending || chatMutation.isPending
@@ -92,33 +103,39 @@ function Index() {
               description="Next session"
               keybind={getCurrentPlatform() === "darwin" ? "cmd+n" : "ctrl+n"}
             />
+            <KeybindHint
+              description="Change model"
+              keybind={getCurrentPlatform() === "darwin" ? "cmd+l" : "ctrl+l"}
+            />
           </div>
         </div>
 
-        <div
-          className="bg-background/20 relative rounded-xl border shadow-2xl
-            backdrop-blur-md"
-        >
-          <div className="p-6">
-            <div className="flex gap-3">
-              <Input
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder="Type your message..."
-                className="bg-background/50 border-border/50 flex-1
-                  backdrop-blur-sm"
-                disabled={isLoading}
-              />
-              <Button
-                onClick={handleSendMessage}
-                disabled={!message.trim() || isLoading}
-                size="icon"
-                className="bg-primary/90 hover:bg-primary"
-              >
-                <Send className="h-4 w-4" />
-              </Button>
-            </div>
+        <div className="relative">
+          <ChatInputBox
+            className="w-full max-w-2xl"
+            onSend={handleSendMessage}
+            disabled={isLoading}
+            value={message}
+            onChange={setMessage}
+          />
+
+          <div className="mt-4 flex justify-center">
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => {
+                const event = new KeyboardEvent("keydown", {
+                  key: "l",
+                  metaKey: getCurrentPlatform() === "darwin",
+                  ctrlKey: getCurrentPlatform() !== "darwin",
+                })
+                document.dispatchEvent(event)
+              }}
+              className="text-muted-foreground hover:text-foreground"
+            >
+              <Settings className="mr-2 h-4 w-4" />
+              Change Model
+            </Button>
           </div>
         </div>
       </div>
