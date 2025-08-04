@@ -22,8 +22,8 @@ export function AppearanceSection() {
   const { theme, setTheme } = useThemeStore()
   const [colorScheme, setColorScheme] = useState("tangerine")
 
-  const getThemeIcon = (themeValue: string) => {
-    switch (themeValue) {
+  const ThemeIcon = ({ theme }: { theme: string }) => {
+    switch (theme) {
       case "light":
         return <Sun className="h-4 w-4" />
       case "dark":
@@ -35,8 +35,8 @@ export function AppearanceSection() {
     }
   }
 
-  const getThemeLabel = (themeValue: string) => {
-    switch (themeValue) {
+  const ThemeLabel = ({ theme }: { theme: string }) => {
+    switch (theme) {
       case "light":
         return "Light"
       case "dark":
@@ -73,8 +73,8 @@ export function AppearanceSection() {
             <Select value={theme} onValueChange={setTheme}>
               <SelectTrigger className="w-[180px]" id="theme-select">
                 <div className="flex items-center gap-2">
-                  {getThemeIcon(theme)}
-                  {getThemeLabel(theme)}
+                  <ThemeIcon theme={theme} />
+                  <ThemeLabel theme={theme} />
                 </div>
               </SelectTrigger>
               <SelectContent>

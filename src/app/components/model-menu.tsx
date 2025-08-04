@@ -45,13 +45,13 @@ export function ModelMenu() {
     [setCurrentModel],
   )
 
-  const getModelCapabilityIcons = (model: Model) => {
+  const ModelCapabilityIcons = ({ model }: { model: Model }) => {
     const icons = []
     if (model.reasoning) icons.push(<Cpu key="reasoning" className="h-3 w-3" />)
     if (model.tool_call) icons.push(<Wrench key="tools" className="h-3 w-3" />)
     if (model.attachment) icons.push(<Eye key="vision" className="h-3 w-3" />)
     if (model.temperature) icons.push(<Zap key="temp" className="h-3 w-3" />)
-    return icons
+    return <>{icons}</>
   }
 
   if (!isOnAllowedRoute) {
@@ -94,7 +94,7 @@ export function ModelMenu() {
                     </div>{" "}
                   </div>
                   <div className="flex items-center gap-1">
-                    {getModelCapabilityIcons(model)}
+                    <ModelCapabilityIcons model={model} />
                   </div>{" "}
                 </CommandItem>
               )
