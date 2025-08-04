@@ -80,6 +80,7 @@ bin/                      # Opencode CLI binary location
 - Try not to leave comments, only do so if they are very necessary!
 - NEVER USE ANY, NEVER USE IT EVER, we should always try to find correct types
 - ALWAYS check lint errors with `pnpm lint` before finishing a task
+- NEVER make functions like `renderSomething()` always use REACT COMPONENTS instead
 
 1. **Always run type checking** after code changes: `pnpm typecheck`, do this over starting the development server
 2. **Follow existing patterns** - check similar components/functions before creating new ones
