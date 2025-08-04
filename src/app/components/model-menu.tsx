@@ -15,12 +15,6 @@ import {
   CommandItem,
   CommandList,
 } from "./ui/command"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "./ui/tooltip"
 
 export function ModelMenu() {
   const [open, setOpen] = useState(false)
@@ -48,54 +42,10 @@ export function ModelMenu() {
 
   const getModelCapabilityIcons = (model: Model) => {
     const icons = []
-    if (model.reasoning) {
-      icons.push(
-        <Tooltip key="reasoning">
-          <TooltipTrigger asChild>
-            <Cpu className="h-3 w-3" />
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Reasoning</p>
-          </TooltipContent>
-        </Tooltip>,
-      )
-    }
-    if (model.tool_call) {
-      icons.push(
-        <Tooltip key="tools">
-          <TooltipTrigger asChild>
-            <Wrench className="h-3 w-3" />
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Tool Calling</p>
-          </TooltipContent>
-        </Tooltip>,
-      )
-    }
-    if (model.attachment) {
-      icons.push(
-        <Tooltip key="vision">
-          <TooltipTrigger asChild>
-            <Eye className="h-3 w-3" />
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Vision</p>
-          </TooltipContent>
-        </Tooltip>,
-      )
-    }
-    if (model.temperature) {
-      icons.push(
-        <Tooltip key="temp">
-          <TooltipTrigger asChild>
-            <Zap className="h-3 w-3" />
-          </TooltipTrigger>
-          <TooltipContent>
-            <p>Temperature Control</p>
-          </TooltipContent>
-        </Tooltip>,
-      )
-    }
+    if (model.reasoning) icons.push(<Cpu key="reasoning" className="h-3 w-3" />)
+    if (model.tool_call) icons.push(<Wrench key="tools" className="h-3 w-3" />)
+    if (model.attachment) icons.push(<Eye key="vision" className="h-3 w-3" />)
+    if (model.temperature) icons.push(<Zap key="temp" className="h-3 w-3" />)
     return icons
   }
 
@@ -134,11 +84,9 @@ export function ModelMenu() {
                       )}
                     </div>{" "}
                   </div>
-                  <TooltipProvider>
-                    <div className="flex items-center gap-1">
-                      {getModelCapabilityIcons(model)}
-                    </div>
-                  </TooltipProvider>{" "}
+                  <div className="flex items-center gap-1">
+                    {getModelCapabilityIcons(model)}
+                  </div>{" "}
                 </CommandItem>
               )
             })}
