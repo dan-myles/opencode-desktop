@@ -63,8 +63,10 @@ export const MessagePart = memo(
 
         if (isUser) {
           return (
-            <div className="rounded bg-blue-600 p-2 text-blue-100">
-              <div className="mb-1 text-xs text-blue-200">{language}</div>
+            <div className="bg-accent text-accent-foreground rounded p-2">
+              <div className="text-accent-foreground/70 mb-1 text-xs">
+                {language}
+              </div>
               <pre className="font-mono text-xs whitespace-pre-wrap">
                 <code>
                   {typeof code === "string"
@@ -107,7 +109,11 @@ export const MessagePart = memo(
         )
 
         if (isUser) {
-          return <div className="text-sm text-red-200">⚠️ {message}</div>
+          return (
+            <div className="text-destructive-foreground text-sm">
+              ⚠️ {message}
+            </div>
+          )
         }
 
         return (
@@ -141,7 +147,9 @@ export const MessagePart = memo(
         }, [url])
 
         if (isUser) {
-          return <div className="text-sm text-blue-100">📎 {filename}</div>
+          return (
+            <div className="text-accent-foreground text-sm">📎 {filename}</div>
+          )
         }
 
         return (
@@ -184,11 +192,13 @@ export const MessagePart = memo(
           return (
             <div
               className={`flex items-center gap-2 rounded-lg p-3 ${
-                isUser ? "text-blue-200" : "bg-muted border-border border"
+                isUser
+                  ? "text-accent-foreground"
+                  : "bg-muted border-border border"
               }`}
             >
               <ImageIcon
-                className={`h-5 w-5 ${isUser ? "text-blue-200" : "text-muted-foreground"}`}
+                className={`h-5 w-5 ${isUser ? "text-accent-foreground" : "text-muted-foreground"}`}
               />
               <span className="text-sm">Image not available</span>
             </div>
@@ -205,7 +215,7 @@ export const MessagePart = memo(
                 style={{ maxHeight: "200px" }}
               />
               {imageFilename && (
-                <div className="mt-1 text-xs text-blue-200">
+                <div className="text-accent-foreground/70 mt-1 text-xs">
                   {imageFilename}
                 </div>
               )}
@@ -237,7 +247,7 @@ export const MessagePart = memo(
 
         if (isUser) {
           return (
-            <div className="text-sm text-blue-200">
+            <div className="text-accent-foreground text-sm">
               {isStart ? "▶️" : isFinish ? "⏹️" : "⏳"} {step}
             </div>
           )
@@ -298,7 +308,7 @@ export const MessagePart = memo(
 
         if (isUser) {
           return (
-            <div className="text-sm text-blue-100">
+            <div className="text-accent-foreground text-sm">
               Tool: {toolName} ({stateString})
             </div>
           )
@@ -335,7 +345,11 @@ export const MessagePart = memo(
 
       default:
         return (
-          <div className={isUser ? "text-blue-100" : "bg-muted rounded-lg p-3"}>
+          <div
+            className={
+              isUser ? "text-accent-foreground" : "bg-muted rounded-lg p-3"
+            }
+          >
             <div className="text-muted-foreground mb-2 font-mono text-xs">
               {part.type}
             </div>
