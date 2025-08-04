@@ -1,11 +1,9 @@
 import { useState } from "react"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { createFileRoute, useNavigate } from "@tanstack/react-router"
-import { Settings } from "lucide-react"
 
 import type { Session } from "@/server/routers/session/types"
 import { ChatInputBox } from "@/app/components/chat-input-box"
-import { Button } from "@/app/components/ui/button"
 import { useModelStore } from "@/app/stores/model.store"
 import { api } from "../lib/api"
 import { formatKeybindForDisplay, getCurrentPlatform } from "../lib/utils"
@@ -110,34 +108,13 @@ function Index() {
           </div>
         </div>
 
-        <div className="relative">
-          <ChatInputBox
-            className="w-full max-w-2xl"
-            onSend={handleSendMessage}
-            disabled={isLoading}
-            value={message}
-            onChange={setMessage}
-          />
-
-          <div className="mt-4 flex justify-center">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => {
-                const event = new KeyboardEvent("keydown", {
-                  key: "l",
-                  metaKey: getCurrentPlatform() === "darwin",
-                  ctrlKey: getCurrentPlatform() !== "darwin",
-                })
-                document.dispatchEvent(event)
-              }}
-              className="text-muted-foreground hover:text-foreground"
-            >
-              <Settings className="mr-2 h-4 w-4" />
-              Change Model
-            </Button>
-          </div>
-        </div>
+        <ChatInputBox
+          className="w-full max-w-2xl"
+          onSend={handleSendMessage}
+          disabled={isLoading}
+          value={message}
+          onChange={setMessage}
+        />
       </div>
     </div>
   )

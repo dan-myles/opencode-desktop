@@ -4,6 +4,7 @@ import { Send } from "lucide-react"
 
 import { api } from "@/app/lib/api"
 import { cn } from "@/app/lib/utils"
+import { useKeybindStore } from "@/app/stores/keybind.store"
 import { useModelStore } from "@/app/stores/model.store"
 import { Button } from "./ui/button"
 import { Input } from "./ui/input"
@@ -20,6 +21,8 @@ interface ChatInputBoxProps {
 function ModelIndicatorBubble() {
   const currentModel = useModelStore((state) => state.currentModel)
   const { data: providersData } = useQuery(api.config.providers.queryOptions())
+  const callbacks = useKeybindStore((state) => state.callbacks)
+  const toggleModelMenuCallback = callbacks.get("toggle-model-menu")
 
   const getModelInfo = () => {
     if (!providersData) return null
@@ -48,6 +51,17 @@ function ModelIndicatorBubble() {
     }
   }
 
+  const handleClick = () => {
+    toggleModelMenuCallback?.()
+  }
+
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault()
+      handleClick()
+    }
+  }
+
   const modelInfo = getModelInfo()
 
   if (!modelInfo) return null
@@ -55,8 +69,17 @@ function ModelIndicatorBubble() {
   return (
     <div className="pointer-events-auto absolute top-full right-4 -mt-3">
       <div
-        className="bg-background/80 border-border rounded-full border px-3
-          py-1.5 shadow-lg backdrop-blur-md"
+        onClick={handleClick}
+        onKeyDown={handleKeyDown}
+        className="bg-background/80 border-border hover:border-ring
+          hover:ring-ring/50 active:border-ring active:ring-ring/70
+          focus-visible:border-ring focus-visible:ring-ring/50 cursor-pointer
+          rounded-full border px-3 py-1.5 shadow-lg backdrop-blur-md
+          transition-[color,box-shadow] outline-none hover:ring-[3px]
+          focus-visible:ring-[3px] active:ring-[3px]"
+        role="button"
+        tabIndex={0}
+        title="Click to change model (Cmd+L)"
       >
         <span className="text-xs">
           <span className="text-muted-foreground">
