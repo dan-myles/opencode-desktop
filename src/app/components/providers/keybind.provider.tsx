@@ -85,14 +85,15 @@ export function KeybindProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
-      const target = event.target as HTMLElement
-      if (
-        target.isContentEditable ||
-        target.tagName === "INPUT" ||
-        target.tagName === "TEXTAREA"
-      ) {
-        return
-      }
+      // NOTE: Do we want keybinds to be disabled while typing?
+      // const target = event.target as HTMLElement
+      // if (
+      //   target.isContentEditable ||
+      //   target.tagName === "INPUT" ||
+      //   target.tagName === "TEXTAREA"
+      // ) {
+      //   return
+      // }
 
       const eventKeybindString = createEventKeybindLookupString(event)
       const matchedKeybind = keybindMap.get(eventKeybindString)
