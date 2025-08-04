@@ -1,7 +1,7 @@
 import type { Dispatch, SetStateAction } from "react"
 import { useCallback, useState } from "react"
 
-import { useKeybindStore, useRegisterKeybind } from "@/app/stores/keybind.store"
+import { useKeybindList, useRegisterKeybind } from "@/app/stores/keybind.store"
 import { formatKeybindForDisplay, getCurrentPlatform } from "../lib/utils"
 import {
   CommandDialog,
@@ -43,7 +43,7 @@ interface CommandItemsProps {
 }
 
 function KeybindCommands({ setOpen }: CommandItemsProps) {
-  const keybinds = useKeybindStore((state) => state.getKeybindList())
+  const keybinds = useKeybindList()
   const platform = getCurrentPlatform()
 
   return (

@@ -1,6 +1,6 @@
 "use no memo"
 
-import { useEffect } from "react"
+import { useEffect, useMemo } from "react"
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
 
@@ -87,6 +87,11 @@ export function useRegisterKeybind(keybind: Keybind) {
     // eslint-disable-next-line react-hooks/react-compiler
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [registerKeybind, keybind.callback, JSON.stringify(keybind)])
+}
+
+export function useKeybindList() {
+  const getBinds = useKeybindStore((state) => state.getKeybindList)
+  return useMemo(() => getBinds(), [getBinds])
 }
 
 function normalizeKeybindString(keybindString: string): string {

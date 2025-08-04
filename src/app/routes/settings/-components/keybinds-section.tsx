@@ -16,15 +16,14 @@ import {
   TableRow,
 } from "@/app/components/ui/table"
 import { formatKeybindForDisplay, getCurrentPlatform } from "@/app/lib/utils"
-import { useKeybindStore } from "@/app/stores/keybind.store"
+import { useKeybindList } from "@/app/stores/keybind.store"
 
 interface GroupedKeybinds {
   [category: string]: Keybind[]
 }
 
 export function KeybindsSection() {
-  return null
-  const keybinds = useKeybindStore((state) => state.getKeybindList())
+  const keybinds = useKeybindList()
   const platform = getCurrentPlatform()
   const groupedKeybinds = groupKeybindsByCategory(keybinds)
 
