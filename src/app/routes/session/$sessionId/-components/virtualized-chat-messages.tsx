@@ -58,7 +58,7 @@ export function VirtualizedChatMessages({
   return (
     <div
       ref={parentRef}
-      className="h-full overflow-y-auto pt-[7rem]"
+      className="h-full overflow-y-auto pt-[7.5rem]"
       style={{ transform: "scaleY(-1)" }}
     >
       <div className={`h-[${virtualizer.getTotalSize()}] relative w-full`}>

@@ -2,6 +2,7 @@ import { useSuspenseQuery } from "@tanstack/react-query"
 import { createFileRoute } from "@tanstack/react-router"
 import { Send } from "lucide-react"
 
+import type { AssistantMessage } from "@/server/routers/session/types"
 import { Button } from "@/app/components/ui/button"
 import { Input } from "@/app/components/ui/input"
 import { api } from "@/app/lib/api"
@@ -26,6 +27,15 @@ function SessionPage() {
     api.session.messages.queryOptions({ id: sessionId }),
   )
 
+  const latestAssistantMessage = session
+    ?.filter((msg) => msg.info.role === "assistant")
+    ?.at(-1)
+
+  const currentModel =
+    latestAssistantMessage?.info.role === "assistant"
+      ? (latestAssistantMessage.info as AssistantMessage)
+      : null
+
   return (
     <div className="relative h-full max-w-full">
       {/* Floating header */}
@@ -39,9 +49,9 @@ function SessionPage() {
       {/* Floating bottom-docked chatbox */}
       <div
         className="pointer-events-none absolute right-0 bottom-0 left-0 flex
-          justify-center p-6"
+          justify-center p-6 pb-10"
       >
-        <div className="pointer-events-auto w-full max-w-2xl">
+        <div className="pointer-events-auto relative w-full max-w-2xl">
           {/* Backdrop blur container */}
           <div
             className="bg-background/80 relative rounded-xl border shadow-2xl
@@ -60,6 +70,20 @@ function SessionPage() {
               </div>
             </div>
           </div>
+
+          {/* Floating model indicator */}
+          {currentModel?.providerID && currentModel?.modelID && (
+            <div className="pointer-events-auto absolute top-full right-4 -mt-3">
+              <div
+                className="bg-background/80 border-border text-muted-foreground
+                  rounded-full border px-3 py-1.5 shadow-lg backdrop-blur-md"
+              >
+                <span className="font-mono text-xs">
+                  {currentModel.providerID}/{currentModel.modelID}
+                </span>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
