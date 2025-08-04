@@ -4,6 +4,7 @@ import { useEffect, useRef } from "react"
 import { useVirtualizer } from "@tanstack/react-virtual"
 
 import type { MessageWithParts, Part } from "@/server/routers/session/types"
+import { cn } from "@/app/lib/utils"
 import { ChatMessage } from "./chat-message"
 
 interface VirtualizedChatMessagesProps {
@@ -58,7 +59,7 @@ export function VirtualizedChatMessages({
   return (
     <div
       ref={parentRef}
-      className="h-full overflow-y-auto pt-[2.5rem]"
+      className="h-full overflow-y-auto"
       style={{ transform: "scaleY(-1)" }}
     >
       <div className={`h-[${virtualizer.getTotalSize()}] relative w-full`}>
@@ -69,9 +70,14 @@ export function VirtualizedChatMessages({
 
           return (
             <div
-              className="absolute top-0 left-0 w-full px-40 pb-4"
+              className={cn(
+                "absolute top-0 left-0 w-full px-40 pb-6",
+                reverseIndex === 0 && "pt-[5.25rem]",
+                virtualItem.index === 0 && "pb-[8.5rem]",
+              )}
               key={virtualItem.key}
               data-index={virtualItem.index}
+              reverse-index={reverseIndex}
               ref={virtualizer.measureElement}
               style={{
                 transform: `translateY(${virtualItem.start}px) scaleY(-1)`,

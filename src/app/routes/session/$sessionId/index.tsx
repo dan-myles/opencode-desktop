@@ -77,7 +77,7 @@ function SessionPage() {
       <SessionHeader sessionId={sessionId} />
 
       {/* Chat messages background */}
-      <div className="absolute inset-20 inset-x-0">
+      <div className="absolute inset-0">
         <VirtualizedChatMessages messages={session || []} />
       </div>
 
