@@ -1,7 +1,7 @@
-import type { MessageWithParts } from "@/server/routers/session/types"
+import type { Message, Part } from "@/server/sdk/gen/types.gen"
 
 interface ChatMessageUserProps {
-  message: MessageWithParts
+  message: { info: Message; parts: Part[] }
   formattedTime: string
 }
 

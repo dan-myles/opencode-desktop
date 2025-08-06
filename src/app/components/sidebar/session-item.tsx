@@ -1,6 +1,6 @@
 import { Link, useParams } from "@tanstack/react-router"
 
-import type { Session } from "@/server/routers/session/types"
+import type { Session } from "@/server/sdk/gen/types.gen"
 import { cn } from "@/app/lib/utils"
 
 interface SessionItemProps {

@@ -1,11 +1,11 @@
 import { memo, useMemo } from "react"
 
-import type { MessageWithParts } from "@/server/routers/session/types"
+import type { Message, Part } from "@/server/sdk/gen/types.gen"
 import { ChatMessageAssistant } from "./chat-message-assistant"
 import { ChatMessageUser } from "./chat-message-user"
 
 interface ChatMessageProps {
-  message: MessageWithParts
+  message: { info: Message; parts: Part[] }
 }
 
 export const ChatMessage = memo(

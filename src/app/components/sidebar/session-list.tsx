@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query"
 
-import type { Session } from "@/server/routers/session/types"
+import type { Session } from "@/server/sdk/gen/types.gen"
 import { useSessionNavigation } from "@/app/hooks/use-session-navigation"
 import { api } from "@/app/lib/api"
 import { useRegisterKeybind } from "@/app/stores/keybind.store"

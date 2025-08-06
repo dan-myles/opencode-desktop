@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef } from "react"
 import { useQuery } from "@tanstack/react-query"
 import { useNavigate, useParams, useRouter } from "@tanstack/react-router"
 
-import type { Session } from "@/server/routers/session/types"
+import type { Session } from "@/server/sdk/gen/types.gen"
 import { api } from "@/app/lib/api"
 import { debounce } from "@/app/lib/utils"
 

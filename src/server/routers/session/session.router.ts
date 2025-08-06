@@ -1,19 +1,20 @@
+import type { Session } from "@/server/sdk/gen/types.gen"
 import type { TRPCRouterRecord } from "@trpc/server"
 import { serverProcedure } from "@/server/trpc"
 import {
-  permissionResponseSchema,
-  sessionChatSchema,
+  permissionResponseInputSchema,
+  sessionChatInputSchema,
   sessionIdSchema,
-  sessionInitSchema,
+  sessionInitInputSchema,
   sessionMessageSchema,
-  sessionRevertSchema,
-  sessionSummarizeSchema,
+  sessionRevertInputSchema,
+  sessionSummarizeInputSchema,
 } from "./types"
 
 export const sessionRouter = {
   list: serverProcedure.query(async ({ ctx }) => {
     const response = await ctx.client.session.list()
-    return response.data
+    return response.data ?? []
   }),
 
   get: serverProcedure.input(sessionIdSchema).query(async ({ input, ctx }) => {
@@ -32,15 +33,18 @@ export const sessionRouter = {
       const response = await ctx.client.session.delete({
         path: { id: input.id },
       })
-      return response.data
+      return response.data ?? false
     }),
 
   init: serverProcedure
-    .input(sessionInitSchema)
+    .input(sessionInitInputSchema)
     .mutation(async ({ input, ctx }) => {
       const { id, ...body } = input
-      const response = await ctx.client.session.init({ path: { id }, body })
-      return response.data
+      const response = await ctx.client.session.init({
+        path: { id },
+        body,
+      })
+      return response.data ?? false
     }),
 
   messages: serverProcedure
@@ -49,7 +53,7 @@ export const sessionRouter = {
       const response = await ctx.client.session.messages({
         path: { id: input.id },
       })
-      return response.data
+      return response.data ?? []
     }),
 
   message: serverProcedure
@@ -62,10 +66,13 @@ export const sessionRouter = {
     }),
 
   chat: serverProcedure
-    .input(sessionChatSchema)
+    .input(sessionChatInputSchema)
     .mutation(async ({ input, ctx }) => {
       const { id, ...body } = input
-      const response = await ctx.client.session.chat({ path: { id }, body })
+      const response = await ctx.client.session.chat({
+        path: { id },
+        body,
+      })
       return response.data
     }),
 
@@ -75,7 +82,7 @@ export const sessionRouter = {
       const response = await ctx.client.session.abort({
         path: { id: input.id },
       })
-      return response.data
+      return response.data ?? false
     }),
 
   share: serverProcedure
@@ -97,21 +104,24 @@ export const sessionRouter = {
     }),
 
   summarize: serverProcedure
-    .input(sessionSummarizeSchema)
+    .input(sessionSummarizeInputSchema)
     .mutation(async ({ input, ctx }) => {
       const { id, ...body } = input
       const response = await ctx.client.session.summarize({
         path: { id },
         body,
       })
-      return response.data
+      return response.data ?? false
     }),
 
   revert: serverProcedure
-    .input(sessionRevertSchema)
+    .input(sessionRevertInputSchema)
     .mutation(async ({ input, ctx }) => {
       const { id, ...body } = input
-      const response = await ctx.client.session.revert({ path: { id }, body })
+      const response = await ctx.client.session.revert({
+        path: { id },
+        body,
+      })
       return response.data
     }),
 
@@ -125,7 +135,7 @@ export const sessionRouter = {
     }),
 
   respondToPermission: serverProcedure
-    .input(permissionResponseSchema)
+    .input(permissionResponseInputSchema)
     .mutation(async ({ input, ctx }) => {
       const { id, permissionID, ...body } = input
       const response =
@@ -133,6 +143,6 @@ export const sessionRouter = {
           path: { id, permissionID },
           body,
         })
-      return response.data
+      return response.data ?? false
     }),
 } satisfies TRPCRouterRecord

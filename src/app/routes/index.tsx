@@ -2,7 +2,7 @@ import { useState } from "react"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { createFileRoute, useNavigate } from "@tanstack/react-router"
 
-import type { Session } from "@/server/routers/session/types"
+import type { Session } from "@/server/sdk/gen/types.gen"
 import { ChatInputBox } from "@/app/components/chat-input-box"
 import { useModelStore } from "@/app/stores/model.store"
 import { api } from "../lib/api"
