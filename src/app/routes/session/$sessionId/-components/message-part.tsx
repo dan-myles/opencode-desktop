@@ -24,7 +24,7 @@ import {
 import type { Part } from "@/server/routers/session/types"
 import { Badge } from "@/app/components/ui/badge"
 import { Button } from "@/app/components/ui/button"
-import { MarkdownRenderer } from "@/app/components/ui/markdown-renderer"
+import { MarkdownRenderer } from "./markdown-renderer"
 
 interface MessagePartProps {
   part: Part
