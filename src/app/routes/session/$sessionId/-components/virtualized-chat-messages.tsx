@@ -18,14 +18,12 @@ export function VirtualizedChatMessages({
 
   const virtualizer = useVirtualizer({
     count: messages.length,
+    overscan: 5,
     getScrollElement: () => parentRef.current,
-    // Calculate reverse index for size estimation
     estimateSize: (index) => {
       const reverseIndex = messages.length - 1 - index
       return estimateMessageSize(messages[reverseIndex])
     },
-    overscan: 5,
-    // Calculate reverse index for keys
     getItemKey: (index) => {
       const reverseIndex = messages.length - 1 - index
       return messages[reverseIndex]?.info.id || index
