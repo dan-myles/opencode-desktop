@@ -1,13 +1,7 @@
-// TODO: Fix ESLint warnings & errors
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-
-import { useSuspenseQuery } from "@tanstack/react-query"
+import { useQuery } from "@tanstack/react-query"
 import { Folder, Hash } from "lucide-react"
 
+import type { AssistantMessage, Message } from "@/server/sdk/gen/types.gen"
 import { Badge } from "@/app/components/ui/badge"
 import { api } from "@/app/lib/api"
 
@@ -16,32 +10,36 @@ interface SessionHeaderProps {
 }
 
 export function SessionHeader({ sessionId }: SessionHeaderProps) {
-  const { data: session } = useSuspenseQuery(
+  const { data: session } = useQuery(
     api.session.get.queryOptions({ id: sessionId }),
   )
-  const { data: messages } = useSuspenseQuery(
+  const { data: messages } = useQuery(
     api.session.messages.queryOptions({ id: sessionId }),
   )
 
-  const latestAssistantMessage = messages
-    ?.filter((msg) => msg.info.role === "assistant")
-    ?.at(-1)
+  const assistantMessages = messages?.filter(isAssistantMessage) || []
 
-  const totalTokens =
-    messages
-      ?.filter((msg) => msg.info.role === "assistant")
-      ?.reduce((total, msg) => {
-        const tokens = (msg.info as any).tokens
-        if (!tokens) return total
-        return total + tokens.input + tokens.output + tokens.reasoning
-      }, 0) || 0
+  const latestAssistantMessage = assistantMessages.at(-1)
 
-  const cwd = (latestAssistantMessage?.info as any)?.path?.cwd
+  const totalTokens = assistantMessages.reduce((total, msg) => {
+    if (hasTokens(msg.info)) {
+      return (
+        total +
+        msg.info.tokens.input +
+        msg.info.tokens.output +
+        msg.info.tokens.reasoning
+      )
+    }
+    return total
+  }, 0)
 
-  // Estimate context percentage (assuming ~200k token context window)
+  const cwd =
+    latestAssistantMessage && hasPath(latestAssistantMessage.info)
+      ? latestAssistantMessage.info.path.cwd
+      : undefined
+
   const contextPercentage = Math.round((totalTokens / 200000) * 100)
 
-  // Format token count (e.g., 31.7K)
   const formatTokens = (tokens: number) => {
     if (tokens >= 1000) {
       return `${(tokens / 1000).toFixed(1)}K`
@@ -90,4 +88,20 @@ export function SessionHeader({ sessionId }: SessionHeaderProps) {
       </div>
     </div>
   )
+}
+
+function isAssistantMessage(message: { info: Message }): boolean {
+  return message.info.role === "assistant"
+}
+
+function hasTokens(
+  message: Message,
+): message is Message & { tokens: AssistantMessage["tokens"] } {
+  return "tokens" in message && message.tokens !== undefined
+}
+
+function hasPath(
+  message: Message,
+): message is Message & { path: AssistantMessage["path"] } {
+  return "path" in message && message.path !== undefined
 }

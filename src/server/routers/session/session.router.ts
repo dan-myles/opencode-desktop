@@ -1,4 +1,3 @@
-import type { Session } from "@/server/sdk/gen/types.gen"
 import type { TRPCRouterRecord } from "@trpc/server"
 import { serverProcedure } from "@/server/trpc"
 import {

@@ -16,7 +16,7 @@ export function useSessionNavigation() {
 
   const sortedSessions = useMemo(
     () =>
-      (sessions as Session[] | undefined)?.sort(
+      sessions?.sort(
         (a: Session, b: Session) => b.time.updated - a.time.updated,
       ) || [],
     [sessions],
