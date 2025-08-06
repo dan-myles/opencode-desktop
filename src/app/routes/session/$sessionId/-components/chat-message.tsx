@@ -14,21 +14,9 @@ export function ChatMessage({ message }: ChatMessageProps) {
     [message.info.time.created],
   )
 
-  const modelInfo = useMemo(() => {
-    if (message.info.role === "assistant") {
-      const assistantMessage = message.info
-      return `${assistantMessage.providerID}/${assistantMessage.modelID}`
-    }
-    return null
-  }, [message.info])
-
   return message.info.role === "user" ? (
     <ChatMessageUser message={message} formattedTime={formattedTime} />
   ) : (
-    <ChatMessageAssistant
-      message={message}
-      formattedTime={formattedTime}
-      modelInfo={modelInfo}
-    />
+    <ChatMessageAssistant message={message} />
   )
 }
