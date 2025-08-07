@@ -1,12 +1,11 @@
-import { createAsyncStoragePersister } from "@tanstack/query-async-storage-persister"
 import { defaultShouldDehydrateQuery, QueryClient } from "@tanstack/react-query"
 import SuperJSON from "superjson"
 
+import { createIDBPersister } from "./idb-persister"
+
 let queryClient: QueryClient | undefined = undefined
 
-export const persister = createAsyncStoragePersister({
-  storage: window.localStorage,
-})
+export const persister = createIDBPersister()
 
 export function getQueryClient() {
   if (!queryClient) queryClient = createQueryClient()
