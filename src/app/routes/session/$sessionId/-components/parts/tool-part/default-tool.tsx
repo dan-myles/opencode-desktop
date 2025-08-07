@@ -57,17 +57,16 @@ export function DefaultTool({ part }: DefaultToolProps) {
         ${isMinimal ? "min-h-20" : "max-h-80 min-h-32"}`}
     >
       <div className="flex items-center gap-2">
-        <span
-          className="font-mono text-sm font-medium text-slate-900
-            dark:text-slate-100"
-        >
+        <span className="text-foreground font-mono text-sm font-medium">
           {part.tool}
         </span>
       </div>
 
       {previewContent && (
         <div className="bg-muted overflow-hidden rounded p-4 font-mono text-xs">
-          <div className="whitespace-pre-wrap">{previewContent}</div>
+          <div className="text-muted-foreground whitespace-pre-wrap">
+            {previewContent}
+          </div>
         </div>
       )}
     </div>

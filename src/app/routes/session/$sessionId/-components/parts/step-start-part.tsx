@@ -9,7 +9,7 @@ interface StepStartPartProps {
 export function StepStartPart({ part: _part }: StepStartPartProps) {
   return (
     <div className="text-muted-foreground flex items-center gap-2 text-sm">
-      <PlayIcon className="h-4 w-4 text-blue-500" />
+      <PlayIcon className="text-chart-1 h-4 w-4" />
       <span>Starting reasoning step...</span>
     </div>
   )

@@ -25,7 +25,7 @@ export function StepFinishPart({ part }: StepFinishPartProps) {
   return (
     <div className="flex items-center justify-between text-sm">
       <div className="text-muted-foreground flex items-center gap-2">
-        <CheckIcon className="h-4 w-4 text-green-500" />
+        <CheckIcon className="text-chart-2 h-4 w-4" />
         <span>Reasoning step completed</span>
       </div>
 

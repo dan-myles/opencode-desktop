@@ -50,10 +50,7 @@ export function ReadTool({ part }: ReadToolProps) {
         ${isMinimal ? "min-h-20" : "max-h-80 min-h-32"}`}
     >
       <div className="flex items-center gap-2">
-        <span
-          className="font-mono text-sm font-medium text-slate-900
-            dark:text-slate-100"
-        >
+        <span className="text-foreground font-mono text-sm font-medium">
           Reading
         </span>
         <span className="text-muted-foreground truncate text-sm">
@@ -61,14 +58,10 @@ export function ReadTool({ part }: ReadToolProps) {
         </span>
       </div>
 
-      <div
-        className="overflow-hidden rounded bg-blue-50 p-4 text-xs
-          dark:bg-blue-950/20"
-      >
+      <div className="bg-secondary/20 overflow-hidden rounded p-4 text-xs">
         {fileContent && (
           <div
-            className="font-mono whitespace-pre-wrap text-slate-600
-              dark:text-slate-300"
+            className="text-secondary-foreground font-mono whitespace-pre-wrap"
           >
             {fileContent}
           </div>

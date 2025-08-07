@@ -42,10 +42,7 @@ export function WriteTool({ part }: WriteToolProps) {
         ${isMinimal ? "min-h-20" : "max-h-80 min-h-32"}`}
     >
       <div className="flex items-center gap-2">
-        <span
-          className="font-mono text-sm font-medium text-slate-900
-            dark:text-slate-100"
-        >
+        <span className="text-foreground font-mono text-sm font-medium">
           Writing
         </span>
         <span className="text-muted-foreground truncate text-sm">
@@ -53,15 +50,9 @@ export function WriteTool({ part }: WriteToolProps) {
         </span>
       </div>
 
-      <div
-        className="overflow-hidden rounded bg-green-50 p-4 text-xs
-          dark:bg-green-950/20"
-      >
+      <div className="bg-accent/20 overflow-hidden rounded p-4 text-xs">
         {fileContent && (
-          <div
-            className="font-mono whitespace-pre-wrap text-slate-600
-              dark:text-slate-300"
-          >
+          <div className="text-accent-foreground font-mono whitespace-pre-wrap">
             {fileContent}
           </div>
         )}

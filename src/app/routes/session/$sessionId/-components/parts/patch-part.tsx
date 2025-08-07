@@ -11,8 +11,10 @@ export function PatchPart({ part }: PatchPartProps) {
   return (
     <div>
       <div className="mb-2 flex items-center gap-2">
-        <GitBranchIcon className="h-4 w-4 text-orange-500" />
-        <span className="text-sm font-medium">Code Changes</span>
+        <GitBranchIcon className="text-primary h-4 w-4" />
+        <span className="text-foreground text-sm font-medium">
+          Code Changes
+        </span>
         <Badge variant="outline" className="text-xs">
           {part.files.length} file{part.files.length !== 1 ? "s" : ""}
         </Badge>

@@ -63,10 +63,7 @@ export function BashTool({ part }: BashToolProps) {
         ${isMinimal ? "min-h-20" : "max-h-80 min-h-32"}`}
     >
       <div className="flex items-center gap-2">
-        <span
-          className="font-mono text-sm font-medium text-slate-900
-            dark:text-slate-100"
-        >
+        <span className="text-foreground font-mono text-sm font-medium">
           Bash
         </span>
         {description && (
@@ -74,13 +71,12 @@ export function BashTool({ part }: BashToolProps) {
         )}
       </div>
 
-      <div
-        className="overflow-hidden rounded bg-slate-900 p-4 font-mono text-xs
-          dark:bg-slate-950"
-      >
-        <div className="mb-2 text-green-400">$ {command}</div>
+      <div className="bg-card overflow-hidden rounded p-4 font-mono text-xs">
+        <div className="text-primary mb-2">$ {command}</div>
         {output && (
-          <div className="whitespace-pre-wrap text-slate-300">{output}</div>
+          <div className="text-card-foreground whitespace-pre-wrap">
+            {output}
+          </div>
         )}
       </div>
     </div>
