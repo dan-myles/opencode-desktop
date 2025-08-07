@@ -1,7 +1,4 @@
-import { CameraIcon } from "lucide-react"
-
 import type { SnapshotPart as SnapshotPartType } from "@/server/sdk/gen/types.gen"
-import { Badge } from "@/app/components/ui/badge"
 
 interface SnapshotPartProps {
   part: SnapshotPartType
@@ -10,14 +7,13 @@ interface SnapshotPartProps {
 export function SnapshotPart({ part }: SnapshotPartProps) {
   return (
     <div>
-      <div className="mb-2 flex items-center gap-2">
-        <CameraIcon className="text-chart-4 h-4 w-4" />
+      <div className="mb-2">
         <span className="text-foreground text-sm font-medium">
           State Snapshot
         </span>
-        <Badge variant="outline" className="text-xs">
-          {part.snapshot.length} chars
-        </Badge>
+        <span className="text-muted-foreground ml-2 text-xs">
+          {part.snapshot.length} characters
+        </span>
       </div>
 
       <div

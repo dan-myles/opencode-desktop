@@ -1,7 +1,4 @@
-import { CheckIcon } from "lucide-react"
-
 import type { StepFinishPart as StepFinishPartType } from "@/server/sdk/gen/types.gen"
-import { Badge } from "@/app/components/ui/badge"
 
 interface StepFinishPartProps {
   part: StepFinishPartType
@@ -24,20 +21,15 @@ export function StepFinishPart({ part }: StepFinishPartProps) {
 
   return (
     <div className="flex items-center justify-between text-sm">
-      <div className="text-muted-foreground flex items-center gap-2">
-        <CheckIcon className="text-chart-2 h-4 w-4" />
+      <div className="text-muted-foreground">
         <span>Reasoning step completed</span>
       </div>
 
-      <div className="flex items-center gap-2">
-        <Badge variant="outline" className="text-xs">
+      <div className="text-muted-foreground space-x-2 text-xs">
+        <span>
           {formatTokens(part.tokens.input + part.tokens.output)} tokens
-        </Badge>
-        {part.cost > 0 && (
-          <Badge variant="outline" className="text-xs">
-            {formatCost(part.cost)}
-          </Badge>
-        )}
+        </span>
+        {part.cost > 0 && <span>{formatCost(part.cost)}</span>}
       </div>
     </div>
   )

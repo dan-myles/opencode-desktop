@@ -1,7 +1,4 @@
-import { GitBranchIcon } from "lucide-react"
-
 import type { PatchPart as PatchPartType } from "@/server/sdk/gen/types.gen"
-import { Badge } from "@/app/components/ui/badge"
 
 interface PatchPartProps {
   part: PatchPartType
@@ -9,24 +6,19 @@ interface PatchPartProps {
 
 export function PatchPart({ part }: PatchPartProps) {
   return (
-    <div>
-      <div className="mb-2 flex items-center gap-2">
-        <GitBranchIcon className="text-primary h-4 w-4" />
-        <span className="text-foreground text-sm font-medium">
-          Code Changes
+    <div className="space-y-2">
+      <div className="flex items-center gap-2">
+        <span className="text-foreground font-mono text-sm font-medium">
+          Patch
         </span>
-        <Badge variant="outline" className="text-xs">
-          {part.files.length} file{part.files.length !== 1 ? "s" : ""}
-        </Badge>
+        <span className="text-muted-foreground text-sm">
+          {part.files.length} file{part.files.length !== 1 ? "s" : ""} modified
+        </span>
       </div>
 
-      <div className="space-y-1">
-        <div className="text-muted-foreground font-mono text-xs">
-          Hash: {part.hash}
-        </div>
-
+      <div className="bg-card rounded p-4">
         <div className="text-sm">
-          <div className="mb-1 font-medium">Modified files:</div>
+          <div className="mb-2 font-medium">Modified files:</div>
           <div className="space-y-1">
             {part.files.map((file, index) => (
               <div
