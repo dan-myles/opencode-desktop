@@ -18,7 +18,7 @@ export function VirtualizedChatMessages({
 
   const virtualizer = useVirtualizer({
     count: messages.length,
-    overscan: 5,
+    overscan: 15,
     getScrollElement: () => parentRef.current,
     estimateSize: (index) => {
       const reverseIndex = messages.length - 1 - index
