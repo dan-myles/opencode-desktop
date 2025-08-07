@@ -84,6 +84,7 @@ bin/                      # Opencode CLI binary location
 
 ### Roadmap
 
-- [ ] feat: command menu model selection in sessions
-- [ ] feat: currently selected model ui
-- [ ] perf: refactor virtualization & markdown rendering (need more FPS)
+- [x] feat: command menu model selection in sessions
+- [x] feat: currently selected model ui
+- [x] perf: refactor virtualization & markdown rendering (need more FPS)
+- [ ] feat: view transition animation for chatbox repositioning on new session start
