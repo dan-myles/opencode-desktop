@@ -1,5 +1,4 @@
-import { defaultShouldDehydrateQuery, QueryClient } from "@tanstack/react-query"
-import SuperJSON from "superjson"
+import { QueryClient } from "@tanstack/react-query"
 
 import { createIDBPersister } from "./idb-persister"
 
@@ -18,15 +17,6 @@ function createQueryClient() {
       queries: {
         staleTime: 1000 * 60 * 60 * 24 * 7, // 1 week
         gcTime: 1000 * 60 * 60 * 24, // 24 hours
-      },
-      dehydrate: {
-        serializeData: SuperJSON.serialize,
-        shouldDehydrateQuery: (query) =>
-          defaultShouldDehydrateQuery(query) ||
-          query.state.status === "pending",
-      },
-      hydrate: {
-        deserializeData: SuperJSON.deserialize,
       },
     },
   })

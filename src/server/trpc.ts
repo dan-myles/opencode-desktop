@@ -1,5 +1,4 @@
 import { initTRPC, TRPCError } from "@trpc/server"
-import SuperJSON from "superjson"
 import { ZodError } from "zod"
 
 import { createOpencodeClient } from "@/server/sdk"
@@ -37,7 +36,6 @@ export const createTRPCContext = async () => {
  */
 const t = initTRPC.context<typeof createTRPCContext>().create({
   isServer: true,
-  transformer: SuperJSON,
   errorFormatter({ shape, error }) {
     return {
       ...shape,
