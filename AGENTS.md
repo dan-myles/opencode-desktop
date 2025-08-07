@@ -1,7 +1,8 @@
 # Opencode Desktop Project
 
 Opencode Desktop is an Electron application that provides a desktop interface for managing and interacting with the opencode CLI tool.
-It's built with modern web technologies and provides a native desktop experience.
+It's built with modern web technologies and provides a native desktop experience. Since we are an Electron application, we run on
+desktop only, are pinned to a certain version of Chromium that we guarantee.
 
 ## Tech Stack
 
