@@ -1,14 +1,17 @@
+import { useMemo } from "react"
+
 import type { Message, Part } from "@/server/sdk/gen/types.gen"
 
 interface ChatMessageUserProps {
   message: { info: Message; parts: Part[] }
-  formattedTime: string
 }
 
-export function ChatMessageUser({
-  message,
-  formattedTime,
-}: ChatMessageUserProps) {
+export function ChatMessageUser({ message }: ChatMessageUserProps) {
+  const formattedTime = useMemo(
+    () => new Date(message.info.time.created * 1000).toLocaleTimeString(),
+    [message.info.time.created],
+  )
+
   return (
     <div className="flex justify-end">
       <div className="max-w-[80%]">
