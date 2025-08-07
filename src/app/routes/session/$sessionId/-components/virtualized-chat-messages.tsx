@@ -69,7 +69,7 @@ export function VirtualizedChatMessages({
           return (
             <div
               className={cn(
-                "absolute top-0 left-0 w-full px-40 pb-6",
+                "absolute top-0 left-0 w-full px-40",
                 reverseIndex === 0 && "pt-[5.25rem]",
                 virtualItem.index === 0 && "pb-[8.5rem]",
               )}
@@ -90,11 +90,23 @@ export function VirtualizedChatMessages({
   )
 }
 
-function estimateMessageSize(_message: {
+function estimateMessageSize(message: {
   info: Message
   parts: Part[]
 }): number {
   let baseHeight = 80 // Base message height with header and padding
-  baseHeight += 32
-  return Math.max(baseHeight, 120) // Minimum height for any message
+
+  // Add estimated height for each part
+  message.parts.forEach((part) => {
+    if (part.type === "tool") {
+      // Dynamic sizing: estimate based on content if available
+      // Minimum 80px (min-h-20), maximum 320px (max-h-80), default to medium size
+      baseHeight += 150 // Conservative estimate for dynamic tool parts
+    } else {
+      baseHeight += 60 // Other parts estimated height
+    }
+  })
+
+  baseHeight += 48 // Increased padding between messages (pb-12)
+  return Math.max(baseHeight, 160) // Minimum height for any message
 }

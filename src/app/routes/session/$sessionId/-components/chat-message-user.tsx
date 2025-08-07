@@ -22,7 +22,9 @@ export function ChatMessageUser({ message }: ChatMessageUserProps) {
           {message.parts.length > 0 && (
             <div className="mb-2 space-y-3">
               {message.parts.map((part) => (
-                <div key={part.id}>{part.type}</div>
+                <div key={part.id}>
+                  {part.type === "text" && <span>{part.text}</span>}
+                </div>
               ))}
             </div>
           )}

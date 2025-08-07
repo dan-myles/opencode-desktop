@@ -2,8 +2,6 @@ import type { Message, Part } from "@/server/sdk/gen/types.gen"
 import { FilePart } from "./file-part"
 import { PatchPart } from "./patch-part"
 import { SnapshotPart } from "./snapshot-part"
-import { StepFinishPart } from "./step-finish-part"
-import { StepStartPart } from "./step-start-part"
 import { TextPart } from "./text-part"
 import { ToolPart } from "./tool-part"
 
@@ -21,9 +19,8 @@ export function MessagePart({ part, message }: MessagePartProps) {
     case "tool":
       return <ToolPart part={part} />
     case "step-start":
-      return <StepStartPart part={part} />
     case "step-finish":
-      return <StepFinishPart part={part} />
+      return null
     case "snapshot":
       return <SnapshotPart part={part} />
     case "patch":
