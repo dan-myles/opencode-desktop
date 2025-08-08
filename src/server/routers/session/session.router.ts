@@ -175,7 +175,7 @@ export const sessionRouter = {
       })
     }),
 
-  test: serverProcedure.mutation(async ({ ctx }) => {
+  test: serverProcedure.mutation(async ({ ctx: _ctx }) => {
     // ctx.client.session.chat({
     //
     // })

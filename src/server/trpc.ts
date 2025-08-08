@@ -91,7 +91,6 @@ export const serverProcedure = publicProcedure.use((opts) => {
     ctx: {
       ...opts.ctx,
       client: opts.ctx.client, // Now guaranteed to be non-null
-      sseService: opts.ctx.sseService,
     },
   })
 })

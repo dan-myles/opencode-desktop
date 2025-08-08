@@ -39,7 +39,11 @@ function SessionPage() {
         className="pointer-events-none absolute right-0 bottom-0 left-0 flex
           justify-center p-6 pb-10"
       >
-        <ChatInputBox className="pointer-events-auto relative w-full max-w-2xl" />
+        <ChatInputBox
+          className="pointer-events-auto relative w-full max-w-2xl"
+          sessionId={sessionId}
+          placeholder="Type your message..."
+        />
       </div>
     </div>
   )
