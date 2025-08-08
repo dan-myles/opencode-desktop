@@ -1,27 +1,16 @@
 import { useEffect, useRef } from "react"
-import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useNavigate } from "@tanstack/react-router"
 import { Send } from "lucide-react"
-import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-import { z } from "zod"
 
 import { api } from "@/app/lib/api"
 import { cn } from "@/app/lib/utils"
+import { useChatInputStore } from "@/app/stores/chat-input.store"
 import { useKeybindStore } from "@/app/stores/keybind.store"
 import { useModelStore } from "@/app/stores/model.store"
 import { Button } from "./ui/button"
-import { Form, FormControl, FormField, FormItem, FormMessage } from "./ui/form"
 import { Input } from "./ui/input"
-
-const messageSchema = z.object({
-  message: z
-    .string()
-    .min(1, "Message cannot be empty")
-    .max(10000, "Message too long")
-    .trim(),
-})
 
 interface ChatInputBoxProps {
   className?: string
@@ -46,10 +35,10 @@ export function ChatInputBox({
   const { data: providersData } = useQuery(api.config.providers.queryOptions())
   const inputRef = useRef<HTMLInputElement>(null)
 
-  const form = useForm<{ message: string }>({
-    resolver: zodResolver(messageSchema),
-    defaultValues: { message: "" },
-  })
+  const message = useChatInputStore((state) => state.message)
+  const setMessage = useChatInputStore((state) => state.setMessage)
+  const clearMessage = useChatInputStore((state) => state.clearMessage)
+  const isValid = useChatInputStore((state) => state.isValid)
 
   useEffect(() => {
     if (autoFocus && inputRef.current) {
@@ -85,10 +74,11 @@ export function ChatInputBox({
 
   const createSession = useMutation(api.session.create.mutationOptions())
 
-  const onSubmit = async (data: { message: string }) => {
-    // Reset form immediately for instant feedback
-    const messageText = data.message
-    form.reset()
+  const onSubmit = async () => {
+    if (!isValid()) return
+
+    const messageText = message.trim()
+    clearMessage() // Clear immediately for instant feedback
 
     try {
       let targetSessionId = sessionId
@@ -136,8 +126,13 @@ export function ChatInputBox({
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault()
-      void form.handleSubmit(onSubmit)()
+      void onSubmit()
     }
+  }
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault()
+    void onSubmit()
   }
 
   // Only disable input during session creation, not during message sending
@@ -145,52 +140,35 @@ export function ChatInputBox({
 
   return (
     <div className={cn("relative", className)}>
-      <Form {...form}>
-        <form
-          onSubmit={(e) => {
-            e.preventDefault()
-            void form.handleSubmit(onSubmit)()
-          }}
+      <form onSubmit={handleSubmit}>
+        <div
+          className="bg-background/80 relative rounded-xl border shadow-2xl
+            backdrop-blur-md"
         >
-          <div
-            className="bg-background/80 relative rounded-xl border shadow-2xl
-              backdrop-blur-md"
-          >
-            <div className="p-6">
-              <div className="flex gap-3">
-                <FormField
-                  control={form.control}
-                  name="message"
-                  render={({ field }) => (
-                    <FormItem className="flex-1">
-                      <FormControl>
-                        <Input
-                          {...field}
-                          ref={inputRef}
-                          onKeyDown={handleKeyDown}
-                          placeholder={placeholder}
-                          className="bg-background/50 border-border/50
-                            backdrop-blur-sm"
-                          disabled={isInputDisabled}
-                        />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-                <Button
-                  type="submit"
-                  disabled={isInputDisabled || !form.formState.isValid}
-                  size="icon"
-                  className="bg-primary/90 hover:bg-primary"
-                >
-                  <Send className="h-4 w-4" />
-                </Button>
-              </div>
+          <div className="p-6">
+            <div className="flex gap-3">
+              <Input
+                ref={inputRef}
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                onKeyDown={handleKeyDown}
+                placeholder={placeholder}
+                className="bg-background/50 border-border/50 flex-1
+                  backdrop-blur-sm"
+                disabled={isInputDisabled}
+              />
+              <Button
+                type="submit"
+                disabled={isInputDisabled || !isValid()}
+                size="icon"
+                className="bg-primary/90 hover:bg-primary"
+              >
+                <Send className="h-4 w-4" />
+              </Button>
             </div>
           </div>
-        </form>
-      </Form>
+        </div>
+      </form>
 
       <ModelIndicatorBubble />
     </div>
