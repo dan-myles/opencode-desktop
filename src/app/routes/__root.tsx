@@ -12,6 +12,7 @@ import { SidebarProvider } from "@/app/components/ui/sidebar"
 import { Toaster } from "@/app/components/ui/sonner"
 import { type api } from "@/app/lib/api"
 import { getQueryClient, persister } from "@/app/lib/query-client"
+import { DevMode } from "../components/dev-mode"
 import { KeybindProvider } from "../components/providers/keybind.provider"
 import { RegistryProvider } from "../components/providers/registry.provider"
 
@@ -64,8 +65,9 @@ function RootDocument() {
           </main>
         </div>
       </div>
-      <CommandMenu />
+      <DevMode />
       <ModelMenu />
+      <CommandMenu />
       <FloatingSidebarTrigger />
       <Toaster position="top-right" />
     </>

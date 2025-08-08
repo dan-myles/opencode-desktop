@@ -63,7 +63,13 @@ export function SessionHeader({ sessionId }: SessionHeaderProps) {
             <div className="flex min-w-0 flex-1 items-center gap-3">
               <div className="flex min-w-0 flex-col">
                 <h1 className="truncate text-sm font-medium">
-                  {session.title}
+                  <span>{session.title}</span>
+                  {process.env.NODE_ENV === "development" && (
+                    <span className="text-muted-foreground text-xs">
+                      {" "}
+                      {session.id}
+                    </span>
+                  )}
                 </h1>
                 {cwd && (
                   <div

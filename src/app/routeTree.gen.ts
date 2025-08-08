@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SettingsIndexRouteImport } from './routes/settings/index'
+import { Route as DevIndexRouteImport } from './routes/dev/index'
 import { Route as SessionSessionIdIndexRouteImport } from './routes/session/$sessionId/index'
 
 const IndexRoute = IndexRouteImport.update({
@@ -23,6 +24,11 @@ const SettingsIndexRoute = SettingsIndexRouteImport.update({
   path: '/settings/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DevIndexRoute = DevIndexRouteImport.update({
+  id: '/dev/',
+  path: '/dev/',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SessionSessionIdIndexRoute = SessionSessionIdIndexRouteImport.update({
   id: '/session/$sessionId/',
   path: '/session/$sessionId/',
@@ -31,30 +37,34 @@ const SessionSessionIdIndexRoute = SessionSessionIdIndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/dev': typeof DevIndexRoute
   '/settings': typeof SettingsIndexRoute
   '/session/$sessionId': typeof SessionSessionIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/dev': typeof DevIndexRoute
   '/settings': typeof SettingsIndexRoute
   '/session/$sessionId': typeof SessionSessionIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/dev/': typeof DevIndexRoute
   '/settings/': typeof SettingsIndexRoute
   '/session/$sessionId/': typeof SessionSessionIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/settings' | '/session/$sessionId'
+  fullPaths: '/' | '/dev' | '/settings' | '/session/$sessionId'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/settings' | '/session/$sessionId'
-  id: '__root__' | '/' | '/settings/' | '/session/$sessionId/'
+  to: '/' | '/dev' | '/settings' | '/session/$sessionId'
+  id: '__root__' | '/' | '/dev/' | '/settings/' | '/session/$sessionId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DevIndexRoute: typeof DevIndexRoute
   SettingsIndexRoute: typeof SettingsIndexRoute
   SessionSessionIdIndexRoute: typeof SessionSessionIdIndexRoute
 }
@@ -75,6 +85,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/dev/': {
+      id: '/dev/'
+      path: '/dev'
+      fullPath: '/dev'
+      preLoaderRoute: typeof DevIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/session/$sessionId/': {
       id: '/session/$sessionId/'
       path: '/session/$sessionId'
@@ -87,6 +104,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DevIndexRoute: DevIndexRoute,
   SettingsIndexRoute: SettingsIndexRoute,
   SessionSessionIdIndexRoute: SessionSessionIdIndexRoute,
 }
