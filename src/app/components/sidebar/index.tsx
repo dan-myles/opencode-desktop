@@ -33,7 +33,7 @@ export function AppSidebar() {
         </div>
       </SidebarHeader>
 
-      <SidebarContent>
+      <SidebarContent className="scrollbar-none">
         <SidebarGroup className="flex-1">
           <SidebarGroupLabel>Sessions</SidebarGroupLabel>
           <SidebarGroupContent className="flex-1">

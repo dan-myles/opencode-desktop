@@ -168,28 +168,13 @@
     @apply border-border outline-ring/50 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-border;
   }
 
-  /* Custom rounded scrollbar with auto-hide */
+  /* Custom rounded scrollbar */
   ::-webkit-scrollbar-thumb {
     border-radius: var(--radius);
-    transition: opacity 0.3s ease;
   }
 
   ::-webkit-scrollbar-track {
     border-radius: var(--radius);
-  }
-
-  /* Auto-hide scrollbar when not scrolling */
-  * {
-    scrollbar-width: thin;
-    scrollbar-color: hsl(var(--border)) transparent;
-  }
-
-  *:not(:hover):not(:focus):not(:active) {
-    scrollbar-width: none;
-  }
-
-  *:not(:hover):not(:focus):not(:active)::-webkit-scrollbar-thumb {
-    opacity: 0;
   }
 
   html,
