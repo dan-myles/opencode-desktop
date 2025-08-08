@@ -75,7 +75,7 @@ export function SessionList() {
 
   return (
     <SidebarGroup className="flex-1">
-      <SidebarGroupLabel>Sessions</SidebarGroupLabel>
+      <SidebarGroupLabel>Last 7 Days</SidebarGroupLabel>
       <SidebarGroupContent className="flex-1">
         <div className="max-w-full p-2">
           {sortedSessions.length === 0 ? (
