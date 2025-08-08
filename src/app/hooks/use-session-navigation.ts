@@ -5,6 +5,7 @@ import { useNavigate, useParams, useRouter } from "@tanstack/react-router"
 import type { Session } from "@/server/sdk/gen/types.gen"
 import { api } from "@/app/lib/api"
 import { debounce } from "@/app/lib/utils"
+import { usePinnedSessionsStore } from "@/app/stores/pinned-sessions.store"
 
 export function useSessionNavigation() {
   const navigate = useNavigate()
@@ -13,14 +14,27 @@ export function useSessionNavigation() {
   const currentSessionId = params.sessionId
 
   const { data: sessions } = useQuery(api.session.list.queryOptions())
-
-  const sortedSessions = useMemo(
-    () =>
-      sessions?.sort(
-        (a: Session, b: Session) => b.time.updated - a.time.updated,
-      ) || [],
-    [sessions],
+  const pinnedSessionIds = usePinnedSessionsStore(
+    (state) => state.pinnedSessionIds,
   )
+
+  const sortedSessions = useMemo(() => {
+    if (!sessions) return []
+
+    const allSessions = sessions.sort(
+      (a: Session, b: Session) => b.time.updated - a.time.updated,
+    )
+
+    const pinnedSessions = allSessions.filter((session) =>
+      pinnedSessionIds.includes(session.id),
+    )
+
+    const unpinnedSessions = allSessions.filter(
+      (session) => !pinnedSessionIds.includes(session.id),
+    )
+
+    return [...pinnedSessions, ...unpinnedSessions]
+  }, [sessions, pinnedSessionIds])
 
   // Track preloaded sessions to avoid duplicate preloading
   const preloadedSessions = useRef(new Set<string>())

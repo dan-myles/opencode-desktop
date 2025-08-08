@@ -1,6 +1,11 @@
 import { useQuery } from "@tanstack/react-query"
 
 import type { Session } from "@/server/sdk/gen/types.gen"
+import {
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+} from "@/app/components/ui/sidebar"
 import { useSessionNavigation } from "@/app/hooks/use-session-navigation"
 import { api } from "@/app/lib/api"
 import { useRegisterKeybind } from "@/app/stores/keybind.store"
@@ -69,18 +74,23 @@ export function SessionList() {
   )
 
   return (
-    <div className="max-w-full p-2">
-      {sortedSessions.length === 0 ? (
-        <div className="text-muted-foreground py-8 text-center text-sm">
-          No sessions yet
+    <SidebarGroup className="flex-1">
+      <SidebarGroupLabel>Sessions</SidebarGroupLabel>
+      <SidebarGroupContent className="flex-1">
+        <div className="max-w-full p-2">
+          {sortedSessions.length === 0 ? (
+            <div className="text-muted-foreground py-8 text-center text-sm">
+              No sessions yet
+            </div>
+          ) : (
+            <>
+              {unpinnedSessions.map((session: Session) => (
+                <SessionItem key={session.id} session={session} />
+              ))}
+            </>
+          )}
         </div>
-      ) : (
-        <>
-          {unpinnedSessions.map((session: Session) => (
-            <SessionItem key={session.id} session={session} />
-          ))}
-        </>
-      )}
-    </div>
+      </SidebarGroupContent>
+    </SidebarGroup>
   )
 }
