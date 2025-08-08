@@ -4,6 +4,7 @@ import type { Session } from "@/server/sdk/gen/types.gen"
 import { useSessionNavigation } from "@/app/hooks/use-session-navigation"
 import { api } from "@/app/lib/api"
 import { useRegisterKeybind } from "@/app/stores/keybind.store"
+import { usePinnedSessionsStore } from "@/app/stores/pinned-sessions.store"
 import { SessionItem } from "./session-item"
 
 export function SessionList() {
@@ -15,6 +16,10 @@ export function SessionList() {
 
   const { navigateToPreviousSession, navigateToNextSession } =
     useSessionNavigation()
+
+  const pinnedSessionIds = usePinnedSessionsStore(
+    (state) => state.pinnedSessionIds,
+  )
 
   useRegisterKeybind({
     id: "navigate-session-up",
@@ -59,6 +64,10 @@ export function SessionList() {
       (a: Session, b: Session) => b.time.updated - a.time.updated,
     ) || []
 
+  const unpinnedSessions = sortedSessions.filter(
+    (session) => !pinnedSessionIds.includes(session.id),
+  )
+
   return (
     <div className="max-w-full p-2">
       {sortedSessions.length === 0 ? (
@@ -66,9 +75,11 @@ export function SessionList() {
           No sessions yet
         </div>
       ) : (
-        sortedSessions.map((session: Session) => (
-          <SessionItem key={session.id} session={session} />
-        ))
+        <>
+          {unpinnedSessions.map((session: Session) => (
+            <SessionItem key={session.id} session={session} />
+          ))}
+        </>
       )}
     </div>
   )

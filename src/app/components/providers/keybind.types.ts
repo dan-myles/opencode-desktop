@@ -8,7 +8,12 @@ export type KeybindId =
   | "navigate-session-down"
   | "navigate-dev"
   | "navigate-home"
-
+  | "toggle-pin-session"
+  | "navigate-pinned-session-1"
+  | "navigate-pinned-session-2"
+  | "navigate-pinned-session-3"
+  | "navigate-pinned-session-4"
+  | "navigate-pinned-session-5"
 
 type Modifier = "ctrl" | "cmd" | "alt" | "shift"
 
