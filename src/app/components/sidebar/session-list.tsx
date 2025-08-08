@@ -4,7 +4,6 @@ import type { Session } from "@/server/sdk/gen/types.gen"
 import { useSessionNavigation } from "@/app/hooks/use-session-navigation"
 import { api } from "@/app/lib/api"
 import { useRegisterKeybind } from "@/app/stores/keybind.store"
-import { NewSessionButton } from "./new-session-button"
 import { SessionItem } from "./session-item"
 
 export function SessionList() {
@@ -61,22 +60,16 @@ export function SessionList() {
     ) || []
 
   return (
-    <div className="flex h-full flex-col">
-      <div className="p-2">
-        <NewSessionButton />
-      </div>
-
-      <div className="max-w-full p-2">
-        {sortedSessions.length === 0 ? (
-          <div className="text-muted-foreground py-8 text-center text-sm">
-            No sessions yet
-          </div>
-        ) : (
-          sortedSessions.map((session: Session) => (
-            <SessionItem key={session.id} session={session} />
-          ))
-        )}
-      </div>
+    <div className="max-w-full p-2">
+      {sortedSessions.length === 0 ? (
+        <div className="text-muted-foreground py-8 text-center text-sm">
+          No sessions yet
+        </div>
+      ) : (
+        sortedSessions.map((session: Session) => (
+          <SessionItem key={session.id} session={session} />
+        ))
+      )}
     </div>
   )
 }
