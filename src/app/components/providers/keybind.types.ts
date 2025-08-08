@@ -7,6 +7,8 @@ export type KeybindId =
   | "navigate-session-up"
   | "navigate-session-down"
   | "navigate-dev"
+  | "navigate-home"
+
 
 type Modifier = "ctrl" | "cmd" | "alt" | "shift"
 

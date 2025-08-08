@@ -28,5 +28,19 @@ export function RegistryProvider({ children }: { children: ReactNode }) {
     description: "Open settings",
   })
 
+  useRegisterKeybind({
+    id: "navigate-home",
+    keys: {
+      darwin: "cmd+o",
+      win32: "ctrl+o",
+      linux: "ctrl+o",
+    },
+    description: "New session",
+    callback: useCallback(
+      () => navigate({ to: "/", viewTransition: true }),
+      [navigate],
+    ),
+  })
+
   return <>{children}</>
 }
