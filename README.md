@@ -97,3 +97,4 @@ bin/                      # Opencode CLI binary location
 - [ ] feat(chat): enhanced markdown rendering with better formatting
 - [ ] feat(chat): message streaming with real-time typing indicators
 - [ ] feat(sync): background session sync and conflict resolution
+- [ ] feat(keybinds): add scopes to binds for smart disabling (cmd p/n disabled in command menu)
