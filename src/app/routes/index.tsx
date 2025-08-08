@@ -36,7 +36,8 @@ function Index() {
         <ChatInputBox
           className="w-full max-w-2xl"
           placeholder="Start a new conversation..."
-        />{" "}
+          autoFocus
+        />
       </div>
     </div>
   )

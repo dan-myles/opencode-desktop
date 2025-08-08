@@ -43,6 +43,7 @@ function SessionPage() {
           className="pointer-events-auto relative w-full max-w-2xl"
           sessionId={sessionId}
           placeholder="Type your message..."
+          autoFocus
         />
       </div>
     </div>

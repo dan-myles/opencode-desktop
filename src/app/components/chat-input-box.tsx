@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { useNavigate } from "@tanstack/react-router"
@@ -28,6 +29,7 @@ interface ChatInputBoxProps {
   sessionId?: string
   onSessionCreated?: (sessionId: string) => void
   disabled?: boolean
+  autoFocus?: boolean
 }
 
 export function ChatInputBox({
@@ -36,16 +38,24 @@ export function ChatInputBox({
   sessionId,
   onSessionCreated,
   disabled = false,
+  autoFocus = false,
 }: ChatInputBoxProps) {
   const navigate = useNavigate()
   const queryClient = useQueryClient()
   const currentModel = useModelStore((state) => state.currentModel)
   const { data: providersData } = useQuery(api.config.providers.queryOptions())
+  const inputRef = useRef<HTMLInputElement>(null)
 
   const form = useForm<{ message: string }>({
     resolver: zodResolver(messageSchema),
     defaultValues: { message: "" },
   })
+
+  useEffect(() => {
+    if (autoFocus && inputRef.current) {
+      inputRef.current.focus()
+    }
+  }, [autoFocus])
 
   const getDefaultModel = () => {
     if (currentModel) return currentModel
@@ -156,6 +166,7 @@ export function ChatInputBox({
                       <FormControl>
                         <Input
                           {...field}
+                          ref={inputRef}
                           onKeyDown={handleKeyDown}
                           placeholder={placeholder}
                           className="bg-background/50 border-border/50
