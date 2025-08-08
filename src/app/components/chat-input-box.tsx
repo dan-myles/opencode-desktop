@@ -44,7 +44,7 @@ export function ChatInputBox({
     if (autoFocus && inputRef.current) {
       inputRef.current.focus()
     }
-  }, [autoFocus])
+  }, [autoFocus, sessionId])
 
   const getDefaultModel = () => {
     if (currentModel) return currentModel
