@@ -25,6 +25,7 @@ function Command({
         overflow-hidden rounded-md`,
         className,
       )}
+      vimBindings={false}
       {...props}
     />
   )
