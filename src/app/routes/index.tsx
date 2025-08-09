@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router"
 
-import { ChatInputBox } from "@/app/components/chat-input-box"
 import { formatKeybindForDisplay, getCurrentPlatform } from "../lib/utils"
 
 export const Route = createFileRoute("/")({
@@ -33,11 +32,7 @@ function Index() {
             />
           </div>
         </div>
-        <ChatInputBox
-          className="w-full max-w-2xl"
-          placeholder="Start a new conversation..."
-          autoFocus
-        />
+        {/* chat input box goes here */}
       </div>
     </div>
   )
