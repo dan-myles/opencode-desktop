@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react"
-import { useSuspenseQuery } from "@tanstack/react-query"
+import { useCallback, useEffect, useMemo, useState } from "react"
+import { useMutation, useSuspenseQuery } from "@tanstack/react-query"
 import { useSubscription } from "@trpc/tanstack-react-query"
 
 import type { Message, Part } from "@/server/sdk/gen/types.gen"
@@ -18,9 +18,82 @@ export function useLiveMessages(sessionId: string) {
   const [messages, setMessages] = useState<MessageWithParts[]>(
     () => initialMessages || [],
   )
+  const [optimisticMessages, setOptimisticMessages] = useState<
+    MessageWithParts[]
+  >([])
 
   const { data: latestEvent } = useSubscription(
     api.session.sessionEvents.subscriptionOptions({ id: sessionId }),
+  )
+
+  const chatMutation = useMutation(api.session.chat.mutationOptions())
+
+  // Merge real messages with optimistic ones
+  const allMessages = useMemo(() => {
+    const messageMap: Record<string, MessageWithParts> = {}
+
+    // Add real messages first
+    for (const msg of messages) {
+      messageMap[msg.info.id] = msg
+    }
+
+    // Add optimistic messages (they'll be replaced when real ones arrive)
+    for (const msg of optimisticMessages) {
+      if (!messageMap[msg.info.id]) {
+        messageMap[msg.info.id] = msg
+      }
+    }
+
+    return Object.values(messageMap).sort(
+      (a, b) => a.info.time.created - b.info.time.created,
+    )
+  }, [messages, optimisticMessages])
+
+  // Send message function with optimistic update
+  const sendMessage = useCallback(
+    async (text: string) => {
+      const optimisticId = `msg_optimistic_${Date.now()}`
+      const now = Math.floor(Date.now() / 1000)
+
+      // Create optimistic message
+      const optimisticMessage: MessageWithParts = {
+        info: {
+          id: optimisticId,
+          sessionID: sessionId,
+          role: "user",
+          time: { created: now },
+        } as Message,
+        parts: [
+          {
+            id: `prt_optimistic_${Date.now()}`,
+            sessionID: sessionId,
+            messageID: optimisticId,
+            type: "text",
+            text: text,
+          } as Part,
+        ],
+      }
+
+      // Add optimistic message immediately
+      setOptimisticMessages((prev) => [...prev, optimisticMessage])
+
+      try {
+        // Send actual message
+        await chatMutation.mutateAsync({
+          id: sessionId,
+          providerID: "anthropic",
+          modelID: "claude-3-5-sonnet-20241022",
+          parts: [{ type: "text" as const, text }],
+        })
+      } catch (error) {
+        // Remove optimistic message on error
+        setOptimisticMessages((prev) =>
+          prev.filter((msg) => msg.info.id !== optimisticId),
+        )
+        throw error
+      }
+    },
+    [sessionId, chatMutation],
   )
 
   useEffect(() => {
@@ -133,8 +206,19 @@ export function useLiveMessages(sessionId: string) {
     }
   }, [latestEvent])
 
+  // Clean up optimistic messages when real ones arrive
+  useEffect(() => {
+    if (latestEvent?.type === "message.updated") {
+      // Remove optimistic messages when real ones come in
+      setOptimisticMessages((prev) =>
+        prev.filter((msg) => !msg.info.id.startsWith("msg_optimistic_")),
+      )
+    }
+  }, [latestEvent])
+
   return {
-    messages,
+    messages: allMessages,
     latestEvent,
+    sendMessage,
   }
 }

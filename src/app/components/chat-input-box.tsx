@@ -1,44 +1,31 @@
-import { useEffect, useRef } from "react"
-import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { useNavigate } from "@tanstack/react-router"
+import { useEffect, useRef, useState } from "react"
+import { useQuery } from "@tanstack/react-query"
 import { Send } from "lucide-react"
-import { toast } from "sonner"
 
 import { api } from "@/app/lib/api"
 import { cn } from "@/app/lib/utils"
-import { useChatInputStore } from "@/app/stores/chat-input.store"
 import { useKeybindStore } from "@/app/stores/keybind.store"
 import { useModelStore } from "@/app/stores/model.store"
 import { Button } from "./ui/button"
 import { Input } from "./ui/input"
 
 interface ChatInputBoxProps {
-  className?: string
+  sessionId: string
+  onSendMessage: (text: string) => Promise<void>
   placeholder?: string
-  sessionId?: string
-  onSessionCreated?: (sessionId: string) => void
-  disabled?: boolean
   autoFocus?: boolean
+  className?: string
 }
 
 export function ChatInputBox({
-  className,
-  placeholder = "Type your message...",
   sessionId,
-  onSessionCreated,
-  disabled = false,
+  onSendMessage,
+  placeholder = "Type your message...",
   autoFocus = false,
+  className,
 }: ChatInputBoxProps) {
-  const navigate = useNavigate()
-  const queryClient = useQueryClient()
-  const currentModel = useModelStore((state) => state.currentModel)
-  const { data: providersData } = useQuery(api.config.providers.queryOptions())
+  const [message, setMessage] = useState("")
   const inputRef = useRef<HTMLInputElement>(null)
-
-  const message = useChatInputStore((state) => state.message)
-  const setMessage = useChatInputStore((state) => state.setMessage)
-  const clearMessage = useChatInputStore((state) => state.clearMessage)
-  const isValid = useChatInputStore((state) => state.isValid)
 
   useEffect(() => {
     if (autoFocus && inputRef.current) {
@@ -46,97 +33,34 @@ export function ChatInputBox({
     }
   }, [autoFocus, sessionId])
 
-  const getDefaultModel = () => {
-    if (currentModel) return currentModel
-    if (providersData?.default) {
-      const firstProvider = Object.keys(providersData.default)[0]
-      if (firstProvider) {
-        return {
-          providerID: firstProvider,
-          modelID: providersData.default[firstProvider],
-        }
-      }
-    }
-    return { providerID: "anthropic", modelID: "claude-3-5-sonnet-20241022" }
-  }
+  const isValid = () => message.trim().length > 0
 
-  const chatMutation = useMutation({
-    ...api.session.chat.mutationOptions(),
-    onSuccess: () => {
-      // Refetch messages after successful send
-      if (sessionId) {
-        void queryClient.invalidateQueries({
-          queryKey: api.session.messages.queryKey({ id: sessionId }),
-        })
-      }
-    },
-  })
-
-  const createSession = useMutation(api.session.create.mutationOptions())
-
-  const onSubmit = async () => {
+  const handleSend = async () => {
     if (!isValid()) return
 
     const messageText = message.trim()
-    clearMessage() // Clear immediately for instant feedback
+    setMessage("") // Clear input immediately
 
     try {
-      let targetSessionId = sessionId
-
-      // Create new session if none provided
-      if (!targetSessionId) {
-        const session = await createSession.mutateAsync()
-        if (!session) throw new Error("Failed to create session")
-
-        targetSessionId = session.id
-        queryClient.invalidateQueries(api.session.list.queryOptions())
-
-        // Notify parent component
-        onSessionCreated?.(session.id)
-      }
-
-      // Send message to session
-      const model = getDefaultModel()
-      await chatMutation.mutateAsync({
-        id: targetSessionId,
-        providerID: model.providerID,
-        modelID: model.modelID,
-        parts: [
-          {
-            type: "text" as const,
-            text: messageText,
-          },
-        ],
-      })
-
-      // Navigate to session if it was newly created and no callback provided
-      if (!sessionId && !onSessionCreated) {
-        navigate({
-          to: "/session/$sessionId",
-          params: { sessionId: targetSessionId },
-        })
-      }
+      await onSendMessage(messageText)
     } catch (error) {
-      if (error instanceof Error) {
-        toast.error(error.message)
-      }
+      console.error("Failed to send message:", error)
+      // Restore message on error
+      setMessage(messageText)
     }
   }
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault()
-      void onSubmit()
+      void handleSend()
     }
   }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    void onSubmit()
+    void handleSend()
   }
-
-  // Only disable input during session creation, not during message sending
-  const isInputDisabled = createSession.isPending || disabled
 
   return (
     <div className={cn("relative", className)}>
@@ -155,11 +79,10 @@ export function ChatInputBox({
                 placeholder={placeholder}
                 className="bg-background/50 border-border/50 flex-1
                   backdrop-blur-sm"
-                disabled={isInputDisabled}
               />
               <Button
                 type="submit"
-                disabled={isInputDisabled || !isValid()}
+                disabled={!isValid()}
                 size="icon"
                 className="bg-primary/90 hover:bg-primary"
               >

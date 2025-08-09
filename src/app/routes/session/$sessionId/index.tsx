@@ -1,10 +1,8 @@
 import { Suspense } from "react"
-import { useSuspenseQuery } from "@tanstack/react-query"
 import { createFileRoute } from "@tanstack/react-router"
 
 import { ChatInputBox } from "@/app/components/chat-input-box"
 import { useLiveMessages } from "@/app/hooks/use-live-messages"
-import { api } from "@/app/lib/api"
 import { SessionHeader } from "./-components/session-header"
 import { VirtualizedChatMessages } from "./-components/virtualized-chat-messages"
 
@@ -22,7 +20,7 @@ export const Route = createFileRoute("/session/$sessionId/")({
 
 function SessionPage() {
   const { sessionId } = Route.useParams()
-  const { messages } = useLiveMessages(sessionId)
+  const { messages, sendMessage } = useLiveMessages(sessionId)
 
   return (
     <div className="relative h-full max-w-full">
@@ -44,6 +42,7 @@ function SessionPage() {
         <ChatInputBox
           className="pointer-events-auto relative w-full max-w-2xl"
           sessionId={sessionId}
+          onSendMessage={sendMessage}
           placeholder="Type your message..."
           autoFocus
         />
