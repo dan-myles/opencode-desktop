@@ -87,14 +87,14 @@ bin/                      # Opencode CLI binary location
 - [x] feat(ui): command menu model selection in sessions
 - [x] feat(ui): currently selected model ui
 - [x] perf(chat): refactor virtualization & markdown rendering (need more FPS)
+- [x] feat(sessions): session pinning for quick access to important conversations
+- [x] feat(keybinds): keyboard shortcuts customization and management
+- [x] feat(chat): enhanced markdown rendering with better formatting
+- [x] feat(chat): message streaming with real-time typing indicators
 - [ ] feat(ui): view transition animation for chatbox repositioning on new session start
 - [ ] feat(app): auto-updater integration for seamless app updates
 - [ ] feat(notifications): native notifications for long-running tasks and responses
-- [ ] feat(sessions): session pinning for quick access to important conversations
-- [ ] feat(keybinds): keyboard shortcuts customization and management
 - [ ] feat(sessions): session sharing and collaboration features
 - [ ] feat(chat): syntax highlighting for code blocks in messages
-- [ ] feat(chat): enhanced markdown rendering with better formatting
-- [ ] feat(chat): message streaming with real-time typing indicators
 - [ ] feat(sync): background session sync and conflict resolution
 - [ ] feat(keybinds): add scopes to binds for smart disabling (cmd p/n disabled in command menu)
