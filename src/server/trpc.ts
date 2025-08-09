@@ -36,6 +36,13 @@ export const createTRPCContext = async () => {
  */
 const t = initTRPC.context<typeof createTRPCContext>().create({
   isServer: true,
+  sse: {
+    enabled: true,
+    intervalMs: 15_000,
+    client: {
+      reconnectAfterInactivityMs: 20_000,
+    },
+  },
   errorFormatter({ shape, error }) {
     return {
       ...shape,

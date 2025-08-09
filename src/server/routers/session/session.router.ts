@@ -149,37 +149,17 @@ export const sessionRouter = {
       return response.data ?? false
     }),
 
-  subscribeLiveMessages: serverProcedure
-    .input(sessionIdSchema)
-    .subscription(({ input }) => {
-      return observable((emit) => {
-        function onMessage(event: Event) {
-          if (
-            event.type === "message.updated" ||
-            event.type === "message.part.updated"
-          ) {
-            emit.next({
-              type: event.type,
-              sessionId: input.id,
-              data: event.properties,
-              timestamp: new Date().toISOString(),
-            })
-          }
-        }
+  sessionEvents: serverProcedure.input(sessionIdSchema).subscription(() => {
+    return observable<Event>((emit) => {
+      function onEvent(event: Event) {
+        emit.next(event)
+      }
 
-        sseService.on(`session:${input.id}:message`, onMessage)
+      sseService.on("event", onEvent)
 
-        return () => {
-          sseService.off(`session:${input.id}:message`, onMessage)
-        }
-      })
-    }),
-
-  test: serverProcedure.mutation(async ({ ctx: _ctx }) => {
-    // ctx.client.session.chat({
-    //
-    // })
-
-    sseService.lol()
+      return () => {
+        sseService.off("event", onEvent)
+      }
+    })
   }),
 } satisfies TRPCRouterRecord

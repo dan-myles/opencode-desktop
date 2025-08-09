@@ -1,7 +1,9 @@
+import { Suspense } from "react"
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { createFileRoute } from "@tanstack/react-router"
 
 import { ChatInputBox } from "@/app/components/chat-input-box"
+import { useLiveMessages } from "@/app/hooks/use-live-messages"
 import { api } from "@/app/lib/api"
 import { SessionHeader } from "./-components/session-header"
 import { VirtualizedChatMessages } from "./-components/virtualized-chat-messages"
@@ -20,9 +22,7 @@ export const Route = createFileRoute("/session/$sessionId/")({
 
 function SessionPage() {
   const { sessionId } = Route.useParams()
-  const { data: session } = useSuspenseQuery(
-    api.session.messages.queryOptions({ id: sessionId }),
-  )
+  const { messages } = useLiveMessages(sessionId)
 
   return (
     <div className="relative h-full max-w-full">
@@ -31,7 +31,9 @@ function SessionPage() {
 
       {/* Chat messages background */}
       <div className="absolute inset-0">
-        <VirtualizedChatMessages messages={session || []} />
+        <Suspense>
+          <VirtualizedChatMessages messages={messages} />
+        </Suspense>
       </div>
 
       {/* Floating bottom-docked chatbox */}
