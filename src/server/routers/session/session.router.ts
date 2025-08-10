@@ -151,8 +151,25 @@ export const sessionRouter = {
 
   sessionEvents: serverProcedure.input(sessionIdSchema).subscription(() => {
     return observable<Event>((emit) => {
+      const eventQueue: Event[] = []
+      let processing = false
+
+      async function processQueue() {
+        if (processing || eventQueue.length === 0) return
+        processing = true
+
+        while (eventQueue.length > 0) {
+          const event = eventQueue.shift()!
+          emit.next(event)
+          await new Promise((resolve) => setTimeout(resolve, 0))
+        }
+
+        processing = false
+      }
+
       function onEvent(event: Event) {
-        emit.next(event)
+        eventQueue.push(event)
+        processQueue()
       }
 
       sseService.on("event", onEvent)
