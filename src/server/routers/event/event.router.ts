@@ -1,9 +1,22 @@
+import { observable } from "@trpc/server/observable"
+
+import type { Event } from "@/server/sdk/gen/types.gen"
 import type { TRPCRouterRecord } from "@trpc/server"
-import { publicProcedure } from "@/server/trpc"
-import { getEventSubscriptionInfo } from "./event.queries"
+import { serverProcedure } from "@/server/trpc"
+import { sseService } from "./services/sse.service"
 
 export const eventRouter = {
-  subscribe: publicProcedure.query(() => {
-    return getEventSubscriptionInfo()
+  subscribe: serverProcedure.subscription(() => {
+    return observable<Event>((emit) => {
+      function onEvent(event: Event) {
+        emit.next(event)
+      }
+
+      sseService.on("event", onEvent)
+
+      return () => {
+        sseService.off("event", onEvent)
+      }
+    })
   }),
 } satisfies TRPCRouterRecord

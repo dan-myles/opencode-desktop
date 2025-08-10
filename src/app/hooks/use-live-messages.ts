@@ -20,7 +20,7 @@ export function useLiveMessages(sessionId: string) {
   )
 
   const { data: latestEvent } = useSubscription(
-    api.session.sessionEvents.subscriptionOptions({ id: sessionId }),
+    api.event.subscribe.subscriptionOptions(),
   )
 
   const chatMutation = useMutation(api.session.chat.mutationOptions())
