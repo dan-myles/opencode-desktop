@@ -104,6 +104,9 @@ importers:
       '@tanstack/query-sync-storage-persister':
         specifier: ^5.83.0
         version: 5.83.0
+      '@tanstack/react-db':
+        specifier: ^0.1.1
+        version: 0.1.1(react@19.1.1)(typescript@5.8.3)
       '@tanstack/react-query':
         specifier: ^5.83.0
         version: 5.83.0(react@19.1.1)
@@ -1984,6 +1987,11 @@ packages:
 
   '@tanstack/query-sync-storage-persister@5.83.0':
     resolution: {integrity: sha512-/+aTnnNGC0mIEcWZuXc40FLUWIicROVNenBN13bxEGJ+wh95KVOKvdt0RmM29fRDFCAGY5QkwMJunhvemNm7BA==}
+
+  '@tanstack/react-db@0.1.1':
+    resolution: {integrity: sha512-W1aw3q9oyIBkW/FzlaNtyP1+Xq4xVsjWJgN3rQfAA6XjGw6VhnF9jERrXbq7dC79egY+ZnOPvWlJSxuEzTI9Lw==}
+    peerDependencies:
+      react: '>=16.8.0'
 
   '@tanstack/react-query-persist-client@5.83.0':
     resolution: {integrity: sha512-uEqJnSbqlvzlhYJ+RU+2c2DmbbT7cw6eFjiewEXZFXaSGWNjvUG02LePrwL8cdLlRQFcZKas30IdckboOoVg9Q==}
@@ -7164,6 +7172,14 @@ snapshots:
     dependencies:
       '@tanstack/query-core': 5.83.0
       '@tanstack/query-persist-client-core': 5.83.0
+
+  '@tanstack/react-db@0.1.1(react@19.1.1)(typescript@5.8.3)':
+    dependencies:
+      '@tanstack/db': 0.1.1(typescript@5.8.3)
+      react: 19.1.1
+      use-sync-external-store: 1.5.0(react@19.1.1)
+    transitivePeerDependencies:
+      - typescript
 
   '@tanstack/react-query-persist-client@5.83.0(@tanstack/react-query@5.83.0(react@19.1.1))(react@19.1.1)':
     dependencies:

@@ -21,7 +21,7 @@ function RouteComponent() {
   const [message, setMessage] = useState("")
   const [sessionId] = useState("ses_7759d17c3ffe3LIx1ObTCdr73w")
 
-  const { messages, latestEvent } = useLiveMessages(sessionId)
+  const { messages, sendMessage, isReady } = useLiveMessages(sessionId)
 
   const chatMutation = useMutation(api.session.chat.mutationOptions())
   const createSessionMutation = useMutation(
@@ -56,10 +56,10 @@ function RouteComponent() {
         <div className="flex items-center gap-2">
           <div
             className={`h-3 w-3 rounded-full
-              ${latestEvent ? "bg-green-500" : "bg-red-500"}`}
+              ${isReady ? "bg-green-500" : "bg-red-500"}`}
           />
           <span className="text-sm">
-            {latestEvent ? "Live Events Active" : "No Events"}
+            {isReady ? "Messages Loaded" : "Loading Messages"}
           </span>
         </div>
         <div className="text-muted-foreground text-sm">
@@ -115,29 +115,20 @@ function RouteComponent() {
 
         <Card>
           <CardHeader>
-            <CardTitle>Latest Event</CardTitle>
+            <CardTitle>Collection Status</CardTitle>
           </CardHeader>
           <CardContent>
-            {latestEvent ? (
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="font-medium">{latestEvent.type}</span>
-                  <span className="text-muted-foreground text-xs">
-                    {new Date().toLocaleTimeString()}
-                  </span>
-                </div>
-                <pre
-                  className="bg-muted max-h-32 overflow-auto rounded p-2
-                    text-xs"
-                >
-                  {JSON.stringify(latestEvent, null, 2)}
-                </pre>
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="font-medium">Status</span>
+                <span className="text-muted-foreground text-xs">
+                  {isReady ? "Ready" : "Loading"}
+                </span>
               </div>
-            ) : (
               <div className="text-muted-foreground text-sm">
-                No events received yet
+                {messages.length} messages in collection
               </div>
-            )}
+            </div>
           </CardContent>
         </Card>
       </div>
