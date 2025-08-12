@@ -7,9 +7,11 @@ import { getQueryClient } from "./query-client"
 
 const queryClient = getQueryClient()
 
+export const trpcClient = createTRPCClient<AppRouter>({
+  links: [ipcLink({})],
+})
+
 export const api = createTRPCOptionsProxy<AppRouter>({
-  client: createTRPCClient<AppRouter>({
-    links: [ipcLink({})],
-  }),
+  client: trpcClient,
   queryClient,
 })
