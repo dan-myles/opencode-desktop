@@ -42,13 +42,10 @@ class MessageCollectionManager {
 
     this.eventSource = new EventSource("http://localhost:4096/event")
     this.eventSource.onmessage = (event) => {
-      try {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-        const data = JSON.parse(event.data) as Event
-        console.log(data)
-      } catch (error) {
-        console.error("Failed to parse SSE event:", error)
-      }
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      const data = JSON.parse(event.data) as Event
+      console.log(data)
+      this.handleEvent(data)
     }
 
     this.eventSource.onerror = (error) => {
@@ -57,6 +54,55 @@ class MessageCollectionManager {
 
     this.eventSource.onopen = () => {
       console.log("SSE connection opened")
+    }
+  }
+
+  private handleEvent(event: Event) {
+    switch (event.type) {
+      case "message.updated": {
+        const messageInfo = event.properties.info
+        const sessionId = messageInfo.sessionID
+        const collection = this.collections.get(sessionId)
+        if (!collection) return
+
+        collection.utils.writeInsert({
+          info: messageInfo,
+          parts: [],
+        })
+        break
+      }
+
+      case "message.part.updated": {
+        const sessionId = event.properties.part.sessionID
+        const messageId = event.properties.part.messageID
+        const partId = event.properties.part.id
+
+        const collection = this.collections.get(sessionId)
+        if (!collection) return
+
+        const existing = collection.get(messageId)
+        if (!existing) return
+
+        const idx = existing.parts.findIndex((p) => p.id === partId)
+        let updatedParts: Part[]
+        if (idx >= 0) {
+          updatedParts = [...existing.parts]
+          updatedParts[idx] = event.properties.part
+        } else {
+          updatedParts = [...existing.parts, event.properties.part]
+        }
+
+        collection.utils.writeUpdate({
+          info: existing.info,
+          parts: updatedParts,
+        })
+
+        break
+      }
+
+      default:
+        // console.warn("Unhandled event type:", event.type, event)
+        break
     }
   }
 
