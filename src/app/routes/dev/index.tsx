@@ -21,7 +21,7 @@ function RouteComponent() {
   const [message, setMessage] = useState("")
   const [sessionId] = useState("ses_7759d17c3ffe3LIx1ObTCdr73w")
 
-  const { messages, sendMessage, isReady } = useLiveMessages(sessionId)
+  const { messages, sendMessage } = useLiveMessages(sessionId)
 
   const chatMutation = useMutation(api.session.chat.mutationOptions())
   const createSessionMutation = useMutation(
@@ -56,10 +56,10 @@ function RouteComponent() {
         <div className="flex items-center gap-2">
           <div
             className={`h-3 w-3 rounded-full
-              ${isReady ? "bg-green-500" : "bg-red-500"}`}
+              ${messages.length >= 0 ? "bg-green-500" : "bg-red-500"}`}
           />
           <span className="text-sm">
-            {isReady ? "Messages Loaded" : "Loading Messages"}
+            Messages Collection Active
           </span>
         </div>
         <div className="text-muted-foreground text-sm">
@@ -122,7 +122,7 @@ function RouteComponent() {
               <div className="flex items-center justify-between">
                 <span className="font-medium">Status</span>
                 <span className="text-muted-foreground text-xs">
-                  {isReady ? "Ready" : "Loading"}
+                  Active
                 </span>
               </div>
               <div className="text-muted-foreground text-sm">
