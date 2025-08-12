@@ -1,7 +1,7 @@
 import { createCollection } from "@tanstack/db"
 import { queryCollectionOptions } from "@tanstack/query-db-collection"
 
-import type { Message, Part } from "@/server/sdk/gen/types.gen"
+import type { Event, Message, Part } from "@/server/sdk/gen/types.gen"
 import { trpcClient } from "@/app/lib/api"
 import { getQueryClient } from "../lib/query-client"
 
@@ -35,6 +35,30 @@ class MessageCollectionManager {
     string,
     ReturnType<typeof createSessionMessageCollection>
   >()
+  private eventSource: EventSource | null = null
+
+  constructor() {
+    if (this.eventSource) return
+
+    this.eventSource = new EventSource("http://localhost:4096/event")
+    this.eventSource.onmessage = (event) => {
+      try {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        const data = JSON.parse(event.data) as Event
+        console.log(data)
+      } catch (error) {
+        console.error("Failed to parse SSE event:", error)
+      }
+    }
+
+    this.eventSource.onerror = (error) => {
+      console.error("SSE connection error:", error)
+    }
+
+    this.eventSource.onopen = () => {
+      console.log("SSE connection opened")
+    }
+  }
 
   getSessionCollection(sessionId: string) {
     if (!this.collections.has(sessionId)) {

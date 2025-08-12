@@ -34,6 +34,7 @@ export function createAppWindow(): BrowserWindow {
     frame: false,
     backgroundColor: "#1a1a1a",
     webPreferences: {
+      webSecurity: false,
       nodeIntegration: false,
       nodeIntegrationInSubFrames: false,
       nodeIntegrationInWorker: false,
