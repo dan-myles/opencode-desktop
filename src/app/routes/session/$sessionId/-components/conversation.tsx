@@ -53,15 +53,98 @@ export function Conversation({ messages }: ConversationProps) {
     }
   }, [scrollY])
 
+  const scrollDown = useCallback(() => {
+    if (parentRef.current) {
+      const currentScroll = parentRef.current.scrollTop
+      const viewportHeight = parentRef.current.clientHeight
+      const scrollAmount = viewportHeight * 0.8 // Scroll 80% of viewport height
+      const targetScroll = Math.max(0, currentScroll - scrollAmount)
+
+      // Stop any ongoing animations
+      scrollY.stop()
+
+      // Set initial value and animate
+      scrollY.set(currentScroll)
+      animate(scrollY, targetScroll, {
+        duration: 0.15,
+        ease: "easeInOut",
+        onUpdate: (value) => {
+          if (parentRef.current) {
+            parentRef.current.scrollTop = value
+          }
+        },
+        onComplete: () => {
+          scrollY.stop()
+          // Update scroll button visibility
+          const shouldShow = parentRef.current ? parentRef.current.scrollTop > 100 : false
+          setShowScrollButton(shouldShow)
+        },
+      })
+    }
+  }, [scrollY])
+
+  const scrollUp = useCallback(() => {
+    if (parentRef.current) {
+      const currentScroll = parentRef.current.scrollTop
+      const viewportHeight = parentRef.current.clientHeight
+      const scrollAmount = viewportHeight * 0.8 // Scroll 80% of viewport height
+      const maxScroll = parentRef.current.scrollHeight - parentRef.current.clientHeight
+      const targetScroll = Math.min(maxScroll, currentScroll + scrollAmount)
+
+      // Stop any ongoing animations
+      scrollY.stop()
+
+      // Set initial value and animate
+      scrollY.set(currentScroll)
+      animate(scrollY, targetScroll, {
+        duration: 0.15,
+        ease: "easeInOut",
+        onUpdate: (value) => {
+          if (parentRef.current) {
+            parentRef.current.scrollTop = value
+          }
+        },
+        onComplete: () => {
+          scrollY.stop()
+          // Update scroll button visibility
+          const shouldShow = parentRef.current ? parentRef.current.scrollTop > 100 : false
+          setShowScrollButton(shouldShow)
+        },
+      })
+    }
+  }, [scrollY])
+
   useRegisterKeybind({
     id: "scroll-to-bottom",
     keys: {
-      darwin: "cmd+l",
-      win32: "ctrl+l",
-      linux: "ctrl+l",
+      darwin: "cmd+g",
+      win32: "ctrl+g",
+      linux: "ctrl+g",
     },
     description: "Scroll to bottom/latest messages",
     callback: scrollToBottom,
+  })
+
+  useRegisterKeybind({
+    id: "scroll-down",
+    keys: {
+      darwin: "cmd+d",
+      win32: "ctrl+d",
+      linux: "ctrl+d",
+    },
+    description: "Scroll down in conversation",
+    callback: scrollDown,
+  })
+
+  useRegisterKeybind({
+    id: "scroll-up",
+    keys: {
+      darwin: "cmd+u",
+      win32: "ctrl+u",
+      linux: "ctrl+u",
+    },
+    description: "Scroll up in conversation",
+    callback: scrollUp,
   })
 
   // Invert wheel scroll for natural scrolling behavior and track scroll position

@@ -41,7 +41,7 @@ export function ScrollToBottomButton({
             )}
           >
             <ChevronDown className="h-4 w-4" />
-            <Shorcut label="Scroll to bottom" kbd="L" />
+            <Shorcut label="Scroll to bottom" kbd="G" />
           </Button>
         </motion.div>
       )}
