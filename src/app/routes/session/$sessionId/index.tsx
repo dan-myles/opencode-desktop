@@ -3,8 +3,8 @@ import { createFileRoute } from "@tanstack/react-router"
 
 import { ChatInputBox } from "@/app/components/chat-input-box"
 import { useLiveMessages } from "@/app/hooks/use-live-messages"
+import { ConversationVirtualized } from "./-components/conversation-virtualized"
 import { SessionHeader } from "./-components/session-header"
-import { VirtualizedChatMessages } from "./-components/virtualized-chat-messages"
 
 export const Route = createFileRoute("/session/$sessionId/")({
   component: SessionPage,
@@ -30,7 +30,7 @@ function SessionPage() {
       {/* Chat messages background */}
       <div className="absolute inset-0">
         <Suspense>
-          <VirtualizedChatMessages messages={messages} />
+          <ConversationVirtualized messages={messages} />
         </Suspense>
       </div>
 

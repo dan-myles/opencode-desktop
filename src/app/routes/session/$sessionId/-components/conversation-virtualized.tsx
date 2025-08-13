@@ -11,7 +11,7 @@ interface VirtualizedChatMessagesProps {
   messages: Array<{ info: Message; parts: Part[] }>
 }
 
-export function VirtualizedChatMessages({
+export function ConversationVirtualized({
   messages,
 }: VirtualizedChatMessagesProps) {
   const parentRef = useRef<HTMLDivElement>(null)
