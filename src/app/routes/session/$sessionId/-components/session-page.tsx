@@ -1,4 +1,3 @@
-import { Suspense } from "react"
 
 import { ChatInputBox } from "@/app/components/chat-input-box"
 import { useLiveMessages } from "@/app/hooks/use-live-messages"
@@ -19,9 +18,7 @@ export function SessionPage({ sessionId }: SessionPageProps) {
 
       {/* Chat messages background */}
       <div className="absolute inset-0">
-        <Suspense>
-          <Conversation messages={messages} />
-        </Suspense>
+        <Conversation messages={messages} />
       </div>
 
       {/* Floating bottom-docked chatbox */}
@@ -40,3 +37,4 @@ export function SessionPage({ sessionId }: SessionPageProps) {
     </div>
   )
 }
+

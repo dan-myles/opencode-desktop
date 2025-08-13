@@ -43,20 +43,14 @@ export function Conversation({ messages }: ConversationProps) {
       className="h-full overflow-y-auto"
       style={{ transform: "scaleY(-1)" }}
     >
-      <div className="w-full">
+      <div className="w-full pt-[7rem] pb-[5.5rem]">
         {messages
           .slice()
           .reverse()
-          .map((message, index) => {
-            const reverseIndex = messages.length - 1 - index
-            
+          .map((message) => {
             return (
               <div
-                className={cn(
-                  "w-full px-40",
-                  reverseIndex === 0 && "pt-[5.25rem]",
-                  index === 0 && "pb-[8.5rem]",
-                )}
+                className="w-full px-40"
                 key={message.info.id}
                 style={{ transform: "scaleY(-1)" }}
               >
@@ -68,3 +62,4 @@ export function Conversation({ messages }: ConversationProps) {
     </div>
   )
 }
+
