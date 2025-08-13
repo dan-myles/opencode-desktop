@@ -30,7 +30,8 @@ export function Conversation({ messages }: ConversationProps) {
     callback: scrollToBottom,
   })
 
-  // Invert wheel scroll for natural scrolling behavior
+  // Invert wheel scroll for natural scrolling behavior and track scroll position
+  // Also show and hide scroll to bottom
   useEffect(() => {
     const el = parentRef.current
     if (!el) return
@@ -38,25 +39,15 @@ export function Conversation({ messages }: ConversationProps) {
     const invertedWheelScroll = (event: WheelEvent) => {
       el.scrollTop -= event.deltaY
       event.preventDefault()
+
+      // Track scroll position for button visibility
+      const shouldShow = el.scrollTop > 100
+      setShowScrollButton(shouldShow)
     }
 
     el.addEventListener("wheel", invertedWheelScroll, { passive: false })
     return () => el.removeEventListener("wheel", invertedWheelScroll)
   }, [messages.length])
-
-  // Track scroll position to show/hide scroll button
-  useEffect(() => {
-    const el = parentRef.current
-    if (!el) return
-
-    const handleScroll = () => {
-      const shouldShow = el.scrollTop > 100 // Show when scrolled away from bottom
-      setShowScrollButton(shouldShow)
-    }
-
-    el.addEventListener("scroll", handleScroll)
-    return () => el.removeEventListener("scroll", handleScroll)
-  }, [])
 
   if (messages.length === 0) {
     return (
@@ -88,7 +79,10 @@ export function Conversation({ messages }: ConversationProps) {
         </div>
       </div>
 
-      <ScrollToBottomButton onClick={scrollToBottom} visible={true} />
+      <ScrollToBottomButton
+        onClick={scrollToBottom}
+        visible={showScrollButton}
+      />
     </>
   )
 }
