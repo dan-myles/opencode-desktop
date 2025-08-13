@@ -1,5 +1,7 @@
+// TODO: Find a way to cancel scroll "momentum" when we hit the keybind
+
 import { useCallback, useEffect, useRef, useState } from "react"
-import { animate, useMotionValue, useSpring } from "framer-motion"
+import { animate, useMotionValue } from "framer-motion"
 
 import type { Message, Part } from "@/server/sdk/gen/types.gen"
 import { useRegisterKeybind } from "@/app/stores/keybind.store"
@@ -21,7 +23,7 @@ export function Conversation({ messages }: ConversationProps) {
       const currentScroll = parentRef.current.scrollTop
       const targetScroll = 0
       const scrollDistance = Math.abs(currentScroll - targetScroll)
-      
+
       // Calculate duration based on distance
       // Base duration of 0.3s, with additional time based on scroll distance
       const baseDuration = 0.3
