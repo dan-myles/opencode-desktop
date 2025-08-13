@@ -1,4 +1,10 @@
 // TODO: Find a way to cancel scroll "momentum" when we hit the keybind
+// This is primarily to do with trackpad stuff. We have momentum when
+// we scroll on a trackpad and its interfering with keyboard usage.
+// There should be a way we can swap back and forth between scrolling
+// using a trackpad and keyboard and not have little bugs.
+// The bug currently is just that scroll momentum persists WHILE
+// keybinds are being hit, can't find a way to stop the scroll.
 
 import { useCallback, useEffect, useRef, useState } from "react"
 import { animate, useMotionValue } from "framer-motion"
@@ -30,7 +36,7 @@ export function Conversation({ messages }: ConversationProps) {
       const maxDuration = 1.5
       const scrollHeight = parentRef.current.scrollHeight
       const distanceRatio = scrollDistance / scrollHeight
-      const duration = Math.min(baseDuration + (distanceRatio * 1.2), maxDuration)
+      const duration = Math.min(baseDuration + distanceRatio * 1.2, maxDuration)
 
       // Stop any ongoing animations
       scrollY.stop()
@@ -76,7 +82,9 @@ export function Conversation({ messages }: ConversationProps) {
         onComplete: () => {
           scrollY.stop()
           // Update scroll button visibility
-          const shouldShow = parentRef.current ? parentRef.current.scrollTop > 100 : false
+          const shouldShow = parentRef.current
+            ? parentRef.current.scrollTop > 100
+            : false
           setShowScrollButton(shouldShow)
         },
       })
@@ -88,7 +96,8 @@ export function Conversation({ messages }: ConversationProps) {
       const currentScroll = parentRef.current.scrollTop
       const viewportHeight = parentRef.current.clientHeight
       const scrollAmount = viewportHeight * 0.8 // Scroll 80% of viewport height
-      const maxScroll = parentRef.current.scrollHeight - parentRef.current.clientHeight
+      const maxScroll =
+        parentRef.current.scrollHeight - parentRef.current.clientHeight
       const targetScroll = Math.min(maxScroll, currentScroll + scrollAmount)
 
       // Stop any ongoing animations
@@ -107,7 +116,9 @@ export function Conversation({ messages }: ConversationProps) {
         onComplete: () => {
           scrollY.stop()
           // Update scroll button visibility
-          const shouldShow = parentRef.current ? parentRef.current.scrollTop > 100 : false
+          const shouldShow = parentRef.current
+            ? parentRef.current.scrollTop > 100
+            : false
           setShowScrollButton(shouldShow)
         },
       })
