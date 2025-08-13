@@ -23,9 +23,9 @@ export function Conversation({ messages }: ConversationProps) {
       event.preventDefault()
     }
 
-    el.addEventListener("wheel", invertedWheelScroll, false)
+    el.addEventListener("wheel", invertedWheelScroll, { passive: false })
     return () => el.removeEventListener("wheel", invertedWheelScroll)
-  }, [])
+  }, [messages.length])
 
   if (messages.length === 0) {
     return (
