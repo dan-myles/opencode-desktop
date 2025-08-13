@@ -197,7 +197,7 @@ export function Conversation({ messages }: ConversationProps) {
         <div className="flex w-full flex-col-reverse pt-[7rem] pb-[5.5rem]">
           {messages.map((message) => (
             <div
-              className="w-full px-40"
+              className="w-full px-40 pb-6"
               key={message.info.id}
               style={{ transform: "scaleY(-1)" }}
             >
