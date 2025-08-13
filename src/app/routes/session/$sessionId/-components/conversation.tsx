@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react"
+import { animate, useMotionValue, useSpring } from "framer-motion"
 
 import type { Message, Part } from "@/server/sdk/gen/types.gen"
 import { useRegisterKeybind } from "@/app/stores/keybind.store"
@@ -13,25 +14,42 @@ export function Conversation({ messages }: ConversationProps) {
   const parentRef = useRef<HTMLDivElement>(null)
   const [showScrollButton, setShowScrollButton] = useState(false)
 
+  const scrollY = useMotionValue(0)
+
   const scrollToBottom = useCallback(() => {
     if (parentRef.current) {
-      // Stop any ongoing scroll momentum/inertia
-      parentRef.current.style.scrollBehavior = 'auto'
+      const currentScroll = parentRef.current.scrollTop
+      const targetScroll = 0
+      const scrollDistance = Math.abs(currentScroll - targetScroll)
       
-      // Force immediate scroll position change
-      parentRef.current.scrollTop = 0 // Top of inverted container = visual bottom
-      
-      // Hide button immediately after scrolling to bottom
-      setShowScrollButton(false)
-      
-      // Reset scroll behavior for future scrolling
-      requestAnimationFrame(() => {
-        if (parentRef.current) {
-          parentRef.current.style.scrollBehavior = ''
-        }
+      // Calculate duration based on distance
+      // Base duration of 0.3s, with additional time based on scroll distance
+      const baseDuration = 0.3
+      const maxDuration = 1.5
+      const scrollHeight = parentRef.current.scrollHeight
+      const distanceRatio = scrollDistance / scrollHeight
+      const duration = Math.min(baseDuration + (distanceRatio * 1.2), maxDuration)
+
+      // Stop any ongoing animations
+      scrollY.stop()
+
+      // Set initial value and animate to bottom
+      scrollY.set(currentScroll)
+      animate(scrollY, 0, {
+        duration,
+        ease: "easeOut",
+        onUpdate: (value) => {
+          if (parentRef.current) {
+            parentRef.current.scrollTop = value
+          }
+        },
+        onComplete: () => {
+          scrollY.stop()
+          setShowScrollButton(false)
+        },
       })
     }
-  }, [])
+  }, [scrollY])
 
   useRegisterKeybind({
     id: "scroll-to-bottom",
