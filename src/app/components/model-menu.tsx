@@ -29,9 +29,9 @@ export function ModelMenu() {
   useRegisterKeybind({
     id: "toggle-model-menu",
     keys: {
-      darwin: "cmd+l",
-      win32: "ctrl+l",
-      linux: "ctrl+l",
+      darwin: "cmd+j",
+      win32: "ctrl+j",
+      linux: "ctrl+j",
     },
     description: "Toggle model menu",
     callback: useCallback(() => setOpen((open) => !open), [setOpen]),

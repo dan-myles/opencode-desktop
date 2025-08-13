@@ -1,4 +1,3 @@
-
 import { ChatInputBox } from "@/app/components/chat-input-box"
 import { useLiveMessages } from "@/app/hooks/use-live-messages"
 import { Conversation } from "./conversation"
