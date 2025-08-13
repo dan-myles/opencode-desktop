@@ -15,7 +15,21 @@ export function Conversation({ messages }: ConversationProps) {
 
   const scrollToBottom = useCallback(() => {
     if (parentRef.current) {
+      // Stop any ongoing scroll momentum/inertia
+      parentRef.current.style.scrollBehavior = 'auto'
+      
+      // Force immediate scroll position change
       parentRef.current.scrollTop = 0 // Top of inverted container = visual bottom
+      
+      // Hide button immediately after scrolling to bottom
+      setShowScrollButton(false)
+      
+      // Reset scroll behavior for future scrolling
+      requestAnimationFrame(() => {
+        if (parentRef.current) {
+          parentRef.current.style.scrollBehavior = ''
+        }
+      })
     }
   }, [])
 
