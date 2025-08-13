@@ -14,6 +14,7 @@ export type KeybindId =
   | "navigate-pinned-session-3"
   | "navigate-pinned-session-4"
   | "navigate-pinned-session-5"
+  | "scroll-to-bottom"
 
 type Modifier = "ctrl" | "cmd" | "alt" | "shift"
 
