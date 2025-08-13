@@ -1,9 +1,6 @@
-"use no memo"
-
 import { useEffect, useRef } from "react"
 
 import type { Message, Part } from "@/server/sdk/gen/types.gen"
-import { cn } from "@/app/lib/utils"
 import { ChatMessage } from "./chat-message"
 
 interface ConversationProps {
@@ -43,23 +40,17 @@ export function Conversation({ messages }: ConversationProps) {
       className="h-full overflow-y-auto"
       style={{ transform: "scaleY(-1)" }}
     >
-      <div className="w-full pt-[7rem] pb-[5.5rem]">
-        {messages
-          .slice()
-          .reverse()
-          .map((message) => {
-            return (
-              <div
-                className="w-full px-40"
-                key={message.info.id}
-                style={{ transform: "scaleY(-1)" }}
-              >
-                <ChatMessage message={message} />
-              </div>
-            )
-          })}
+      <div className="flex w-full flex-col-reverse pt-[7rem] pb-[5.5rem]">
+        {messages.map((message) => (
+          <div
+            className="w-full px-40"
+            key={message.info.id}
+            style={{ transform: "scaleY(-1)" }}
+          >
+            <ChatMessage message={message} />
+          </div>
+        ))}
       </div>
     </div>
   )
 }
-
