@@ -71,7 +71,6 @@ export const useSessionStateStore = create<SessionStateStore>()((set, get) => {
     switch (event.type) {
       case "session.idle": {
         const sessionId = event.properties.sessionID
-        console.log(`Session ${sessionId} is now idle`)
         get().setSessionIdle(sessionId)
         break
       }
@@ -90,7 +89,6 @@ export const useSessionStateStore = create<SessionStateStore>()((set, get) => {
     _eventSource: eventSource,
 
     setSessionIdle: (sessionId) => {
-      console.log(`Setting session ${sessionId} to idle`)
       set((state) => ({
         sessions: {
           ...state.sessions,
@@ -100,7 +98,6 @@ export const useSessionStateStore = create<SessionStateStore>()((set, get) => {
     },
 
     setSessionGenerating: (sessionId) => {
-      console.log(`Setting session ${sessionId} to generating`)
       set((state) => ({
         sessions: {
           ...state.sessions,

@@ -1,21 +1,22 @@
-import { useCallback, useMemo } from "react"
-import { useLiveQuery } from "@tanstack/react-db"
+import { useCallback, useEffect } from "react"
 import { useMutation } from "@tanstack/react-query"
 
 import { api } from "@/app/lib/api"
-import { messageManager } from "@/app/stores/message.collection"
+import { useCurrentSessionMessagesStore } from "@/app/stores/current-session-messages.store"
 import { useModelStore } from "@/app/stores/model.store"
 import { useSessionStateStore } from "@/app/stores/session-state.store"
 
 export function useLiveMessages(sessionId: string) {
-  const sessionMessages = useMemo(
-    () => messageManager.getSessionCollection(sessionId),
-    [sessionId],
-  )
-  const { data: messages } = useLiveQuery(sessionMessages)
+  const { messages, setCurrentSession } = useCurrentSessionMessagesStore()
   const currentModel = useModelStore((state) => state.currentModel)
   const { setSessionGenerating } = useSessionStateStore()
   const chatMutation = useMutation(api.session.chat.mutationOptions())
+  const messageArray = Array.from(messages.values())
+
+  // Switch session when sessionId changes
+  useEffect(() => {
+    setCurrentSession(sessionId)
+  }, [sessionId, setCurrentSession])
 
   const sendMessage = useCallback(
     async (text: string) => {
@@ -41,7 +42,7 @@ export function useLiveMessages(sessionId: string) {
   )
 
   return {
-    messages: messages ?? [],
+    messages: messageArray,
     sendMessage,
   }
 }
