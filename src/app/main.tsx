@@ -1,12 +1,17 @@
 import { StrictMode } from "react"
 import { createRouter, RouterProvider } from "@tanstack/react-router"
 import ReactDOM from "react-dom/client"
+import { scan } from "react-scan"
 
 import { api } from "./lib/api"
 import { getQueryClient } from "./lib/query-client"
 import { routeTree } from "./routeTree.gen"
 
 import "@/app/styles/globals.css"
+
+scan({
+  enabled: process.env.NODE_ENV === "development",
+})
 
 const router = createRouter({
   routeTree,
