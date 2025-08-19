@@ -1,6 +1,6 @@
 import type { ReactNode } from "react"
 import { useCallback } from "react"
-import { useNavigate, useRouterState } from "@tanstack/react-router"
+import { useNavigate } from "@tanstack/react-router"
 
 import { useRegisterKeybind } from "@/app/stores/keybind.store"
 import { usePinnedSessionsStore } from "@/app/stores/pinned-sessions.store"
@@ -14,7 +14,6 @@ import { usePinnedSessionsStore } from "@/app/stores/pinned-sessions.store"
  **/
 export function RegistryProvider({ children }: { children: ReactNode }) {
   const navigate = useNavigate()
-  const routerState = useRouterState()
   const { togglePin, getPinnedSessionAtIndex } = usePinnedSessionsStore()
 
   useRegisterKeybind({
@@ -54,7 +53,7 @@ export function RegistryProvider({ children }: { children: ReactNode }) {
     },
     description: "Pin/unpin current session",
     callback: useCallback(() => {
-      const currentLocation = routerState.location
+      const currentLocation = window.location
       const sessionMatch =
         currentLocation.pathname.match(/^\/session\/([^\/]+)/)
 
@@ -62,7 +61,7 @@ export function RegistryProvider({ children }: { children: ReactNode }) {
         const sessionId = sessionMatch[1]
         togglePin(sessionId)
       }
-    }, [routerState.location, togglePin]),
+    }, [togglePin]),
   })
 
   useRegisterKeybind({
