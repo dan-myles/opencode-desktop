@@ -3,7 +3,9 @@ import { Folder, Hash } from "lucide-react"
 
 import type { AssistantMessage, Message } from "@/server/sdk/gen/types.gen"
 import { Badge } from "@/app/components/ui/badge"
+import { ShimmerContainer } from "@/app/components/ui/shimmer-container"
 import { api } from "@/app/lib/api"
+import { useSessionStateStore } from "@/app/stores/session-state.store"
 
 interface SessionHeaderProps {
   sessionId: string
@@ -15,6 +17,9 @@ export function SessionHeader({ sessionId }: SessionHeaderProps) {
   )
   const { data: messages } = useQuery(
     api.session.messages.queryOptions({ id: sessionId }),
+  )
+  const isGenerating = useSessionStateStore((state) =>
+    state.isSessionGenerating(sessionId),
   )
 
   const assistantMessages = messages?.filter(isAssistantMessage) || []
@@ -55,7 +60,8 @@ export function SessionHeader({ sessionId }: SessionHeaderProps) {
         justify-center p-3"
     >
       <div className="pointer-events-auto w-full max-w-3xl">
-        <div
+        <ShimmerContainer
+          isAnimating={isGenerating}
           className="bg-background/20 border-border/20 rounded-lg border
             shadow-lg backdrop-blur-md"
         >
@@ -90,7 +96,7 @@ export function SessionHeader({ sessionId }: SessionHeaderProps) {
               {formatTokens(totalTokens)}/{contextPercentage}%
             </Badge>
           </div>
-        </div>
+        </ShimmerContainer>
       </div>
     </div>
   )
