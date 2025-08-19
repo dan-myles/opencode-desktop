@@ -5,6 +5,7 @@ import { useMutation } from "@tanstack/react-query"
 import { api } from "@/app/lib/api"
 import { messageManager } from "@/app/stores/message.collection"
 import { useModelStore } from "@/app/stores/model.store"
+import { useSessionStateStore } from "@/app/stores/session-state.store"
 
 export function useLiveMessages(sessionId: string) {
   const sessionMessages = useMemo(
@@ -13,6 +14,7 @@ export function useLiveMessages(sessionId: string) {
   )
   const { data: messages } = useLiveQuery(sessionMessages)
   const currentModel = useModelStore((state) => state.currentModel)
+  const { setSessionGenerating } = useSessionStateStore()
   const chatMutation = useMutation(api.session.chat.mutationOptions())
 
   const sendMessage = useCallback(
@@ -22,6 +24,8 @@ export function useLiveMessages(sessionId: string) {
       }
 
       try {
+        setSessionGenerating(sessionId)
+
         await chatMutation.mutateAsync({
           id: sessionId,
           providerID: currentModel.providerID,
@@ -33,7 +37,7 @@ export function useLiveMessages(sessionId: string) {
         throw error
       }
     },
-    [sessionId, currentModel, chatMutation],
+    [sessionId, currentModel, chatMutation, setSessionGenerating],
   )
 
   return {

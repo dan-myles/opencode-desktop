@@ -12,6 +12,7 @@ import {
 import { Input } from "@/app/components/ui/input"
 import { useLiveMessages } from "@/app/hooks/use-live-messages"
 import { api } from "@/app/lib/api"
+import { useSessionStateStore } from "@/app/stores/session-state.store"
 
 export const Route = createFileRoute("/dev/")({
   component: RouteComponent,
@@ -22,27 +23,25 @@ function RouteComponent() {
   const [sessionId] = useState("ses_7759d17c3ffe3LIx1ObTCdr73w")
 
   const { messages, sendMessage } = useLiveMessages(sessionId)
+  const isSessionIdle = useSessionStateStore((state) =>
+    state.isSessionIdle(sessionId),
+  )
+  const isConnected = useSessionStateStore((state) => state.isConnected)
 
   const chatMutation = useMutation(api.session.chat.mutationOptions())
   const createSessionMutation = useMutation(
     api.session.create.mutationOptions(),
   )
 
-  const handleSendMessage = () => {
+  const handleSendMessage = async () => {
     if (!message.trim()) return
 
-    chatMutation.mutate({
-      id: sessionId,
-      providerID: "anthropic",
-      modelID: "claude-3-5-sonnet-20241022",
-      parts: [
-        {
-          type: "text" as const,
-          text: message.trim(),
-        },
-      ],
-    })
-    setMessage("")
+    try {
+      await sendMessage(message.trim())
+      setMessage("")
+    } catch (error) {
+      console.error("Failed to send message:", error)
+    }
   }
 
   const handleCreateSession = () => {
@@ -56,11 +55,21 @@ function RouteComponent() {
         <div className="flex items-center gap-2">
           <div
             className={`h-3 w-3 rounded-full
-              ${messages.length >= 0 ? "bg-green-500" : "bg-red-500"}`}
+              ${isConnected ? "bg-green-500" : "bg-red-500"}`}
+          />
+          <span className="text-sm">Session State Connected</span>
+        </div>
+        <div className="flex items-center gap-2">
+          <div
+            className={`h-3 w-3 rounded-full
+              ${isSessionIdle ? "bg-blue-500" : "bg-orange-500"}`}
           />
           <span className="text-sm">
-            Messages Collection Active
+            Session {isSessionIdle ? "Idle" : "Generating"}
           </span>
+        </div>
+        <div className="text-muted-foreground text-sm">
+          {messages.length} messages loaded
         </div>
         <div className="text-muted-foreground text-sm">
           {messages.length} messages loaded
@@ -121,9 +130,7 @@ function RouteComponent() {
             <div className="space-y-2">
               <div className="flex items-center justify-between">
                 <span className="font-medium">Status</span>
-                <span className="text-muted-foreground text-xs">
-                  Active
-                </span>
+                <span className="text-muted-foreground text-xs">Active</span>
               </div>
               <div className="text-muted-foreground text-sm">
                 {messages.length} messages in collection
