@@ -3,6 +3,7 @@
 import { create } from "zustand"
 
 import type { Event, Message, Part } from "@/server/sdk/gen/types.gen"
+import { trpcClient } from "@/app/lib/api"
 
 export type MessageWithParts = {
   info: Message
@@ -15,9 +16,10 @@ interface CurrentSessionMessagesStore {
   messages: Map<string, MessageWithParts>
 
   // Actions
-  setCurrentSession: (sessionId: string) => void
+  setCurrentSession: (sessionId: string) => Promise<void>
   addMessage: (message: MessageWithParts) => void
   updateMessagePart: (messageId: string, part: Part) => void
+  loadInitialMessages: (sessionId: string) => Promise<void>
 
   // Internal
   _eventSource: EventSource | null
@@ -94,7 +96,7 @@ export const useCurrentSessionMessagesStore =
       messages: new Map(),
       _eventSource: eventSource,
 
-      setCurrentSession: (sessionId) => {
+      setCurrentSession: async (sessionId) => {
         const currentSessionId = get().sessionId
         if (currentSessionId === sessionId) return
 
@@ -103,10 +105,19 @@ export const useCurrentSessionMessagesStore =
         }
 
         set({ sessionId })
+
+        // Load initial messages first
+        await get().loadInitialMessages(sessionId)
+
+        // Then connect to SSE for new messages
         connect()
       },
 
       addMessage: (message) => {
+        // Prevent duplicates from initial load + SSE overlap
+        const existingMessage = get().messages.get(message.info.id)
+        if (existingMessage) return
+
         // Use setState to properly notify React of Map changes
         set((prev) => ({
           messages: new Map(prev.messages).set(message.info.id, message),
@@ -135,6 +146,24 @@ export const useCurrentSessionMessagesStore =
         set((prev) => ({
           messages: new Map(prev.messages).set(messageId, updatedMessage),
         }))
+      },
+
+      loadInitialMessages: async (sessionId) => {
+        try {
+          const existingMessages = await trpcClient.session.messages.query({
+            id: sessionId,
+          })
+
+          // Add each message to the store
+          existingMessages.forEach((message) => {
+            get().addMessage({
+              info: message.info,
+              parts: message.parts,
+            })
+          })
+        } catch (error) {
+          console.error("Failed to load initial messages:", error)
+        }
       },
 
       _connect: connect,
