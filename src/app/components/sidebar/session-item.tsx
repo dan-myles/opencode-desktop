@@ -18,7 +18,7 @@ export function SessionItem({ session }: SessionItemProps) {
   )
 
   return (
-    <ShimmerContainer isAnimating={isGenerating}>
+    <ShimmerContainer isAnimating={isGenerating} className="rounded-md">
       <Link
         to="/session/$sessionId"
         params={{ sessionId: session.id }}
@@ -30,7 +30,7 @@ export function SessionItem({ session }: SessionItemProps) {
         viewTransition
       >
         {isGenerating && (
-          <Loader2 className="text-chart-1 h-3 w-3 flex-shrink-0 animate-spin" />
+          <Loader2 className="h-3 w-3 flex-shrink-0 animate-spin" />
         )}
         <div className="min-w-0 flex-1">
           <div className="flex items-center justify-between gap-2">
