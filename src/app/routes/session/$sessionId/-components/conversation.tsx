@@ -170,6 +170,7 @@ export function Conversation({ messages }: ConversationProps) {
 
       // Track scroll position for button visibility
       const shouldShow = el.scrollTop > 100
+      // TODO: Fix this line, causes a re render of the whole conversation
       setShowScrollButton(shouldShow)
     }
 
