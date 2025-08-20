@@ -3,7 +3,7 @@
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
 
-import type { Agent } from "@/server/sdk/gen2/types.gen"
+import type { Agent } from "@/server/sdk/gen/types.gen"
 
 interface ModeStore {
   currentMode: string | null
