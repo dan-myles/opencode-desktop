@@ -33,7 +33,7 @@ export function useLiveMessages(sessionId: string) {
           id: sessionId,
           providerID: currentModel.providerID,
           modelID: currentModel.modelID,
-          mode: currentMode || undefined,
+          agent: currentMode || undefined,
           parts: [{ type: "text" as const, text }],
         })
       } catch (error) {

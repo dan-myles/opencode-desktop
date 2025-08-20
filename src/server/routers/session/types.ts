@@ -22,7 +22,7 @@ export const sessionChatInputSchema = z.object({
   messageID: z.string().regex(/^msg/).optional(),
   providerID: z.string(),
   modelID: z.string(),
-  mode: z.string().optional(),
+  agent: z.string().optional(),
   system: z.string().optional(),
   tools: z.record(z.string(), z.boolean()).optional(),
   parts: z.array(
