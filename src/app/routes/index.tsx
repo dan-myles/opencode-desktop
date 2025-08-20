@@ -1,5 +1,10 @@
-import { createFileRoute } from "@tanstack/react-router"
+import { useMutation } from "@tanstack/react-query"
+import { createFileRoute, useNavigate } from "@tanstack/react-router"
 
+import { ChatInputBox } from "@/app/components/chat-input-box"
+import { api } from "@/app/lib/api"
+import { useModeStore } from "@/app/stores/mode.store"
+import { useModelStore } from "@/app/stores/model.store"
 import { formatKeybindForDisplay, getCurrentPlatform } from "../lib/utils"
 
 export const Route = createFileRoute("/")({
@@ -7,6 +12,42 @@ export const Route = createFileRoute("/")({
 })
 
 function Index() {
+  const navigate = useNavigate()
+  const currentModel = useModelStore((state) => state.currentModel)
+  const currentMode = useModeStore((state) => state.currentMode)
+
+  const createSession = useMutation(api.session.create.mutationOptions())
+  const sendMessage = useMutation(api.session.chat.mutationOptions())
+
+  const handleSendMessage = async (text: string) => {
+    if (!currentModel) {
+      throw new Error("No model selected. Please select a model first.")
+    }
+
+    // Create new session
+    const session = await createSession.mutateAsync()
+
+    if (!session) {
+      throw new Error("Failed to create session")
+    }
+
+    // Send first message
+    await sendMessage.mutateAsync({
+      id: session.id,
+      providerID: currentModel.providerID,
+      modelID: currentModel.modelID,
+      agent: currentMode || undefined,
+      parts: [{ type: "text" as const, text }],
+    })
+
+    // Navigate to the new session with view transition
+    navigate({
+      to: "/session/$sessionId",
+      params: { sessionId: session.id },
+      viewTransition: true,
+    })
+  }
+
   return (
     <div className="flex h-full items-center justify-center p-6">
       <div className="w-full max-w-2xl">
@@ -32,7 +73,12 @@ function Index() {
             />
           </div>
         </div>
-        {/* chat input box goes here */}
+        <ChatInputBox
+          sessionId="temp"
+          onSendMessage={handleSendMessage}
+          placeholder="Start a new conversation..."
+          autoFocus
+        />
       </div>
     </div>
   )
