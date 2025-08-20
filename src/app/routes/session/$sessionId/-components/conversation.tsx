@@ -195,7 +195,7 @@ export function Conversation({ messages }: ConversationProps) {
         className="h-full overflow-y-auto"
         style={{ transform: "scaleY(-1)" }}
       >
-        <div className="flex w-full flex-col-reverse pt-[7rem] pb-[5.5rem]">
+        <div className="flex w-full flex-col-reverse pt-[8rem] pb-[5.5rem]">
           {messages.map((message) => (
             <div
               className="w-full px-40 pb-6"

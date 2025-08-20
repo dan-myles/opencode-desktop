@@ -6,6 +6,7 @@ import { api } from "@/app/lib/api"
 import { cn } from "@/app/lib/utils"
 import { useKeybindStore } from "@/app/stores/keybind.store"
 import { useModelStore } from "@/app/stores/model.store"
+import { ModeIndicator } from "./mode-indicator"
 import { Button } from "./ui/button"
 import { Input } from "./ui/input"
 
@@ -69,7 +70,7 @@ export function ChatInputBox({
           className="bg-background/80 relative rounded-xl border shadow-2xl
             backdrop-blur-md"
         >
-          <div className="p-6">
+          <div className="p-8">
             <div className="flex gap-3">
               <Input
                 ref={inputRef}
@@ -94,6 +95,7 @@ export function ChatInputBox({
       </form>
 
       <ModelIndicatorBubble />
+      <ModeIndicator />
     </div>
   )
 }
@@ -147,16 +149,16 @@ function ModelIndicatorBubble() {
   if (!modelInfo) return null
 
   return (
-    <div className="pointer-events-auto absolute top-full right-4 -mt-3">
+    <div className="pointer-events-auto absolute top-full right-20 z-10 -mt-4">
       <div
         onClick={handleClick}
         onKeyDown={handleKeyDown}
         className="bg-background/80 border-border hover:border-ring
           hover:ring-ring/50 active:border-ring active:ring-ring/70
-          focus-visible:border-ring focus-visible:ring-ring/50 cursor-pointer
-          rounded-full border px-3 py-1.5 shadow-lg backdrop-blur-md
-          transition-[color,box-shadow] outline-none hover:ring-[3px]
-          focus-visible:ring-[3px] active:ring-[3px]"
+          focus-visible:border-ring focus-visible:ring-ring/50 z-10
+          cursor-pointer rounded-full border px-3 py-1.5 shadow-lg
+          backdrop-blur-md transition-[color,box-shadow] outline-none
+          hover:ring-[3px] focus-visible:ring-[3px] active:ring-[3px]"
         role="button"
         tabIndex={0}
         title="Click to change model (Cmd+L)"

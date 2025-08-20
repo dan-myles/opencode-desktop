@@ -4,6 +4,7 @@ import { createRootRouteWithContext, Outlet } from "@tanstack/react-router"
 
 import { CommandMenu } from "@/app/components/command-menu"
 import { FloatingSidebarTrigger } from "@/app/components/floating-sidebar-trigger"
+import { ModeMenu } from "@/app/components/mode-menu"
 import { ModelMenu } from "@/app/components/model-menu"
 import { ThemeProvider } from "@/app/components/providers/theme.provider"
 import { AppSidebar } from "@/app/components/sidebar"
@@ -67,6 +68,7 @@ function RootDocument() {
       </div>
       <DevMode />
       <ModelMenu />
+      <ModeMenu />
       <CommandMenu />
       <FloatingSidebarTrigger />
       <Toaster position="top-right" />
