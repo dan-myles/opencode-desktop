@@ -23,11 +23,11 @@ export function ModeIndicator() {
   const getModeColor = (mode: string) => {
     switch (mode.toLowerCase()) {
       case "plan":
-        return "border-blue-500/50 bg-blue-500/10 text-blue-600 hover:border-blue-500 hover:bg-blue-500/20"
+        return "bg-background/80 border-chart-1 text-chart-1 hover:border-chart-1 hover:ring-chart-1/50"
       case "build":
-        return "border-green-500/50 bg-green-500/10 text-green-600 hover:border-green-500 hover:bg-green-500/20"
+        return "bg-background/80 border-chart-2 text-chart-2 hover:border-chart-2 hover:ring-chart-2/50"
       default:
-        return "border-purple-500/50 bg-purple-500/10 text-purple-600 hover:border-purple-500 hover:bg-purple-500/20"
+        return "bg-background/80 border-chart-3 text-chart-3 hover:border-chart-3 hover:ring-chart-3/50"
     }
   }
 
@@ -49,10 +49,8 @@ export function ModeIndicator() {
         onKeyDown={handleKeyDown}
         className={cn(
           `-z-20 min-w-[4rem] cursor-pointer rounded-full border px-3 py-1.5
-          shadow-lg backdrop-blur-md transition-all outline-none
-          hover:ring-[3px] hover:ring-current/20 focus-visible:ring-[3px]
-          focus-visible:ring-current/20 active:ring-[3px]
-          active:ring-current/30`,
+          shadow-lg backdrop-blur-md transition-[color,box-shadow] outline-none
+          hover:ring-[3px] focus-visible:ring-[3px] active:ring-[3px]`,
           getModeColor(currentMode),
         )}
         role="button"

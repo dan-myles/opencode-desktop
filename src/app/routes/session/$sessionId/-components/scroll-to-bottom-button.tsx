@@ -29,7 +29,7 @@ export function ScrollToBottomButton({
             damping: 25,
             duration: 0.2,
           }}
-          className="absolute bottom-36 left-1/2 z-10 -translate-x-1/2"
+          className="absolute bottom-40 left-1/2 z-10 -translate-x-1/2"
         >
           <Button
             variant="outline"
