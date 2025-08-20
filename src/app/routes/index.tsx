@@ -61,7 +61,7 @@ function Index() {
           >
             <KeybindHint
               description="New session"
-              keybind={getCurrentPlatform() === "darwin" ? "cmd+n" : "ctrl+n"}
+              keybind={getCurrentPlatform() === "darwin" ? "cmd+o" : "ctrl+o"}
             />
             <KeybindHint
               description="Next session"
@@ -69,7 +69,7 @@ function Index() {
             />
             <KeybindHint
               description="Change model"
-              keybind={getCurrentPlatform() === "darwin" ? "cmd+l" : "ctrl+l"}
+              keybind={getCurrentPlatform() === "darwin" ? "cmd+j" : "ctrl+j"}
             />
           </div>
         </div>
