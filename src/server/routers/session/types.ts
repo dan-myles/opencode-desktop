@@ -45,6 +45,17 @@ export const sessionChatInputSchema = z.object({
         filename: z.string().optional(),
         source: z.any().optional(),
       }),
+      z.object({
+        type: z.literal("agent"),
+        name: z.string(),
+        source: z
+          .object({
+            value: z.string(),
+            start: z.number(),
+            end: z.number(),
+          })
+          .optional(),
+      }),
     ]),
   ),
 })

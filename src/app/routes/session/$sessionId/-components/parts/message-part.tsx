@@ -1,4 +1,5 @@
 import type { Message, Part } from "@/server/sdk/gen/types.gen"
+import { AgentPart } from "@/app/components/agent-part"
 import { FilePart } from "./file-part"
 import { PatchPart } from "./patch-part"
 import { SnapshotPart } from "./snapshot-part"
@@ -16,6 +17,8 @@ export function MessagePart({ part, message }: MessagePartProps) {
       return <TextPart part={part} message={message} />
     case "file":
       return <FilePart part={part} />
+    case "agent":
+      return <AgentPart part={part} />
     case "tool":
       return <ToolPart part={part} />
     case "step-start":
