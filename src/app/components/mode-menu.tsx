@@ -22,19 +22,20 @@ export function ModeMenu() {
   const currentMode = useModeStore((state) => state.currentMode)
   const setCurrentMode = useModeStore((state) => state.setCurrentMode)
   const setAvailableModes = useModeStore((state) => state.setAvailableModes)
-  const togglePlanBuild = useModeStore((state) => state.togglePlanBuild)
+  const getVisibleAgents = useModeStore((state) => state.getVisibleAgents)
+  const cycleAllAgents = useModeStore((state) => state.cycleAllAgents)
   const isOpen = useModeStore((state) => state.isOpen)
   const setModeOpen = useModeStore((state) => state.setOpen)
 
-  const { data: modes } = useQuery(api.app.modes.queryOptions())
+  const { data: agents } = useQuery(api.app.agents.queryOptions())
   const isOnAllowedRoute =
     location.pathname === "/" || location.pathname.startsWith("/session/")
 
   useEffect(() => {
-    if (modes) {
-      setAvailableModes(modes)
+    if (agents) {
+      setAvailableModes(agents)
     }
-  }, [modes, setAvailableModes])
+  }, [agents, setAvailableModes])
 
   useEffect(() => {
     setOpen(isOpen)
@@ -58,8 +59,8 @@ export function ModeMenu() {
       win32: "ctrl+l",
       linux: "ctrl+l",
     },
-    description: "Toggle between plan and build mode",
-    callback: useCallback(() => togglePlanBuild(), [togglePlanBuild]),
+    description: "Cycle through all agents",
+    callback: useCallback(() => cycleAllAgents(), [cycleAllAgents]),
   })
 
   const handleModeSelect = useCallback(
@@ -98,24 +99,27 @@ export function ModeMenu() {
       <CommandList>
         <CommandEmpty>No modes found.</CommandEmpty>
         <CommandGroup heading="Available Modes">
-          {modes?.map((mode) => {
-            const isSelected = currentMode === mode.name
-            const isPlanOrBuild = mode.name === "plan" || mode.name === "build"
+          {getVisibleAgents().map((agent) => {
+            const isSelected = currentMode === agent.name
+            const displayName =
+              agent.name.charAt(0).toUpperCase() + agent.name.slice(1)
 
             return (
               <CommandItem
-                key={mode.name}
-                onSelect={() => handleModeSelect(mode.name)}
+                key={agent.name}
+                onSelect={() => handleModeSelect(agent.name)}
                 className="flex items-center justify-between"
               >
                 <div className="flex items-center gap-2">
                   {isSelected && <Check className="h-4 w-4" />}
                   <div className="flex items-center gap-2">
-                    <ModeIcon modeName={mode.name} />
-                    <span className="font-medium capitalize">{mode.name}</span>
-                    {isPlanOrBuild && (
-                      <Badge variant="secondary" className="text-xs">
-                        Quick Toggle
+                    <ModeIcon modeName={agent.name} />
+                    <span className="font-medium capitalize">
+                      {displayName}
+                    </span>
+                    {agent.mode === "subagent" && (
+                      <Badge variant="outline" className="text-xs">
+                        Subagent
                       </Badge>
                     )}
                   </div>
@@ -124,8 +128,8 @@ export function ModeMenu() {
                   className="text-muted-foreground flex items-center gap-1
                     text-xs"
                 >
-                  {mode.model && <span>{mode.model.modelID}</span>}
-                  {mode.temperature && <span>T:{mode.temperature}</span>}
+                  {agent.model?.modelID && <span>{agent.model.modelID}</span>}
+                  {agent.temperature && <span>T:{agent.temperature}</span>}
                 </div>
               </CommandItem>
             )

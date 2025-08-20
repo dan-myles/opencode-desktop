@@ -3,40 +3,70 @@
 import { create } from "zustand"
 import { persist } from "zustand/middleware"
 
-import type { Mode } from "@/server/sdk/gen/types.gen"
+import type { Agent } from "@/server/sdk/gen2/types.gen"
 
 interface ModeStore {
   currentMode: string | null
-  availableModes: Mode[]
+  availableModes: Agent[]
   isOpen: boolean
 
   setCurrentMode: (mode: string | null) => void
-  setAvailableModes: (modes: Mode[]) => void
+  setAvailableModes: (modes: Agent[]) => void
   setOpen: (open: boolean) => void
-  togglePlanBuild: () => void
+  cycleAllAgents: () => void
+  initializeDefaultMode: () => void
+  getVisibleAgents: () => Agent[]
 
-  getCurrentModeInfo: () => Mode | null
+  getCurrentModeInfo: () => Agent | null
 }
 
 export const useModeStore = create<ModeStore>()(
   persist(
     (set, get) => ({
-      currentMode: "build",
+      currentMode: null,
       availableModes: [],
       isOpen: false,
 
       setCurrentMode: (mode) => set({ currentMode: mode }),
 
-      setAvailableModes: (modes) => set({ availableModes: modes }),
+      setAvailableModes: (modes) => {
+        set({ availableModes: modes })
+        // Auto-initialize default mode if not set
+        const { currentMode } = get()
+        if (!currentMode && modes.length > 0) {
+          get().initializeDefaultMode()
+        }
+      },
 
       setOpen: (open) => set({ isOpen: open }),
 
-      togglePlanBuild: () => {
+      getVisibleAgents: () => {
+        const { availableModes } = get()
+        return availableModes.filter((agent) => agent.name !== "general")
+      },
+
+      cycleAllAgents: () => {
+        const visibleAgents = get().getVisibleAgents()
         const { currentMode } = get()
-        if (currentMode === "plan") {
+        if (visibleAgents.length === 0) return
+
+        const currentIndex = visibleAgents.findIndex(
+          (agent) => agent.name === currentMode,
+        )
+        const nextIndex = (currentIndex + 1) % visibleAgents.length
+        set({ currentMode: visibleAgents[nextIndex].name })
+      },
+
+      initializeDefaultMode: () => {
+        const { availableModes } = get()
+        const buildAgent = availableModes.find(
+          (agent) => agent.name === "build",
+        )
+        if (buildAgent) {
           set({ currentMode: "build" })
-        } else {
-          set({ currentMode: "plan" })
+        } else if (availableModes.length > 0) {
+          // Fallback to first agent if no "build" found
+          set({ currentMode: availableModes[0].name })
         }
       },
 

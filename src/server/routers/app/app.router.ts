@@ -18,8 +18,8 @@ export const appRouter = {
     return response.data
   }),
 
-  modes: serverProcedure.query(async ({ ctx }) => {
-    const response = await ctx.client.app.modes()
+  agents: serverProcedure.query(async ({ ctx }) => {
+    const response = await ctx.client.app.agents()
     return response.data
   }),
 } satisfies TRPCRouterRecord
