@@ -7,7 +7,7 @@ import { SessionListPinned } from "./session-list-pinned"
 export function AppSidebar() {
   return (
     <Sidebar variant="sidebar" collapsible="offcanvas" className="h-full">
-      <SidebarContent className="scrollbar-none relative">
+      <SidebarContent className="scrollbar-none relative overflow-x-hidden">
         <Header />
         <SessionListPinned />
         <SessionList />
