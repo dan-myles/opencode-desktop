@@ -1,9 +1,22 @@
+import { useState } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { Code2 } from "lucide-react"
+import { del } from "idb-keyval"
+import { Code2, Trash2 } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/app/components/ui/alert-dialog"
 import { Badge } from "@/app/components/ui/badge"
 import { Button } from "@/app/components/ui/button"
 import {
@@ -30,6 +43,7 @@ export function DeveloperSection() {
   const queryClient = useQueryClient()
   const binary = useQuery(api.binary.path.queryOptions())
   const status = useQuery(api.binary.status.queryOptions())
+  const [isClearing, setIsClearing] = useState(false)
 
   const defaultValues = startSchema.parse({})
 
@@ -61,6 +75,33 @@ export function DeveloperSection() {
       },
     }),
   )
+
+  const clearAllStorage = async () => {
+    setIsClearing(true)
+    try {
+      // Clear localStorage
+      localStorage.clear()
+
+      // Clear sessionStorage
+      sessionStorage.clear()
+
+      // Clear IndexedDB (query cache and any other IDB data)
+      await del("opencode-query-cache")
+
+      // Clear React Query cache
+      queryClient.clear()
+
+      toast.success("All storage cleared successfully")
+
+      // Reload the app to reset all stores
+      window.location.reload()
+    } catch (error) {
+      console.error("Failed to clear storage:", error)
+      toast.error("Failed to clear some storage data")
+    } finally {
+      setIsClearing(false)
+    }
+  }
 
   return (
     <section
@@ -221,6 +262,61 @@ export function DeveloperSection() {
               {stopServer.isPending ? "Stopping..." : "Stop Server"}
             </Button>
           </div>
+        </CardContent>
+      </Card>
+
+      {/* Storage Management Card */}
+      <Card className="bg-background/10">
+        <CardHeader className="pb-3">
+          <CardTitle className="text-base">Storage Management</CardTitle>
+          <CardDescription className="text-sm">
+            Clear application data and reset to defaults
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          <AlertDialog>
+            <AlertDialogTrigger asChild>
+              <Button
+                variant="destructive"
+                size="sm"
+                className="w-full text-sm"
+                disabled={isClearing}
+              >
+                <Trash2 className="mr-2 h-4 w-4" />
+                {isClearing ? "Clearing..." : "Clear All Storage"}
+              </Button>
+            </AlertDialogTrigger>
+            <AlertDialogContent>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Clear All Storage</AlertDialogTitle>
+                <AlertDialogDescription>
+                  This will permanently delete all application data including:
+                  <br />
+                  • Session states and history
+                  <br />
+                  • Pinned sessions
+                  <br />
+                  • Theme preferences
+                  <br />
+                  • Cached data
+                  <br />
+                  <br />
+                  The application will reload after clearing. This action cannot
+                  be undone.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction
+                  onClick={clearAllStorage}
+                  className="bg-destructive text-destructive-foreground
+                    hover:bg-destructive/90"
+                >
+                  Clear All Data
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </AlertDialogContent>
+          </AlertDialog>
         </CardContent>
       </Card>
     </section>
