@@ -72,6 +72,31 @@ export const useCurrentSessionMessagesStore =
           const messageInfo = event.properties.info
           if (messageInfo.sessionID !== state.sessionId) return
 
+          // If this is a user message, remove any matching optimistic message
+          if (messageInfo.role === "user") {
+            const messages = state.messages
+            const optimisticEntries = Array.from(messages.entries()).filter(
+              ([id, msg]) =>
+                id.startsWith("temp-") &&
+                msg.info.role === "user" &&
+                msg.parts.length > 0 &&
+                msg.parts[0].type === "text",
+            )
+
+            // Remove the most recent optimistic user message (likely match)
+            if (optimisticEntries.length > 0) {
+              const mostRecentOptimistic = optimisticEntries.sort(
+                (a, b) => b[1].info.time.created - a[1].info.time.created,
+              )[0]
+
+              set((prev) => {
+                const newMessages = new Map(prev.messages)
+                newMessages.delete(mostRecentOptimistic[0])
+                return { messages: newMessages }
+              })
+            }
+          }
+
           const foundParts = state.messages.get(messageInfo.id)?.parts
 
           get().addMessage({
@@ -155,7 +180,7 @@ export const useCurrentSessionMessagesStore =
           })
 
           // Add each message to the store
-          existingMessages.forEach((message) => {
+          existingMessages.forEach((message: MessageWithParts) => {
             get().addMessage({
               info: message.info,
               parts: message.parts,

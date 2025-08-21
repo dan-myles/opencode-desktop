@@ -26,6 +26,33 @@ export function useLiveMessages(sessionId: string) {
         throw new Error("No model selected. Please select a model first.")
       }
 
+      // Create optimistic message with temporary ID
+      const optimisticMessageId = `temp-${Date.now()}-${Math.random()}`
+      const optimisticPartId = `temp-part-${Date.now()}-${Math.random()}`
+
+      const optimisticMessage = {
+        info: {
+          id: optimisticMessageId,
+          sessionID: sessionId,
+          role: "user" as const,
+          time: { created: Date.now() },
+        },
+        parts: [
+          {
+            id: optimisticPartId,
+            sessionID: sessionId,
+            messageID: optimisticMessageId,
+            type: "text" as const,
+            text,
+            synthetic: true,
+          },
+        ],
+      }
+
+      // Add optimistically using existing addMessage
+      const { addMessage } = useCurrentSessionMessagesStore.getState()
+      addMessage(optimisticMessage)
+
       try {
         setSessionGenerating(sessionId)
 
@@ -37,6 +64,12 @@ export function useLiveMessages(sessionId: string) {
           parts: [{ type: "text" as const, text }],
         })
       } catch (error) {
+        // Remove optimistic message on error
+        useCurrentSessionMessagesStore.setState((prev) => {
+          const newMessages = new Map(prev.messages)
+          newMessages.delete(optimisticMessageId)
+          return { messages: newMessages }
+        })
         console.error("Failed to send message:", error)
         throw error
       }

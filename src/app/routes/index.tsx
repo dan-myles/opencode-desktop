@@ -6,6 +6,8 @@ import { api } from "@/app/lib/api"
 import { useModeStore } from "@/app/stores/mode.store"
 import { useModelStore } from "@/app/stores/model.store"
 import { formatKeybindForDisplay, getCurrentPlatform } from "../lib/utils"
+import { useCurrentSessionMessagesStore } from "../stores/current-session-messages.store"
+import { useSessionStateStore } from "../stores/session-state.store"
 
 export const Route = createFileRoute("/")({
   component: Index,
@@ -18,6 +20,7 @@ function Index() {
 
   const createSession = useMutation(api.session.create.mutationOptions())
   const sendMessage = useMutation(api.session.chat.mutationOptions())
+  const { setSessionGenerating } = useSessionStateStore()
 
   const handleSendMessage = async (text: string) => {
     if (!currentModel) {
@@ -31,20 +34,46 @@ function Index() {
       throw new Error("Failed to create session")
     }
 
-    // Send first message
+    navigate({
+      to: "/session/$sessionId",
+      params: { sessionId: session.id },
+      viewTransition: true,
+    })
+
+    // Create optimistic message with temporary ID
+    const optimisticMessageId = `temp-${Date.now()}-${Math.random()}`
+    const optimisticPartId = `temp-part-${Date.now()}-${Math.random()}`
+
+    const optimisticMessage = {
+      info: {
+        id: optimisticMessageId,
+        sessionID: session.id,
+        role: "user" as const,
+        time: { created: Date.now() },
+      },
+      parts: [
+        {
+          id: optimisticPartId,
+          sessionID: session.id,
+          messageID: optimisticMessageId,
+          type: "text" as const,
+          text,
+          synthetic: true,
+        },
+      ],
+    }
+
+    // Add optimistically using existing addMessage
+    const { addMessage } = useCurrentSessionMessagesStore.getState()
+    addMessage(optimisticMessage)
+    setSessionGenerating(session.id)
+
     await sendMessage.mutateAsync({
       id: session.id,
       providerID: currentModel.providerID,
       modelID: currentModel.modelID,
       agent: currentMode || undefined,
       parts: [{ type: "text" as const, text }],
-    })
-
-    // Navigate to the new session with view transition
-    navigate({
-      to: "/session/$sessionId",
-      params: { sessionId: session.id },
-      viewTransition: true,
     })
   }
 
