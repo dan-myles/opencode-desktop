@@ -19,6 +19,8 @@ export function SessionList() {
     error,
   } = useQuery(api.session.list.queryOptions())
 
+  console.log(sessions)
+
   const { navigateToPreviousSession, navigateToNextSession } =
     useSessionNavigation()
 

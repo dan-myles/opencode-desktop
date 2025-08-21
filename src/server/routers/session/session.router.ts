@@ -13,6 +13,7 @@ import {
 export const sessionRouter = {
   list: serverProcedure.query(async ({ ctx }) => {
     const response = await ctx.client.session.list()
+    console.log("LIST", response)
     return response.data ?? []
   }),
 

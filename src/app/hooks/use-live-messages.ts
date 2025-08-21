@@ -1,5 +1,6 @@
 import { useCallback, useEffect } from "react"
 import { useMutation } from "@tanstack/react-query"
+import { toast } from "sonner"
 
 import { api } from "@/app/lib/api"
 import { useCurrentSessionMessagesStore } from "@/app/stores/current-session-messages.store"
@@ -23,6 +24,7 @@ export function useLiveMessages(sessionId: string) {
   const sendMessage = useCallback(
     async (text: string) => {
       if (!currentModel) {
+        toast.error("No model selected. Please select a model first.")
         throw new Error("No model selected. Please select a model first.")
       }
 
