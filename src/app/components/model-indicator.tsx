@@ -11,29 +11,16 @@ export function ModelIndicator() {
   const toggleModelMenuCallback = callbacks.get("toggle-model-menu")
 
   const getModelInfo = () => {
-    if (!providersData) return null
-
-    let model = currentModel
-    if (!model && providersData.default) {
-      const firstProvider = Object.keys(providersData.default)[0]
-      if (firstProvider) {
-        model = {
-          providerID: firstProvider,
-          modelID: providersData.default[firstProvider],
-        }
-      }
-    }
-
-    if (!model) return null
+    if (!providersData || !currentModel) return null
 
     const provider = providersData.providers.find(
-      (p) => p.id === model.providerID,
+      (p) => p.id === currentModel.providerID,
     )
-    const modelData = provider?.models[model.modelID]
+    const modelData = provider?.models[currentModel.modelID]
 
     return {
-      providerName: provider?.name || model.providerID,
-      modelName: modelData?.name || model.modelID,
+      providerName: provider?.name || currentModel.providerID,
+      modelName: modelData?.name || currentModel.modelID,
     }
   }
 
@@ -49,8 +36,6 @@ export function ModelIndicator() {
   }
 
   const modelInfo = getModelInfo()
-
-  if (!modelInfo) return null
 
   return (
     <div className="pointer-events-auto absolute top-full right-20 z-10 -mt-4">
@@ -68,10 +53,16 @@ export function ModelIndicator() {
         title="Click to change model (Cmd+L)"
       >
         <span className="text-xs">
-          <span className="text-muted-foreground">
-            {modelInfo.providerName}
-          </span>{" "}
-          <span className="text-foreground">{modelInfo.modelName}</span>
+          {modelInfo ? (
+            <>
+              <span className="text-muted-foreground">
+                {modelInfo.providerName}
+              </span>{" "}
+              <span className="text-foreground">{modelInfo.modelName}</span>
+            </>
+          ) : (
+            <span className="text-muted-foreground">No Model Selected</span>
+          )}
         </span>
       </div>
     </div>
